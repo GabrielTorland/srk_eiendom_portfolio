@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\elisa\\website\\roy_kato_website\\srk_website\\srk_website.csproj": {}
+    "C:\\Users\\Andre\\roy_kato_website\\srk_website\\srk_website.csproj": {}
   },
   "projects": {
-    "C:\\Users\\elisa\\website\\roy_kato_website\\srk_website\\srk_website.csproj": {
+    "C:\\Users\\Andre\\roy_kato_website\\srk_website\\srk_website.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\elisa\\website\\roy_kato_website\\srk_website\\srk_website.csproj",
+        "projectUniqueName": "C:\\Users\\Andre\\roy_kato_website\\srk_website\\srk_website.csproj",
         "projectName": "srk_website",
-        "projectPath": "C:\\Users\\elisa\\website\\roy_kato_website\\srk_website\\srk_website.csproj",
-        "packagesPath": "C:\\Users\\elisa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\elisa\\website\\roy_kato_website\\srk_website\\obj\\",
+        "projectPath": "C:\\Users\\Andre\\roy_kato_website\\srk_website\\srk_website.csproj",
+        "packagesPath": "C:\\Users\\Andre\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Andre\\roy_kato_website\\srk_website\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\elisa\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Andre\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -56,7 +56,15 @@
               "target": "Package",
               "version": "[6.0.6, )"
             },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[6.0.6, )"
+            },
             "Microsoft.EntityFrameworkCore.Tools": {
+              "target": "Package",
+              "version": "[6.0.6, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[6.0.6, )"
             }
@@ -79,7 +87,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
         }
       }
     }
