@@ -11,6 +11,7 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("aspnet-srk_website-2CADFCD8-C01F-492A-B2C5-C4788537A165")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("srk_website")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
