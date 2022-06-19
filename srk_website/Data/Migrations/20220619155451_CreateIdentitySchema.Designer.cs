@@ -11,7 +11,7 @@ using srk_website.Data;
 namespace srk_website.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220618122935_CreateIdentitySchema")]
+    [Migration("20220619155451_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
