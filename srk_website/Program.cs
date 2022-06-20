@@ -48,6 +48,14 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
+// Remove the possibility of register a new account. 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapGet("/Identity/Account/Register", context => Task.Factory.StartNew(() => context.Response.Redirect("/Identity/Account/Login", true, true)));
+    endpoints.MapPost("/Identity/Account/Register", context => Task.Factory.StartNew(() => context.Response.Redirect("/Identity/Account/Login", true, true)));
+});
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
