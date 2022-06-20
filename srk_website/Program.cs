@@ -53,4 +53,13 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
+// migrate any database changes on startup (includes initial db creation)
+using (var scope = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var um = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var _emailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
+    ApplicationDbInitializer.Initialize(dataContext, um, _emailSender);
+}
+
 app.Run();
