@@ -592,3 +592,8 @@ C:\Users\elisa\website\roy_kato_website\srk_website\obj\Debug\net6.0\ref\srk_web
 C:\Users\elisa\website\roy_kato_website\srk_website\bin\Debug\net6.0\SendGrid.dll
 C:\Users\elisa\website\roy_kato_website\srk_website\bin\Debug\net6.0\SendGrid.Extensions.DependencyInjection.dll
 C:\Users\elisa\website\roy_kato_website\srk_website\bin\Debug\net6.0\StarkbankEcdsa.dll
+C:\Users\elisa\website\roy_kato_website\srk_website\bin\Debug\net6.0\Azure.Core.dll
+C:\Users\elisa\website\roy_kato_website\srk_website\bin\Debug\net6.0\Azure.Storage.Blobs.dll
+C:\Users\elisa\website\roy_kato_website\srk_website\bin\Debug\net6.0\Azure.Storage.Common.dll
+C:\Users\elisa\website\roy_kato_website\srk_website\bin\Debug\net6.0\System.IO.Hashing.dll
+C:\Users\elisa\website\roy_kato_website\srk_website\bin\Debug\net6.0\System.Memory.Data.dll
