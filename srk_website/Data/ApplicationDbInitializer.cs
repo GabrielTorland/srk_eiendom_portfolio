@@ -57,11 +57,11 @@ namespace srk_website.Data
             string[] countires = { "Norge", "Norge", "Norge" };
             string[] tlfs = { "95402323", "47232342", "95432309" };
             string[] emails = { "rfk@gmail.com", "rfk2@gmail.com", "rfk3@gmail.com" };
-            //for (int i = 0; i < 3; ++i)
-            //{
-            //    db.Contact.Add(new Contact(addresses[i], zips[i], cities[i], countires[i], tlfs[i], emails[i]));
-            //}
-           
+            for (int i = 0; i < 3; ++i)
+            {
+                db.Contact.Add(new Contact(addresses[i], zips[i], cities[i], countires[i], tlfs[i], emails[i]));
+            }
+
             await db.SaveChangesAsync();
             
             //await _emailSender.SendEmailAsync(user.Email, "Initial password",$"<p>Here is your initial password: {password} . This password should be changed!<p>");
