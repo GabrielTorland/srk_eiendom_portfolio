@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,16 +11,17 @@ using srk_website.Models;
 
 namespace srk_website.Controllers
 {
-    public class ContactsController : Controller
+    [Authorize]
+    public class ContactController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ContactsController(ApplicationDbContext context)
+        public ContactController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Contacts
+        // GET: Contact
         public async Task<IActionResult> Index()
         {
               return _context.Contact != null ? 
@@ -27,7 +29,7 @@ namespace srk_website.Controllers
                           Problem("Entity set 'ApplicationDbContext.Contact'  is null.");
         }
 
-        // GET: Contacts/Details/5
+        // GET: Contact/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Contact == null)
@@ -35,39 +37,39 @@ namespace srk_website.Controllers
                 return NotFound();
             }
 
-            var contact = await _context.Contact
+            var contactModel = await _context.Contact
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (contact == null)
+            if (contactModel == null)
             {
                 return NotFound();
             }
 
-            return View(contact);
+            return View(contactModel);
         }
 
-        // GET: Contacts/Create
+        // GET: Contact/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Contacts/Create
+        // POST: Contact/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Address,Zip,City,Country,Phone,Email")] Contact contact)
+        public async Task<IActionResult> Create([Bind("Id,Address,Zip,City,Country,Phone,Email")] ContactModel contactModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(contact);
+                _context.Add(contactModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(contact);
+            return View(contactModel);
         }
 
-        // GET: Contacts/Edit/5
+        // GET: Contact/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Contact == null)
@@ -75,22 +77,22 @@ namespace srk_website.Controllers
                 return NotFound();
             }
 
-            var contact = await _context.Contact.FindAsync(id);
-            if (contact == null)
+            var contactModel = await _context.Contact.FindAsync(id);
+            if (contactModel == null)
             {
                 return NotFound();
             }
-            return View(contact);
+            return View(contactModel);
         }
 
-        // POST: Contacts/Edit/5
+        // POST: Contact/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Address,Zip,City,Country,Phone,Email")] Contact contact)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Address,Zip,City,Country,Phone,Email")] ContactModel contactModel)
         {
-            if (id != contact.Id)
+            if (id != contactModel.Id)
             {
                 return NotFound();
             }
@@ -99,12 +101,12 @@ namespace srk_website.Controllers
             {
                 try
                 {
-                    _context.Update(contact);
+                    _context.Update(contactModel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ContactExists(contact.Id))
+                    if (!ContactModelExists(contactModel.Id))
                     {
                         return NotFound();
                     }
@@ -115,10 +117,10 @@ namespace srk_website.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(contact);
+            return View(contactModel);
         }
 
-        // GET: Contacts/Delete/5
+        // GET: Contact/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Contact == null)
@@ -126,17 +128,17 @@ namespace srk_website.Controllers
                 return NotFound();
             }
 
-            var contact = await _context.Contact
+            var contactModel = await _context.Contact
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (contact == null)
+            if (contactModel == null)
             {
                 return NotFound();
             }
 
-            return View(contact);
+            return View(contactModel);
         }
 
-        // POST: Contacts/Delete/5
+        // POST: Contact/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -145,17 +147,17 @@ namespace srk_website.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Contact'  is null.");
             }
-            var contact = await _context.Contact.FindAsync(id);
-            if (contact != null)
+            var contactModel = await _context.Contact.FindAsync(id);
+            if (contactModel != null)
             {
-                _context.Contact.Remove(contact);
+                _context.Contact.Remove(contactModel);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ContactExists(int id)
+        private bool ContactModelExists(int id)
         {
           return (_context.Contact?.Any(e => e.Id == id)).GetValueOrDefault();
         }

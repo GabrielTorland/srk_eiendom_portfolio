@@ -10,6 +10,6 @@ namespace srk_website.Data
             : base(options)
         {
         }
-        public DbSet<Contact> Contact { get; set; }
+        public DbSet<ContactModel> Contact { get; set; }
     }
 }

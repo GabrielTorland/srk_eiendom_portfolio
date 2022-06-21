@@ -59,7 +59,7 @@ namespace srk_website.Data
             string[] emails = { "rfk@gmail.com", "rfk2@gmail.com", "rfk3@gmail.com" };
             for (int i = 0; i < 3; ++i)
             {
-                db.Contact.Add(new Contact(addresses[i], zips[i], cities[i], countires[i], tlfs[i], emails[i]));
+                db.Contact.Add(new ContactModel(addresses[i], zips[i], cities[i], countires[i], tlfs[i], emails[i]));
             }
 
             await db.SaveChangesAsync();
