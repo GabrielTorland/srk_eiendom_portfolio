@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace srk_website.Models
 {
-    public class Contact
+    public class ContactModel
     {
-        public Contact(){}
-        public Contact(string address, string zip, string city, string country, string phone, string email)
+        public ContactModel(){}
+        public ContactModel(string address, string zip, string city, string country, string phone, string email)
         {
             Address = address;
             Zip = zip;

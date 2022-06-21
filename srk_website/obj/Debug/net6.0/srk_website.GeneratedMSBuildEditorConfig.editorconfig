@@ -175,24 +175,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elisa/website/roy_kato_website/srk_website/Views/Contacts/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdHNcQ3JlYXRlLmNzaHRtbA==
+[C:/Users/elisa/website/roy_kato_website/srk_website/Views/Contact/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elisa/website/roy_kato_website/srk_website/Views/Contacts/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdHNcRGVsZXRlLmNzaHRtbA==
+[C:/Users/elisa/website/roy_kato_website/srk_website/Views/Contact/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elisa/website/roy_kato_website/srk_website/Views/Contacts/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdHNcRGV0YWlscy5jc2h0bWw=
+[C:/Users/elisa/website/roy_kato_website/srk_website/Views/Contact/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elisa/website/roy_kato_website/srk_website/Views/Contacts/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdHNcRWRpdC5jc2h0bWw=
+[C:/Users/elisa/website/roy_kato_website/srk_website/Views/Contact/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elisa/website/roy_kato_website/srk_website/Views/Contacts/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdHNcSW5kZXguY3NodG1s
+[C:/Users/elisa/website/roy_kato_website/srk_website/Views/Contact/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/elisa/website/roy_kato_website/srk_website/Views/Home/Index.cshtml]
