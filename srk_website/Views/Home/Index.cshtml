@@ -332,36 +332,18 @@
                     </div>
                 </div>
                 <div class="row">
+                    @foreach (var item in ViewData["Contacts"] as List<Contact>) {
                     <div class="col-md-4">
                         <div class="item bg-4">
                             <div class="con">
-                                <h5>LONDON</h5>
-                                <p><i class="ti-home" style="font-size: 16px; color: #c5a47e;"></i> 15 Crow Pl, Kensington, London, UK</p>
-                                <p><i class="ti-mobile" style="font-size: 16px; color: #c5a47e;"></i> +44 20 1234 4444</p>
-                                <p><i class="ti-envelope" style="font-size: 16px; color: #c5a47e;"></i> london@togo.com</p>
+                                <h5>@item.Country.ToUpper()</h5>
+                                <p><i class="ti-home" style="font-size: 16px; color: #c5a47e;"></i> @item.Address, @item.Zip @item.City, @item.Country, UK</p>
+                                <p><i class="ti-mobile" style="font-size: 16px; color: #c5a47e;"></i> @item.Phone</p>
+                                <p><i class="ti-envelope" style="font-size: 16px; color: #c5a47e;"></i> @item.Email</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="item bg-4">
-                            <div class="con">
-                                <h5>PARIS</h5>
-                                <p><i class="ti-home" style="font-size: 16px; color: #c5a47e;"></i> 5 Rue Saint-Roch, 75001 Paris, France</p>
-                                <p><i class="ti-mobile" style="font-size: 16px; color: #c5a47e;"></i> +33 1 1234 4444</p>
-                                <p><i class="ti-envelope" style="font-size: 16px; color: #c5a47e;"></i> paris@togo.com</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="item bg-4">
-                            <div class="con">
-                                <h5>NEW YORK</h5>
-                                <p><i class="ti-home" style="font-size: 16px; color: #c5a47e;"></i> 363 W 16th St, NY 10011, USA</p>
-                                <p><i class="ti-mobile" style="font-size: 16px; color: #c5a47e;"></i> +1 212 12 4444</p>
-                                <p><i class="ti-envelope" style="font-size: 16px; color: #c5a47e;"></i> newyork@togo.com</p>
-                            </div>
-                        </div>
-                    </div>
+                    }
                 </div>
                 <div class="row mt-100">
                     <div class="col-md-4 offset-md-4">

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using srk_website.Models;
 
 namespace srk_website.Data
 {
@@ -9,5 +10,6 @@ namespace srk_website.Data
             : base(options)
         {
         }
+        public DbSet<Contact> Contact { get; set; }
     }
 }

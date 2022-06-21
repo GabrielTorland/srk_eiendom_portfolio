@@ -39,7 +39,7 @@ namespace srk_website.Data
                 rString += ((char)(random.Next(1, 26) + 96)).ToString();
                 rString += ((char)(random.Next(1, 10) + 47)).ToString();
             }
-            rString += "?";
+            rString += "?";           
             
             // This is the admin user.
             var email = "gabri.torland@gmail.com";
@@ -47,9 +47,21 @@ namespace srk_website.Data
             user.UserName = email;
             user.Email = email;
             user.EmailConfirmed = true;
-            var password = rString;
+            // Change to rString later.
+            var password = "Password1.";
             await um.CreateAsync(user,password);
 
+            string[] addresses = { "Ulveveien 3", "Gaupeveien 35A", "Osloveien 3" };
+            string[] zips = { "4323", "4873", "4532" };
+            string[] cities = { "Sandnes", "Sandnes", "Oslo" };
+            string[] countires = { "Norge", "Norge", "Norge" };
+            string[] tlfs = { "95402323", "47232342", "95432309" };
+            string[] emails = { "rfk@gmail.com", "rfk2@gmail.com", "rfk3@gmail.com" };
+            //for (int i = 0; i < 3; ++i)
+            //{
+            //    db.Contact.Add(new Contact(addresses[i], zips[i], cities[i], countires[i], tlfs[i], emails[i]));
+            //}
+           
             await db.SaveChangesAsync();
             
             //await _emailSender.SendEmailAsync(user.Email, "Initial password",$"<p>Here is your initial password: {password} . This password should be changed!<p>");
