@@ -33,7 +33,6 @@ namespace srk_website.Models
         public string Country { get; set; }
 
         [Required]
-        [StringLength(8)]
         [Phone]
         public string Phone { get; set; }
 
