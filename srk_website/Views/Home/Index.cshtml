@@ -59,27 +59,15 @@
         <!-- Header Slider -->
         <header id="home" class="header pos-re slider-fade">
             <div class="owl-carousel owl-theme">
-                <div class="item bg-img" data-overlay-dark="3" data-background="img/slider/1.jpg">
+                @foreach(var item in ViewData["Images"] as List<IDictionary<string, string>>){
+                <div class="item bg-img" data-overlay-dark="3" data-background="@item["Uri"]">
                     <div class="container text-center v-middle caption">
-                        <h4>RESIDENTAL</h4>
-                        <h1>DRANA HOUSE, USA</h1>
-                        <a href="https://1.envato.market/bRjBb" target="_blank" class="btn"><span>Purchase Now <i class="ti-arrow-right"></i></span></a>
+                        <h4>Eiendom</h4>
+                        <h1>@item["ProjectName"], @item["Country"]</h1>
+                        <a href=@item["Website"] target="_blank" class="btn"><span>Kjøp nå<i class="ti-arrow-right"></i></span></a>
                     </div>
                 </div>
-                <div class="item bg-img" data-overlay-dark="3" data-background="img/slider/2.jpg">
-                    <div class="container text-center v-middle caption">
-                        <h4>ARCHITECTURE</h4>
-                        <h1>ARCH STUDIO, CA</h1>
-                        <a href="https://1.envato.market/bRjBb" target="_blank" class="btn"><span>Purchase Now <i class="ti-arrow-right"></i></span></a>
-                    </div>
-                </div>
-                <div class="item bg-img" data-overlay-dark="3" data-background="img/slider/3.jpg">
-                    <div class="container text-center v-middle caption">
-                        <h4>ARCHITECTURE</h4>
-                        <h1>ART MUSEUM, USA</h1>
-                        <a href="https://1.envato.market/bRjBb" target="_blank" class="btn"><span>Purchase Now <i class="ti-arrow-right"></i></span></a>
-                    </div>
-                </div>
+                }
             </div>
         </header>
         <!-- Services -->
