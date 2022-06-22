@@ -52,7 +52,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-// Remove the possibility of register a new account. 
+// Remove the possibility of register a new account(mapping Register subfolder to Login subfolder).
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapGet("/Identity/Account/Register", context => Task.Factory.StartNew(() => context.Response.Redirect("/Identity/Account/Login", true, true)));

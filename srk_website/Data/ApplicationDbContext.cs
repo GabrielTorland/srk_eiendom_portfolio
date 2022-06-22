@@ -11,5 +11,6 @@ namespace srk_website.Data
         {
         }
         public DbSet<ContactModel> Contact { get; set; }
+        public DbSet<ImageSlideShowModel> ImageSlideShow { get; set; }
     }
 }
