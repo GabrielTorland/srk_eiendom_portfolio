@@ -1,30 +1,32 @@
-﻿using srk_website.Models;
-using srk_website.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Mvc;
 using srk_website.Data;
+using srk_website.Services;
+using srk_website.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace srk_website.Controllers
 {
     /// <summary>
-    /// This controller handles uploading and deleting slide show images to azure container.
+    /// This controller handles uploading and deleting service images to azure container.
     /// </summary>
     /// <remarks></remarks>
     [Route("api/[controller]")]
     [Authorize]
-    public class ImageSlideShowController : Controller
+    public class ServiceController : Controller
     {
         private readonly IAzureStorage _storage;
         private readonly List<string> _imageFormats;
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<ServiceController> _logger;
 
-        public ImageSlideShowController(IAzureStorage storage, ApplicationDbContext context, IConfiguration configuration)
+        public ServiceController(IAzureStorage storage, ApplicationDbContext context, IConfiguration configuration, ILogger<ServiceController> logger)
         {
             _storage = storage;
             _context = context;
             // List of image formats supported, see appsettings.json.
             _imageFormats = configuration.GetSection("Formats:Images").Get<List<string>>();
+            _logger = logger;
         }
         [HttpGet(nameof(Upload))]
         public IActionResult Upload()
@@ -34,7 +36,7 @@ namespace srk_website.Controllers
 
         [System.ComponentModel.Description("Upload image to azure container and store meta data in database.")]
         [HttpPost(nameof(Upload))]
-        public async Task<IActionResult> Upload(string projectName, string city, string website, IFormFile file)
+        public async Task<IActionResult> Upload(string title, string description, IFormFile file)
         {
             // Index 0 is description of the data, e.g image.
             // Index 1 is the datatype, e.g jpg... 
@@ -48,12 +50,6 @@ namespace srk_website.Controllers
                 return Problem("The image format is not supported.");
             }
 
-            // Meta data about image.
-            ImageSlideShowModel newImage = new ImageSlideShowModel(file.FileName, projectName, city, website);
-            // Stored in the database.
-            await _context.ImageSlideShow.AddAsync(newImage);
-            await _context.SaveChangesAsync();
-
             // Upload image to azure container.
             BlobResponseDto? response = await _storage.UploadAsync(file);
 
@@ -61,32 +57,47 @@ namespace srk_website.Controllers
             if (response.Error == true)
             {
                 // We got an error during upload, return an error with details to the client
+                _logger.LogError("Failed to upload to azure container.");
                 return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
             }
             else
             {
+                var images = await _storage.ListAsync();
+                string uri = "0";
+                foreach (var image in images)
+                {
+                    if (image.Name == file.FileName)
+                    {
+                        uri = image.Uri;
+                    }
+                }
+                if (uri == "0")
+                {
+                    _logger.LogError("Image not found on azure storage.");
+                    return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
+                }
+                // Meta data about image.
+                ServiceModel newImage = new ServiceModel(file.FileName, title, description, uri);
+
+                // Stored in the database.
+                await _context.Service.AddAsync(newImage);
+                await _context.SaveChangesAsync();
+
                 // Return a success message to the client about successfull upload
                 return StatusCode(StatusCodes.Status200OK, response);
             }
 
         }
         [HttpGet(nameof(Delete))]
-        public async Task<IActionResult> Delete()
+        public IActionResult Delete()
         {
             // Get the uri for all images in the azure container.
-            var files = await _storage.ListAsync();
+            var files = _context.Service;
             // List of image meta-data.
             List<SelectListItem> images = new List<SelectListItem>();
             foreach (var file in files)
             {
-                // See if the image is in the database.
-                var img = await _context.ImageSlideShow.FindAsync(file.Name);
-                // If the image is not a ImageSlideShow then we check the next image.
-                if (img == null)
-                {
-                    continue;
-                }
-                images.Add(new SelectListItem { Value = img.ImageName, Text = img.ProjectName });
+                images.Add(new SelectListItem { Value = file.ImageName, Text = file.Title });
             }
             ViewData["images"] = images;
             return View();
@@ -101,19 +112,22 @@ namespace srk_website.Controllers
             // Delete image from azure container.
             BlobResponseDto response = await _storage.DeleteAsync(ImageName);
             // Find image in database.
-            var image = await _context.ImageSlideShow.FindAsync(ImageName);
+            var image = await _context.Service.FindAsync(ImageName);
             if (image == null)
             {
-                return Problem("Image is not in the database.");
+                // Return an error message to the client
+                _logger.LogError("Image not found in database.");
+                return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
             }
             // Remove image from database.
-            _context.ImageSlideShow.Remove(image);
+            _context.Service.Remove(image);
             await _context.SaveChangesAsync();
 
             // Check if we got an error
             if (response.Error == true)
             {
                 // Return an error message to the client
+                _logger.LogError("Failed to delete image from azure container.");
                 return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
             }
             else
@@ -121,6 +135,6 @@ namespace srk_website.Controllers
                 // File has been successfully deleted
                 return StatusCode(StatusCodes.Status200OK, response.Status);
             }
-        }        
+        }
     }
 }

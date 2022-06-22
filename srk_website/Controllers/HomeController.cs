@@ -23,6 +23,17 @@ namespace srk_website.Controllers
         
         public async Task<IActionResult> Index()
         {
+            List<IDictionary<string, string>> ServiceImages = new List<IDictionary<string, string>>();
+            foreach (var file in _context.Service)
+            {
+                // Image meta-data.
+                IDictionary<string, string> tmpDict = new Dictionary<string, string>();
+                tmpDict.Add("Title", file.Title);
+                tmpDict.Add("Description", file.Description);
+                tmpDict.Add("Uri", file.Uri);
+                ServiceImages.Add(tmpDict);
+
+            }
             // Get the uri for all images in the azure container.
             var files = await _storage.ListAsync();
             // List of image meta-data.
@@ -44,6 +55,7 @@ namespace srk_website.Controllers
                 tmpDict.Add("Website", img.Website.ToString());
                 images.Add(tmpDict);
             }
+            ViewData["ServiceImages"] = ServiceImages;
             ViewData["Images"] = images;
             ViewData["Contacts"] = await _context.Contact.ToListAsync();
             return View();
