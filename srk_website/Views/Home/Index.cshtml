@@ -79,10 +79,12 @@
                         <h6 class="small-title">HVA VI GJØR</h6>
                         <h4 class="title">VÅRE TJENESTER</h4>
                     </div>
+                    <!-- Equivalent to enumerate in python -->
                     @foreach (var it in ServiceImages.Select((Value, Index) => new {Value, Index})){
                     <div class="col-md-4">
                         <div class="@("item bg-"+(it.Index+1))">
                             <div class="con">
+                                <!-- Code will bug if there are more than 10 services. -->
                                 <div class="numb">@("0"+(it.Index+1).ToString())</div>
                                 <h5>@it.Value["Title"]</h5>
                                 <p>@it.Value["Description"]</p>

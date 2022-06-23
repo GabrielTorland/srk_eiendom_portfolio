@@ -32,7 +32,6 @@ namespace srk_website.Controllers
                 tmpDict.Add("Description", file.Description);
                 tmpDict.Add("Uri", file.Uri);
                 ServiceImages.Add(tmpDict);
-
             }
             // Get the uri for all images in the azure container.
             var files = await _storage.ListAsync();

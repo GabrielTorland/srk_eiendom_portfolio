@@ -43,7 +43,7 @@ namespace srk_website.Services
             // Return all files to the requesting method
             return files;
         }
-        public async Task<BlobResponseDto> UploadAsync(IFormFile blob)
+        public async Task<BlobResponseDto> UploadAsync(IFormFile blob, string fileName)
         {
             // Create new upload response object that we can return to the requesting method
             BlobResponseDto response = new();
@@ -54,7 +54,7 @@ namespace srk_website.Services
             try
             {
                 // Get a reference to the blob just uploaded from the API in a container from configuration settings
-                BlobClient client = container.GetBlobClient(blob.FileName);
+                BlobClient client = container.GetBlobClient(fileName);
 
                 // Open a stream for the file we want to upload
                 await using (Stream? data = blob.OpenReadStream())
@@ -64,7 +64,7 @@ namespace srk_website.Services
                 }
 
                 // Everything is OK and file got uploaded
-                response.Status = $"File {blob.FileName} Uploaded Successfully";
+                response.Status = $"File {fileName} Uploaded Successfully";
                 response.Error = false;
                 response.Blob.Uri = client.Uri.AbsoluteUri;
                 response.Blob.Name = client.Name;
@@ -74,8 +74,8 @@ namespace srk_website.Services
             catch (Azure.RequestFailedException ex)
                when (ex.ErrorCode == BlobErrorCode.BlobAlreadyExists)
             {
-                _logger.LogError($"File with name {blob.FileName} already exists in container. Set another name to store the file in the container: '{_storageContainerName}.'");
-                response.Status = $"File with name {blob.FileName} already exists. Please use another name to store your file.";
+                _logger.LogError($"File with name {fileName} already exists in container. Set another name to store the file in the container: '{_storageContainerName}.'");
+                response.Status = $"File with name {fileName} already exists. Please use another name to store your file.";
                 response.Error = true;
                 return response;
             }

@@ -8,6 +8,22 @@
 
 <hr />
 
+@if (ViewBag.IsResponse != null)
+    {
+        if (ViewBag.IsSuccess)
+        {
+            <div class="alert alert-success">
+                @ViewBag.Message
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-danger">
+                @ViewBag.Message
+            </div>
+        }
+    }
+
 <form method="post" enctype="multipart/form-data" asp-action="Upload">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">

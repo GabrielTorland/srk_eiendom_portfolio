@@ -5,9 +5,16 @@
     var l = ViewData["Images"] as List<SelectListItem>;
 }
 
+
+
 <h1>Delete Image</h1>
 
-<hr />
+@if (ViewBag.IsResponse != null)
+    {   
+        <div class="alert alert-success">
+            @ViewBag.Message
+        </div>
+    }
 
 <form method="post" asp-action="Delete">
     <select class="form-group" name="ImageName" asp-items=@l>

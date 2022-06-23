@@ -31,6 +31,7 @@ namespace srk_website.Controllers
         [HttpGet(nameof(Upload))]
         public IActionResult Upload()
         {
+
             return View();
         }
 
@@ -50,8 +51,10 @@ namespace srk_website.Controllers
                 return Problem("The image format is not supported.");
             }
 
+            string fileName = $"{_context.Service.Count() + 1}" + '.' + ContentType[1];
+
             // Upload image to azure container.
-            BlobResponseDto? response = await _storage.UploadAsync(file);
+            BlobResponseDto? response = await _storage.UploadAsync(file, fileName);
 
             // Check if we got an error
             if (response.Error == true)
@@ -66,25 +69,29 @@ namespace srk_website.Controllers
                 string uri = "0";
                 foreach (var image in images)
                 {
-                    if (image.Name == file.FileName)
+                    if (image.Name == fileName)
                     {
                         uri = image.Uri;
                     }
                 }
                 if (uri == "0")
                 {
-                    _logger.LogError("Image not found on azure storage.");
-                    return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
+                    _logger.LogError("Image not found in azure storage.");
+                    ViewBag.IsResponse = true;
+                    ViewBag.IsSuccess = false;
+                    ViewBag.Message = "Image upload was unsuccessful!";
+                    return View();
                 }
                 // Meta data about image.
-                ServiceModel newImage = new ServiceModel(file.FileName, title, description, uri);
+                ServiceModel newImage = new ServiceModel(fileName, title, description, uri);
 
                 // Stored in the database.
                 await _context.Service.AddAsync(newImage);
                 await _context.SaveChangesAsync();
-
-                // Return a success message to the client about successfull upload
-                return StatusCode(StatusCodes.Status200OK, response);
+                ViewBag.IsResponse = true;
+                ViewBag.IsSuccess = true;
+                ViewBag.Message = "Image was successfully uploaded!";
+                return View();
             }
 
         }
@@ -133,7 +140,9 @@ namespace srk_website.Controllers
             else
             {
                 // File has been successfully deleted
-                return StatusCode(StatusCodes.Status200OK, response.Status);
+                ViewBag.IsResponse = true;
+                ViewBag.Message = "Image was successfully deleted!";
+                return View();
             }
         }
     }

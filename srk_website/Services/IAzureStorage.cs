@@ -9,7 +9,7 @@ namespace srk_website.Services
         /// </summary>
         /// <param name="file">File for upload</param>
         /// <returns>Blob with status</returns>
-        Task<BlobResponseDto> UploadAsync(IFormFile file);
+        Task<BlobResponseDto> UploadAsync(IFormFile file, string fileName);
         /// <summary>
         /// This method downloads a file with the specified filename
         /// </summary>
