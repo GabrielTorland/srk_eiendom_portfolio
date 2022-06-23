@@ -145,5 +145,11 @@ namespace srk_website.Controllers
                 return View();
             }
         }
+
+        //[HttpGet(nameof(Edit))]
+        //public async Task<IActionResult> Edit(string ImageName)
+        //{
+        //    return View(await _context.Service.FindAsync(ImageName));
+        //}
     }
 }
