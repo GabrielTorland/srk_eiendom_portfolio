@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace srk_website.Controllers
 {
     /// <summary>
-    /// This controller handles uploading and deleting service images to azure container.
+    /// This controller handles upload, delete and edit for services.
     /// </summary>
     /// <remarks></remarks>
     [Route("api/[controller]")]
@@ -39,23 +39,37 @@ namespace srk_website.Controllers
         [HttpPost(nameof(Upload))]
         public async Task<IActionResult> Upload(string title, string description, IFormFile file)
         {
+            if (title == null | description == null | file == null)
+            {
+                ViewBag.IsResponse = true;
+                ViewBag.IsSuccess = false;
+                ViewBag.Message = "All parameters needs to be filled!";
+                return View();
+            }
             // Index 0 is description of the data, e.g image.
             // Index 1 is the datatype, e.g jpg... 
             var ContentType = file.ContentType.Split("/");
             if (ContentType[0] != "image")
             {
-                return Problem("You can only upload images!");
+                ViewBag.IsResponse = true;
+                ViewBag.IsSuccess = false;
+                ViewBag.Message = "You can only upload an image!";
+                return View();
             }
             if (!_imageFormats.Contains(ContentType[1]))
             {
-                return Problem("The image format is not supported.");
+                ViewBag.IsResponse = true;
+                ViewBag.IsSuccess = false;
+                var formats = _imageFormats.ToString();
+                ViewBag.Message = $"Formats supported: {formats}";
+                return View();
             }
 
             string fileName = $"{_context.Service.Count() + 1}" + '.' + ContentType[1];
 
             // Upload image to azure container.
             BlobResponseDto? response = await _storage.UploadAsync(file, fileName);
-
+            
             // Check if we got an error
             if (response.Error == true)
             {
@@ -74,14 +88,6 @@ namespace srk_website.Controllers
                         uri = image.Uri;
                     }
                 }
-                if (uri == "0")
-                {
-                    _logger.LogError("Image not found in azure storage.");
-                    ViewBag.IsResponse = true;
-                    ViewBag.IsSuccess = false;
-                    ViewBag.Message = "Image upload was unsuccessful!";
-                    return View();
-                }
                 // Meta data about image.
                 ServiceModel newImage = new ServiceModel(fileName, title, description, uri);
 
@@ -90,7 +96,7 @@ namespace srk_website.Controllers
                 await _context.SaveChangesAsync();
                 ViewBag.IsResponse = true;
                 ViewBag.IsSuccess = true;
-                ViewBag.Message = "Image was successfully uploaded!";
+                ViewBag.Message = "Service was successfully uploaded!";
                 return View();
             }
 
@@ -113,18 +119,24 @@ namespace srk_website.Controllers
         }
 
         [HttpPost(nameof(Delete))]
-        [System.ComponentModel.Description("Delete image in azure container.")]
+        [System.ComponentModel.Description("Delete image in azure container and remove meta data in database.")]
         public async Task<IActionResult> Delete(string ImageName)
         {
+            if (ImageName == null)
+            {
+                ViewBag.IsResponse = true;
+                ViewBag.Message = "ImageName cant be null!";
+                return View();
+            }
             // Delete image from azure container.
             BlobResponseDto response = await _storage.DeleteAsync(ImageName);
             // Find image in database.
             var image = await _context.Service.FindAsync(ImageName);
             if (image == null)
             {
+                _logger.LogError("Service not found in database.");
                 // Return an error message to the client
-                _logger.LogError("Image not found in database.");
-                return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Service not in database!");
             }
             // Remove image from database.
             _context.Service.Remove(image);
@@ -141,7 +153,8 @@ namespace srk_website.Controllers
             {
                 // File has been successfully deleted
                 ViewBag.IsResponse = true;
-                ViewBag.Message = "Image was successfully deleted!";
+                ViewBag.IsSuccess = true;
+                ViewBag.Message = "Service was successfully deleted!";
                 return View();
             }
         }

@@ -16,13 +16,16 @@ namespace srk_website.Models
         }
         [Key]
         public string ImageName { get; set; }
-        
+
+        [Required]
         public string ProjectName { get; set; }
 
+        [Required]
         public string City { get; set; }
 
         [Url]
-        [DisplayName("Website where you can buy the appartment/house")]
+        [Required]
+        [DisplayName("Website URI where you can buy the appartment/house")]
         public string Website { get; set; }
     }
 }
