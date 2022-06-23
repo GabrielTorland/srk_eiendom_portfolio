@@ -55,7 +55,7 @@ namespace srk_website.Controllers
             await _context.SaveChangesAsync();
 
             // Upload image to azure container.
-            BlobResponseDto? response = await _storage.UploadAsync(file);
+            BlobResponseDto? response = await _storage.UploadAsync(file, file.FileName);
 
             // Check if we got an error
             if (response.Error == true)
@@ -108,7 +108,8 @@ namespace srk_website.Controllers
             }
             // Remove image from database.
             _context.ImageSlideShow.Remove(image);
-            
+            await _context.SaveChangesAsync();
+
             // Check if we got an error
             if (response.Error == true)
             {

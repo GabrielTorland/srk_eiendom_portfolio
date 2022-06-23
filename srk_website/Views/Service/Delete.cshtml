@@ -1,0 +1,25 @@
+﻿@model srk_website.Models.ServiceModel
+
+@{
+    ViewData["Title"] = "Delete";
+    var l = ViewData["Images"] as List<SelectListItem>;
+}
+
+
+
+<h1>Delete Image</h1>
+
+@if (ViewBag.IsResponse != null)
+    {   
+        <div class="alert alert-success">
+            @ViewBag.Message
+        </div>
+    }
+
+<form method="post" asp-action="Delete">
+    <select class="form-group" name="ImageName" asp-items=@l>
+    </select>
+    <div class="form-group">
+        <input type="submit" value="Delete" class="btn btn-danger" />
+    </div>
+</form>

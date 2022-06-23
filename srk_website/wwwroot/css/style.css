@@ -531,13 +531,22 @@ input[type="submit"] {
     font-size: 16px;
 }
 .services .bg-1 {
-    background-image: url(../img/blog/1.jpg);
+    background-image: url("https://webapi.blob.core.windows.net/images/1.jpeg");
 }
 .services .bg-2 {
-    background-image: url(../img/blog/2.jpg);
+    background-image: url("https://webapi.blob.core.windows.net/images/2.jpeg");
 }
 .services .bg-3 {
-    background-image: url(../img/blog/1.jpg);
+    background-image: url("https://webapi.blob.core.windows.net/images/3.jpeg");
+}
+.services .bg-4 {
+    background-image: url("https://webapi.blob.core.windows.net/images/4.jpeg");
+}
+.services .bg-5 {
+    background-image: url("https://webapi.blob.core.windows.net/images/5.jpeg");
+}
+.services .bg-6 {
+    background-image: url("https://webapi.blob.core.windows.net/images/6.jpeg");
 }
 
 
