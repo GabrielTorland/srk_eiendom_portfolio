@@ -22,6 +22,7 @@
                 @ViewBag.Message
             </div>
         }
+
     }
 
 <form method="post" enctype="multipart/form-data" asp-action="Upload">
@@ -43,3 +44,5 @@
         <input type="submit" value="Create" class="btn btn-primary" />
     </div>
 </form>
+
+<a asp-action="Index" asp-controller="Service" class="btn btn-info" role="button" >Back to services</a>

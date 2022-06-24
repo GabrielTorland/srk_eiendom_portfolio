@@ -33,29 +33,19 @@ namespace srk_website.Controllers
                 tmpDict.Add("Uri", file.Uri);
                 ServiceImages.Add(tmpDict);
             }
-            // Get the uri for all images in the azure container.
-            var files = await _storage.ListAsync();
-            // List of image meta-data.
-            List<IDictionary<string, string>> images = new List<IDictionary<string, string>>();
-            foreach (var file in files)
+            List<IDictionary<string, string>> ImageSlideShowImages = new List<IDictionary<string, string>>();
+            foreach (var file in _context.ImageSlideShow)
             {
-                // See if the image is in the database.
-                var img = await _context.ImageSlideShow.FindAsync(file.Name);
-                // If the image is not a ImageSlideShow then we check the next image.
-                if (img == null)
-                {
-                    continue;
-                }
                 // Image meta-data.
                 IDictionary<string, string> tmpDict = new Dictionary<string, string>();
-                tmpDict.Add("ProjectName", img.ProjectName);
-                tmpDict.Add("Country", img.City);
+                tmpDict.Add("ProjectName", file.ProjectName);
+                tmpDict.Add("Country", file.City);
                 tmpDict.Add("Uri", file.Uri);
-                tmpDict.Add("Website", img.Website.ToString());
-                images.Add(tmpDict);
+                tmpDict.Add("Website", file.Website.ToString());
+                ImageSlideShowImages.Add(tmpDict);
             }
             ViewData["ServiceImages"] = ServiceImages;
-            ViewData["Images"] = images;
+            ViewData["ImageSlideShowImages"] = ImageSlideShowImages;
             ViewData["Contacts"] = await _context.Contact.ToListAsync();
             return View();
         }

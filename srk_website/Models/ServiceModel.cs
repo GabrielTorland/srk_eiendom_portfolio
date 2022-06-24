@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace srk_website.Models
 {
@@ -16,9 +17,11 @@ namespace srk_website.Models
 
         [Key]
         public string ImageName { get; set; }
-        
+
+        [Required]
         public string Title { get; set; }
 
+        [Required]
         public string Description { get; set; }
 
         [Url]
