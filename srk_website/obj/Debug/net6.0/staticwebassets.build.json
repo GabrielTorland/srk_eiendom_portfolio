@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "vBIC/mXZD3JdpqeE0+ofYLRMStplwtXXf/AeqRojF1s=",
+  "Hash": "EdVtrSZ4aprOqQSmNkkfhjFDX5zO7siGeZqogIbxjGc=",
   "Source": "srk_website",
   "BasePath": "_content/srk_website",
   "Mode": "Default",
@@ -1205,6 +1205,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\style.css"
+    },
+    {
+      "Identity": "C:\\Users\\elisa\\website\\roy_kato_website\\srk_website\\wwwroot\\css\\test.css",
+      "SourceId": "srk_website",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\elisa\\website\\roy_kato_website\\srk_website\\wwwroot\\",
+      "BasePath": "_content/srk_website",
+      "RelativePath": "css/test.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\test.css"
     },
     {
       "Identity": "C:\\Users\\elisa\\website\\roy_kato_website\\srk_website\\wwwroot\\css\\themify-icons.css",

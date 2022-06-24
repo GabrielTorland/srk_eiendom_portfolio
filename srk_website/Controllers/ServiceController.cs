@@ -28,6 +28,11 @@ namespace srk_website.Controllers
             _imageFormats = configuration.GetSection("Formats:Images").Get<List<string>>();
             _logger = logger;
         }
+        public IActionResult Index()
+        {
+            return View(_context.Service);
+        }
+            
         [HttpGet(nameof(Upload))]
         public IActionResult Upload()
         {
@@ -101,22 +106,6 @@ namespace srk_website.Controllers
             }
 
         }
-        [HttpGet(nameof(Delete))]
-        public IActionResult Delete()
-        {
-            // Get the uri for all images in the azure container.
-            var files = _context.Service;
-            // List of image meta-data.
-            List<SelectListItem> images = new List<SelectListItem>();
-            foreach (var file in files)
-            {
-                images.Add(new SelectListItem { Value = file.ImageName, Text = file.Title });
-            }
-            ViewData["images"] = images;
-            return View();
-
-
-        }
 
         [HttpPost(nameof(Delete))]
         [System.ComponentModel.Description("Delete image in azure container and remove meta data in database.")]
@@ -124,9 +113,7 @@ namespace srk_website.Controllers
         {
             if (ImageName == null)
             {
-                ViewBag.IsResponse = true;
-                ViewBag.Message = "ImageName cant be null!";
-                return View();
+                return Problem("ImageName cant be null.");
             }
             // Delete image from azure container.
             BlobResponseDto response = await _storage.DeleteAsync(ImageName);
@@ -152,10 +139,7 @@ namespace srk_website.Controllers
             else
             {
                 // File has been successfully deleted
-                ViewBag.IsResponse = true;
-                ViewBag.IsSuccess = true;
-                ViewBag.Message = "Service was successfully deleted!";
-                return View();
+                return RedirectToAction("Index", "Service");
             }
         }
 

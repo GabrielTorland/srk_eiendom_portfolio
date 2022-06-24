@@ -25,7 +25,6 @@ namespace srk_website.Models
         public string Description { get; set; }
 
         [Url]
-        [DefaultValue("#")]
         public string Uri { get; set; }
     }
 }

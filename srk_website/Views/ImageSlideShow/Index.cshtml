@@ -1,0 +1,31 @@
+﻿@model IEnumerable<srk_website.Models.ImageSlideShowModel>
+
+@{
+    ViewData["Title"] = "Image slide show";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-8 col-lg-5">
+            <h6 class="text-muted">Slide show images</h6>
+            <a asp-action="Upload" asp-controller="ImageSlideShow" class="btn btn-info" role="button" >Add image to the slideshow</a>
+                <ul class="list-group">            
+                @foreach (var item  in Model){
+            
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @item.ProjectName 
+                        <div class="image-parent">
+                            <img src="@item.Uri" class="img-fluid" alt="quixote">
+                        </div>
+                    </li>
+                    <form method="post" asp-action="Delete">
+                        <input type="hidden" name="ImageName" value=@item.ImageName>
+                        <div class="form-group">
+                            <input type="submit" value="Delete" class="btn btn-danger" />
+                        </div>
+                    </form>
+                }   
+            </ul>
+            <a asp-action="Index" asp-controller="Admin" class="btn btn-info" role="button" >Back to image admin page</a>
+        </div>
+    </div>
+</div>

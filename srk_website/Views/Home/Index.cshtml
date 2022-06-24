@@ -32,6 +32,7 @@
 					<li><a href="#project">PROSJEKTER</a></li>
 					<li><a href="#news">NYHETER</a></li>
 					<li><a href="#contact">KONTAKT</a></li>
+                    <li><a asp-controller="Home" asp-action="Privacy">Personvern</a></li>
 				</ul>
 			</nav>
 			<!-- Menu social media -->
@@ -40,9 +41,6 @@
                     <a href="#"><i class="ti-facebook"></i></a>
                     <a href="#"><i class="ti-twitter"></i></a>
                     <a href="#"><i class="ti-instagram"></i></a>
-                </div>
-                <div class="togo-menu-copyright">
-                    <p>© 2022 TOGO by <a href="#">DuruThemes</a></p>
                 </div>
             </div>
 		</div>
@@ -60,7 +58,7 @@
         <!-- Header Slider -->
         <header id="home" class="header pos-re slider-fade">
             <div class="owl-carousel owl-theme">
-                @foreach(var item in ViewData["Images"] as List<IDictionary<string, string>>){
+                @foreach(var item in ViewData["ImageSlideShowImages"] as List<IDictionary<string, string>>){
                 <div class="item bg-img" data-overlay-dark="3" data-background="@item["Uri"]">
                     <div class="container text-center v-middle caption">
                         <h4>Eiendom</h4>

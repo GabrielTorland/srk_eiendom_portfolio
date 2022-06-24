@@ -28,6 +28,13 @@ namespace srk_website.Controllers
             _imageFormats = configuration.GetSection("Formats:Images").Get<List<string>>();
             _logger = logger;
         }
+
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View(_context.ImageSlideShow);
+        }
+        
         [HttpGet(nameof(Upload))]
         public IActionResult Upload()
         {
@@ -97,7 +104,7 @@ namespace srk_website.Controllers
                     }
                 }
                 // Meta data about image.
-                ImageSlideShowModel newImage = new ImageSlideShowModel(fileName, projectName, city, website);
+                ImageSlideShowModel newImage = new ImageSlideShowModel(fileName, projectName, city, website, uri);
 
                 // Stored in the database.
                 await _context.ImageSlideShow.AddAsync(newImage);
@@ -107,20 +114,6 @@ namespace srk_website.Controllers
                 ViewBag.Message = "Image was successfully uploaded to the slideshow!";
                 return View();
             }
-
-        }
-        [HttpGet(nameof(Delete))]
-        public async Task<IActionResult> Delete()
-        {
-            // List of image meta-data.
-            List<SelectListItem> images = new List<SelectListItem>();
-            foreach (var file in _context.ImageSlideShow)
-            {
-                images.Add(new SelectListItem { Value = file.ImageName, Text = file.ProjectName });
-            }
-            ViewData["images"] = images;
-            return View();
-
 
         }
 
@@ -156,9 +149,7 @@ namespace srk_website.Controllers
             else
             {
                 // File has been successfully deleted
-                ViewBag.IsResponse = true;
-                ViewBag.Message = "Slideshow image was successfully deleted!";
-                return View();
+                return RedirectToAction("Index", "ImageSlideShow");
             }
         }        
     }
