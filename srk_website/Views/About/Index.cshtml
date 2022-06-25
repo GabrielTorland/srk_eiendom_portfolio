@@ -1,0 +1,26 @@
+﻿@model srk_website.Models.AboutModel
+
+@{
+    ViewData["Title"] = "About";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <h4>About</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Text)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Text)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model?.Id">Edit</a>
+</div>
+
+<a asp-action="Index" asp-controller="Admin">Back to admin page</a>
+

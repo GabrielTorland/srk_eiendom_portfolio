@@ -51,3 +51,7 @@
 </form>
 
 <a asp-action="Index" asp-controller="ImageSlideShow" class="btn btn-info" role="button" >Back to image slideshow</a>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
