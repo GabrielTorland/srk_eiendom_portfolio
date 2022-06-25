@@ -25,6 +25,7 @@
 
 <form method="post" enctype="multipart/form-data" asp-action="Upload">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.AntiForgeryToken()
     <div class="form-group">
         <label asp-for="ProjectName" class="control-label"></label>
         <input asp-for="ProjectName" class="form-control" />
