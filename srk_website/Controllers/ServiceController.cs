@@ -102,6 +102,7 @@ namespace srk_website.Controllers
                 ViewBag.IsResponse = true;
                 ViewBag.IsSuccess = true;
                 ViewBag.Message = "Service was successfully uploaded!";
+                ViewData["ImageName"] = fileName;
                 return View();
             }
 
