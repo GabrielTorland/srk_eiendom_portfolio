@@ -1,4 +1,4 @@
-﻿@model IEnumerable<srk_website.Models.ServiceModel>
+﻿@model  IEnumerable<srk_website.Models.ServiceModel>
 
 @{
     ViewData["Title"] = "Services";
@@ -22,10 +22,16 @@
                         <div class="form-group">
                             <input type="submit" value="Delete" class="btn btn-danger" />
                         </div>
+                    </form>   
+                    <form method="get" asp-action="Edit">
+                        <input type="hidden" name="ImageName" value=@item.ImageName>
+                        <div class="form-group">
+                            <input type="submit" value="Edit" class="btn btn-danger" />
+                        </div>
                     </form>
                 }   
             </ul>
-            <a asp-action="Index" asp-controller="Admin" class="btn btn-info" role="button" >Back to image admin page</a>
+            <a asp-action="Index" asp-controller="Admin" class="btn btn-info" role="button" >Back to admin page</a>
         </div>
     </div>
 </div>
