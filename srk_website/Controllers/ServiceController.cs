@@ -143,10 +143,77 @@ namespace srk_website.Controllers
             }
         }
 
-        //[HttpGet(nameof(Edit))]
-        //public async Task<IActionResult> Edit(string ImageName)
-        //{
-        //    return View(await _context.Service.FindAsync(ImageName));
-        //}
+        [HttpGet(nameof(Edit))]
+        public async Task<IActionResult> Edit(string ImageName)
+        {
+            if (ImageName == null)
+            {
+                return NotFound();
+            }
+            var service = await _context.Service.FindAsync(ImageName);
+            if (service == null)
+            {
+                return NotFound();
+            }
+
+            return View(service);
+        }
+        
+        // This method needs to be improved in the future!
+        [HttpPost(nameof(Edit))]
+        public async Task<IActionResult> Edit(string imageName, string title, string description, IFormFile file)
+        {
+            if (imageName == null | title == null | description == null | file == null)
+            {
+                ViewBag.IsResponse = true;
+                ViewBag.IsSuccess = false;
+                ViewBag.Message = "All parameters needs to be filled!";
+                return View();
+            }
+            var ContentType = file.ContentType.Split("/");
+            if (ContentType[0] != "image")
+            {
+                ViewBag.IsResponse = true;
+                ViewBag.IsSuccess = false;
+                ViewBag.Message = "You can only upload an image!";
+                return View();
+            }
+            if (!_imageFormats.Contains(ContentType[1]))
+            {
+                ViewBag.IsResponse = true;
+                ViewBag.IsSuccess = false;
+                var formats = _imageFormats.ToString();
+                ViewBag.Message = $"Formats supported: {formats}";
+                return View();
+            }
+            var service = await _context.Service.FindAsync(imageName);
+            if (service == null)
+            {
+                return NotFound();
+            }
+            // Have to create new image name because datatype can change.
+            string ImageName = imageName.Substring(0, 1) + '.' + ContentType[1];
+
+            var newService = new ServiceModel();
+            newService.ImageName = ImageName;
+            newService.Title = title;
+            newService.Description = description;
+            newService.Uri = service.Uri.Replace(imageName, ImageName);
+
+            _context.Service.Remove(service);
+            _context.Service.Add(newService);
+            _context.SaveChanges();
+
+            // Delete image in azure storage.
+            await _storage.DeleteAsync(imageName);
+            
+            // Upload image to azure container.
+            await _storage.UploadAsync(file, ImageName);
+            ViewBag.IsResponse = true;
+            ViewBag.IsSuccess = true;
+            ViewBag.Message = "Service was successfully edited!";
+            return View(newService);
+            
+        }
     }
 }
