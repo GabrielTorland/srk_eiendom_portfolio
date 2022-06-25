@@ -18,6 +18,7 @@
                         </div>
                     </li>
                     <form method="post" asp-action="Delete">
+                        @Html.AntiForgeryToken()
                         <input type="hidden" name="ImageName" value=@item.ImageName>
                         <div class="form-group">
                             <input type="submit" value="Delete" class="btn btn-danger" />

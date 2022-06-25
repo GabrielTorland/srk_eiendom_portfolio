@@ -42,6 +42,7 @@ namespace srk_website.Controllers
         }
 
         [System.ComponentModel.Description("Upload image to azure container and store meta data in database.")]
+        [ValidateAntiForgeryToken]
         [HttpPost(nameof(Upload))]
         public async Task<IActionResult> Upload(string projectName, string city, string website, IFormFile file)
         {
@@ -95,7 +96,7 @@ namespace srk_website.Controllers
             else
             {
                 var images = await _storage.ListAsync();
-                string uri = "0";
+                string uri = "";
                 foreach (var image in images)
                 {
                     if (image.Name == fileName)
@@ -103,12 +104,18 @@ namespace srk_website.Controllers
                         uri = image.Uri;
                     }
                 }
+                if (uri == "")
+                {
+                    return Problem("Could not find image in azure container!");
+                }
                 // Meta data about image.
                 ImageSlideShowModel newImage = new ImageSlideShowModel(fileName, projectName, city, website, uri);
 
                 // Stored in the database.
+                // Try catch here in the future.
                 await _context.ImageSlideShow.AddAsync(newImage);
                 await _context.SaveChangesAsync();
+                
                 ViewBag.IsResponse = true;
                 ViewBag.IsSuccess = true;
                 ViewBag.Message = "Image was successfully uploaded to the slideshow!";
@@ -118,6 +125,7 @@ namespace srk_website.Controllers
         }
 
         [HttpPost(nameof(Delete))]
+        [ValidateAntiForgeryToken]
         [System.ComponentModel.Description("Delete image in azure container and meta data in database.")]
         public async Task<IActionResult> Delete(string ImageName)
         {
@@ -125,8 +133,6 @@ namespace srk_website.Controllers
             {
                 return Problem("ImageName cant be null.");
             }
-            // Delete image from azure container.
-            BlobResponseDto response = await _storage.DeleteAsync(ImageName);
             
             // Find image in database.
             var image = await _context.ImageSlideShow.FindAsync(ImageName);       
@@ -137,9 +143,13 @@ namespace srk_website.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "ImageSlideShow not in database.");
             }
             // Remove image from database.
+            // Try catch here in the future.
             _context.ImageSlideShow.Remove(image);
             await _context.SaveChangesAsync();
 
+            // Delete image from azure container.
+            BlobResponseDto response = await _storage.DeleteAsync(ImageName);
+            
             // Check if we got an error
             if (response.Error == true)
             {

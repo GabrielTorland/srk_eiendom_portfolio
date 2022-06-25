@@ -25,8 +25,11 @@
 
     }
 
+<img src=@Model.Uri alt="Current image">
+
 <form method="post" enctype="multipart/form-data" asp-action="Edit">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.AntiForgeryToken()
     <input asp-for="ImageName" type="hidden" value=@Model.ImageName />
     <div class="form-group">
         <label asp-for="Title" class="control-label"></label>

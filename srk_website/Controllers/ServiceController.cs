@@ -36,11 +36,11 @@ namespace srk_website.Controllers
         [HttpGet(nameof(Upload))]
         public IActionResult Upload()
         {
-
             return View();
         }
 
         [System.ComponentModel.Description("Upload image to azure container and store meta data in database.")]
+        [ValidateAntiForgeryToken]
         [HttpPost(nameof(Upload))]
         public async Task<IActionResult> Upload(string title, string description, IFormFile file)
         {
@@ -70,10 +70,25 @@ namespace srk_website.Controllers
                 return View();
             }
 
-            string fileName = $"{_context.Service.Count() + 1}" + '.' + ContentType[1];
+            // Generating random string.
+            Random random = new Random();
+            int length = 20;
+            var rString = "";
+            for (var i = 0; i < length; i++)
+            {
+                rString += ((char)(random.Next(1, 26) + 64)).ToString();
+                rString += ((char)(random.Next(1, 26) + 96)).ToString();
+            }
+
+            string fileName = rString + '.' + ContentType[1];
 
             // Upload image to azure container.
             BlobResponseDto? response = await _storage.UploadAsync(file, fileName);
+            
+            if (response == null)
+            {
+                return Problem("UploadAsync is not working or azure storage is down!");
+            }
             
             // Check if we got an error
             if (response.Error == true)
@@ -85,30 +100,43 @@ namespace srk_website.Controllers
             else
             {
                 var images = await _storage.ListAsync();
-                string uri = "0";
+                if (images == null)
+                {
+                    return Problem("ListAsync is not working or azure storage is down!");
+                }
+                string uri = "";
                 foreach (var image in images)
                 {
                     if (image.Name == fileName)
                     {
                         uri = image.Uri;
+                        break;
                     }
                 }
+                // This test is a little overkill, but what the heck:D
+                if (uri == "")
+                {
+                    return Problem("Could not find image in azure container!");
+                }
+                
                 // Meta data about image.
                 ServiceModel newImage = new ServiceModel(fileName, title, description, uri);
 
                 // Stored in the database.
+                // Try catch here in the future.
                 await _context.Service.AddAsync(newImage);
                 await _context.SaveChangesAsync();
+                
                 ViewBag.IsResponse = true;
                 ViewBag.IsSuccess = true;
                 ViewBag.Message = "Service was successfully uploaded!";
-                ViewData["ImageName"] = fileName;
                 return View();
             }
 
         }
 
         [HttpPost(nameof(Delete))]
+        [ValidateAntiForgeryToken]
         [System.ComponentModel.Description("Delete image in azure container and remove meta data in database.")]
         public async Task<IActionResult> Delete(string ImageName)
         {
@@ -116,8 +144,7 @@ namespace srk_website.Controllers
             {
                 return Problem("ImageName cant be null.");
             }
-            // Delete image from azure container.
-            BlobResponseDto response = await _storage.DeleteAsync(ImageName);
+            
             // Find image in database.
             var image = await _context.Service.FindAsync(ImageName);
             if (image == null)
@@ -127,8 +154,12 @@ namespace srk_website.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Service not in database!");
             }
             // Remove image from database.
+            // Try catch here in the future.
             _context.Service.Remove(image);
             await _context.SaveChangesAsync();
+
+            // Delete image from azure container.
+            BlobResponseDto response = await _storage.DeleteAsync(ImageName);            
 
             // Check if we got an error
             if (response.Error == true)
@@ -162,54 +193,81 @@ namespace srk_website.Controllers
         
         // This method needs to be improved in the future!
         [HttpPost(nameof(Edit))]
+        [ValidateAntiForgeryToken]
+        [System.ComponentModel.Description("Edit image in azure container and edit meta data in database.")]
         public async Task<IActionResult> Edit(string imageName, string title, string description, IFormFile file)
         {
-            if (imageName == null | title == null | description == null | file == null)
+            if (imageName == null | title == null | description == null)
             {
                 ViewBag.IsResponse = true;
                 ViewBag.IsSuccess = false;
                 ViewBag.Message = "All parameters needs to be filled!";
                 return View();
             }
-            var ContentType = file.ContentType.Split("/");
-            if (ContentType[0] != "image")
+            string ImageName = "";
+            if (file != null)
             {
-                ViewBag.IsResponse = true;
-                ViewBag.IsSuccess = false;
-                ViewBag.Message = "You can only upload an image!";
-                return View();
+                var ContentType = file.ContentType.Split("/");
+                if (ContentType[0] != "image")
+                {
+                    ViewBag.IsResponse = true;
+                    ViewBag.IsSuccess = false;
+                    ViewBag.Message = "You can only upload an image!";
+                    return View();
+                }
+                if (!_imageFormats.Contains(ContentType[1]))
+                {
+                    ViewBag.IsResponse = true;
+                    ViewBag.IsSuccess = false;
+                    var formats = _imageFormats.ToString();
+                    ViewBag.Message = $"Formats supported: {formats}";
+                    return View();
+                }
+                // ImageName change because another datatype is used.
+                ImageName = imageName.Split('.')[0] + '.' + ContentType[1];
             }
-            if (!_imageFormats.Contains(ContentType[1]))
+            else
             {
-                ViewBag.IsResponse = true;
-                ViewBag.IsSuccess = false;
-                var formats = _imageFormats.ToString();
-                ViewBag.Message = $"Formats supported: {formats}";
-                return View();
+                ImageName = imageName;
             }
+            
+
             var service = await _context.Service.FindAsync(imageName);
             if (service == null)
             {
                 return NotFound();
             }
-            // Have to create new image name because datatype can change.
-            string ImageName = imageName.Substring(0, 1) + '.' + ContentType[1];
 
             var newService = new ServiceModel();
             newService.ImageName = ImageName;
             newService.Title = title;
             newService.Description = description;
+            // Replace old image name with new imagename(otherwise URI is still the same).
             newService.Uri = service.Uri.Replace(imageName, ImageName);
 
+            // Try catch here in the future.
             _context.Service.Remove(service);
             _context.Service.Add(newService);
             _context.SaveChanges();
 
-            // Delete image in azure storage.
-            await _storage.DeleteAsync(imageName);
-            
-            // Upload image to azure container.
-            await _storage.UploadAsync(file, ImageName);
+            if (file != null)
+            {
+                // Delete image in azure storage.
+                BlobResponseDto? response = await _storage.DeleteAsync(imageName);
+                if (response.Error == true)
+                {
+                    _logger.LogError("Failed to delete image from azure container.");
+                    return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
+                }
+                // Upload image to azure container.
+                response = await _storage.UploadAsync(file, ImageName);
+                if (response.Error == true)
+                {
+                    _logger.LogError("Failed to upload to azure container.");
+                    return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
+                }
+            }
+
             ViewBag.IsResponse = true;
             ViewBag.IsSuccess = true;
             ViewBag.Message = "Service was successfully edited!";
