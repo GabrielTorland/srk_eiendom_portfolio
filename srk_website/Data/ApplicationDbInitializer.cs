@@ -16,19 +16,19 @@ namespace srk_website.Data
             // Delete the database before we initialize it. This is common to do during development.
             
             // Reenable this after first build
-            // db.Database.EnsureDeleted();
+            db.Database.EnsureDeleted();
 
             // Recreate the database and tables according to our models
             db.Database.EnsureCreated();
 
             // If there are any uses in the database, we dont create a new admin.
+
             if (um.Users.Any())
             {
                 db.SaveChanges();
                 return;
             }
-            
-            
+
             // Generating random string.
             Random random = new Random();
             int length = 8;
@@ -61,6 +61,10 @@ namespace srk_website.Data
             {
                 db.Contact.Add(new ContactModel(addresses[i], zips[i], cities[i], countires[i], tlfs[i], emails[i]));
             }
+
+            // Create about page.
+            var about = new AboutModel("");
+            db.About.Add(about);
 
             await db.SaveChangesAsync();
             

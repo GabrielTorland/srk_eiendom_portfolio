@@ -44,6 +44,8 @@ namespace srk_website.Controllers
                 tmpDict.Add("Website", file.Website.ToString());
                 ImageSlideShowImages.Add(tmpDict);
             }
+            var tmp = await _context.About.FindAsync(1);
+            ViewData["About"] = tmp;
             ViewData["ServiceImages"] = ServiceImages;
             ViewData["ImageSlideShowImages"] = ImageSlideShowImages;
             ViewData["Contacts"] = await _context.Contact.ToListAsync();

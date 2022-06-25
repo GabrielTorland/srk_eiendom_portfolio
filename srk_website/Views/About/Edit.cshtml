@@ -1,0 +1,42 @@
+﻿@model srk_website.Models.AboutModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>About</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Text" class="control-label"></label>
+                 <textarea asp-for="Text" class="ckeditor" name="text" rows="200"></textarea>
+                <span asp-validation-for="Text" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to about</a>
+</div>
+
+<script>
+    $(document).ready(function () {
+        CKEDITOR.replace('#Description');
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

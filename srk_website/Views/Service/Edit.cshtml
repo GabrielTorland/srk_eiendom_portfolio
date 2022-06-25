@@ -48,3 +48,7 @@
 </form>
 
 <a asp-action="Index" asp-controller="Service" class="btn btn-info" role="button" >Back to services</a>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
