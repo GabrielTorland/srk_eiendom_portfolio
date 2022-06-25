@@ -81,7 +81,7 @@
                     <!-- Equivalent to enumerate in python -->
                     @foreach (var it in ServiceImages.Select((Value, Index) => new {Value, Index})){
                     <div class="col-md-4">
-                        <div class="@("item bg-"+(it.Index+1))">
+                        <div class="@("item bg-"+(it.Index+1))" style="background-image: url(@it.Value["Uri"]);">
                             <div class="con">
                                 <!-- Code will bug if there are more than 10 services. -->
                                 <div class="numb">@("0"+(it.Index+1).ToString())</div>
