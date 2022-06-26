@@ -51,17 +51,6 @@ namespace srk_website.Data
             var password = "Password1.";
             await um.CreateAsync(user,password);
 
-            string[] addresses = { "Ulveveien 3", "Gaupeveien 35A", "Osloveien 3" };
-            string[] zips = { "4323", "4873", "4532" };
-            string[] cities = { "Sandnes", "Sandnes", "Oslo" };
-            string[] countires = { "Norge", "Norge", "Norge" };
-            string[] tlfs = { "95402323", "47232342", "95432309" };
-            string[] emails = { "rfk@gmail.com", "rfk2@gmail.com", "rfk3@gmail.com" };
-            for (int i = 0; i < 3; ++i)
-            {
-                db.Contact.Add(new ContactModel(addresses[i], zips[i], cities[i], countires[i], tlfs[i], emails[i]));
-            }
-
             // Create about page.
             var about = new AboutModel("");
             db.About.Add(about);

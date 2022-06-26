@@ -1,6 +1,7 @@
 ﻿@{
     string Title = "SRK";
-    var ServiceImages = ViewData["ServiceImages"] as List<IDictionary<string, string>>;
+    var Services = ViewData["Services"] as List<ServiceModel>;
+    var Contacts = ViewData["Contacts"] as List<ContactModel>;
     var About = ViewData["About"] as AboutModel;
 }
 
@@ -59,12 +60,12 @@
         <!-- Header Slider -->
         <header id="home" class="header pos-re slider-fade">
             <div class="owl-carousel owl-theme">
-                @foreach(var item in ViewData["ImageSlideShowImages"] as List<IDictionary<string, string>>){
-                <div class="item bg-img" data-overlay-dark="3" data-background="@item["Uri"]">
+                @foreach(var item in ViewData["ImageSlideShows"] as List<ImageSlideShowModel>){
+                <div class="item bg-img" data-overlay-dark="3" data-background="@item.Uri">
                     <div class="container text-center v-middle caption">
                         <h4>Eiendom</h4>
-                        <h1>@item["ProjectName"], @item["Country"]</h1>
-                        <a href=@item["Website"] target="_blank" class="btn"><span>Kjøp nå<i class="ti-arrow-right"></i></span></a>
+                        <h1>@item.ProjectName, @item.City</h1>
+                        <a href=@item.Website target="_blank" class="btn"><span>Kjøp nå<i class="ti-arrow-right"></i></span></a>
                     </div>
                 </div>
                 }
@@ -79,14 +80,14 @@
                         <h4 class="title">VÅRE TJENESTER</h4>
                     </div>
                     <!-- Equivalent to enumerate in python -->
-                    @foreach (var it in ServiceImages.Select((Value, Index) => new {Value, Index})){
+                    @foreach (var it in Services.Select((Value, Index) => new {Value, Index})){
                     <div class="col-md-4">
-                        <div class="@("item bg-"+(it.Index+1))" style="background-image: url(@it.Value["Uri"]);">
+                        <div class="@("item bg-"+(it.Index+1))" style="background-image: url(@it.Value.Uri);">
                             <div class="con">
                                 <!-- Code will bug if there are more than 10 services. -->
                                 <div class="numb">@("0"+(it.Index+1).ToString())</div>
-                                <h5>@it.Value["Title"]</h5>
-                                <p>@it.Value["Description"]</p>
+                                <h5>@it.Value.Title</h5>
+                                <p>@it.Value.Description</p>
                             </div>
                         </div>
                     </div>
@@ -304,14 +305,15 @@
                     </div>
                 </div>
                 <div class="row">
-                    @foreach (var item in ViewData["Contacts"] as List<ContactModel>) {
+                    <!-- Equivalent to enumerate in python -->
+                    @foreach (var it in Contacts.Select((Value, Index) => new {Value, Index})){
                     <div class="col-md-4">
-                        <div class="item bg-4">
+                        <div class="item bg-4" style="background-image: url(https://webapi.blob.core.windows.net/images/contact.jpg);">
                             <div class="con">
-                                <h5>@item.Country.ToUpper()</h5>
-                                <p><i class="ti-home" style="font-size: 16px; color: #c5a47e;"></i> @item.Address, @item.Zip @item.City, @item.Country, UK</p>
-                                <p><i class="ti-mobile" style="font-size: 16px; color: #c5a47e;"></i> @item.Phone</p>
-                                <p><i class="ti-envelope" style="font-size: 16px; color: #c5a47e;"></i> @item.Email</p>
+                                <h5>@it.Value.Country.ToUpper()</h5>
+                                <p><i class="ti-home" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Address, @it.Value.Zip @it.Value.City, @it.Value.Country, UK</p>
+                                <p><i class="ti-mobile" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Phone</p>
+                                <p><i class="ti-envelope" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Email</p>
                             </div>
                         </div>
                     </div>

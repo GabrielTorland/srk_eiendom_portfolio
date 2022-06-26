@@ -39,6 +39,5 @@ namespace srk_website.Models
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-
     }
 }

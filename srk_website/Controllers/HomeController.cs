@@ -22,32 +22,10 @@ namespace srk_website.Controllers
         }
         
         public async Task<IActionResult> Index()
-        {
-            List<IDictionary<string, string>> ServiceImages = new List<IDictionary<string, string>>();
-            foreach (var file in _context.Service)
-            {
-                // Image meta-data.
-                IDictionary<string, string> tmpDict = new Dictionary<string, string>();
-                tmpDict.Add("Title", file.Title);
-                tmpDict.Add("Description", file.Description);
-                tmpDict.Add("Uri", file.Uri);
-                ServiceImages.Add(tmpDict);
-            }
-            List<IDictionary<string, string>> ImageSlideShowImages = new List<IDictionary<string, string>>();
-            foreach (var file in _context.ImageSlideShow)
-            {
-                // Image meta-data.
-                IDictionary<string, string> tmpDict = new Dictionary<string, string>();
-                tmpDict.Add("ProjectName", file.ProjectName);
-                tmpDict.Add("Country", file.City);
-                tmpDict.Add("Uri", file.Uri);
-                tmpDict.Add("Website", file.Website.ToString());
-                ImageSlideShowImages.Add(tmpDict);
-            }
-            var tmp = await _context.About.FindAsync(1);
-            ViewData["About"] = tmp;
-            ViewData["ServiceImages"] = ServiceImages;
-            ViewData["ImageSlideShowImages"] = ImageSlideShowImages;
+        {   
+            ViewData["About"] = await _context.About.FindAsync(1);
+            ViewData["Services"] = await _context.Service.ToListAsync();
+            ViewData["ImageSlideShows"] = await _context.ImageSlideShow.ToListAsync();
             ViewData["Contacts"] = await _context.Contact.ToListAsync();
             return View();
         }
