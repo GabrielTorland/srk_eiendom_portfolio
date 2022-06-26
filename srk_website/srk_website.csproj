@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Storage\" />
     <Folder Include="wwwroot\fonts\" />
   </ItemGroup>
 
