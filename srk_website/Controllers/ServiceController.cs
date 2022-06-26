@@ -19,14 +19,16 @@ namespace srk_website.Controllers
         private readonly List<string> _imageFormats;
         private readonly ApplicationDbContext _context;
         private readonly ILogger<ServiceController> _logger;
+        private readonly IGenerateRandomImageName _generator;
 
-        public ServiceController(IAzureStorage storage, ApplicationDbContext context, IConfiguration configuration, ILogger<ServiceController> logger)
+        public ServiceController(IAzureStorage storage, ApplicationDbContext context, IConfiguration configuration, ILogger<ServiceController> logger, IGenerateRandomImageName generator)
         {
             _storage = storage;
             _context = context;
             // List of image formats supported, see appsettings.json.
             _imageFormats = configuration.GetSection("Formats:Images").Get<List<string>>();
             _logger = logger;
+            _generator = generator;
         }
         public IActionResult Index()
         {
@@ -70,17 +72,17 @@ namespace srk_website.Controllers
                 return View();
             }
 
-            // Generating random string.
-            Random random = new Random();
-            int length = 20;
-            var rString = "";
-            for (var i = 0; i < length; i++)
-            {
-                rString += ((char)(random.Next(1, 26) + 64)).ToString();
-                rString += ((char)(random.Next(1, 26) + 96)).ToString();
-            }
 
-            string fileName = rString + '.' + ContentType[1];
+            // Generating fileNames untill a unique is found.
+            string fileName = "";
+            while (true)
+            {
+                fileName = await _generator.Generate(ContentType[1], 20);
+                if (_context.Service.Where(s => s.ImageName == fileName).Count() == 0)
+                {
+                    break;
+                }
+            }
 
             // Upload image to azure container.
             BlobResponseDto? response = await _storage.UploadAsync(file, fileName);

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\MSI Gaming PC\\codingProjects\\roy_kato_website\\FirebaseLoginAuth\\FirebaseLoginAuth.csproj": {}
+    "C:\\Users\\elisa\\website\\roy_kato_website\\FirebaseLoginAuth\\FirebaseLoginAuth.csproj": {}
   },
   "projects": {
-    "C:\\Users\\MSI Gaming PC\\codingProjects\\roy_kato_website\\FirebaseLoginAuth\\FirebaseLoginAuth.csproj": {
+    "C:\\Users\\elisa\\website\\roy_kato_website\\FirebaseLoginAuth\\FirebaseLoginAuth.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\MSI Gaming PC\\codingProjects\\roy_kato_website\\FirebaseLoginAuth\\FirebaseLoginAuth.csproj",
+        "projectUniqueName": "C:\\Users\\elisa\\website\\roy_kato_website\\FirebaseLoginAuth\\FirebaseLoginAuth.csproj",
         "projectName": "FirebaseLoginAuth",
-        "projectPath": "C:\\Users\\MSI Gaming PC\\codingProjects\\roy_kato_website\\FirebaseLoginAuth\\FirebaseLoginAuth.csproj",
-        "packagesPath": "C:\\Users\\MSI Gaming PC\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\MSI Gaming PC\\codingProjects\\roy_kato_website\\FirebaseLoginAuth\\obj\\",
+        "projectPath": "C:\\Users\\elisa\\website\\roy_kato_website\\FirebaseLoginAuth\\FirebaseLoginAuth.csproj",
+        "packagesPath": "C:\\Users\\elisa\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\elisa\\website\\roy_kato_website\\FirebaseLoginAuth\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\MSI Gaming PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\elisa\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -71,7 +71,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -19,14 +19,16 @@ namespace srk_website.Controllers
         private readonly List<string> _imageFormats;
         private readonly ApplicationDbContext _context;
         private readonly ILogger<ImageSlideShowController> _logger;
+        private readonly IGenerateRandomImageName _generator;
 
-        public ImageSlideShowController(IAzureStorage storage, ApplicationDbContext context, IConfiguration configuration, ILogger<ImageSlideShowController> logger)
+        public ImageSlideShowController(IAzureStorage storage, ApplicationDbContext context, IConfiguration configuration, ILogger<ImageSlideShowController> logger, IGenerateRandomImageName generator)
         {
             _storage = storage;
             _context = context;
             // List of image formats supported, see appsettings.json.
             _imageFormats = configuration.GetSection("Formats:Images").Get<List<string>>();
             _logger = logger;
+            _generator = generator;
         }
 
         [HttpGet]
@@ -71,18 +73,18 @@ namespace srk_website.Controllers
                 ViewBag.Message = $"Formats supported: {formats}";
                 return View();
             }
-            
-            // Generating random string.
-            Random random = new Random();
-            int length = 20;
-            var rString = "";
-            for (var i = 0; i < length; i++)
+
+            // Generating fileNames untill a unique is found.
+            string fileName = "";
+            while (true)
             {
-                rString += ((char)(random.Next(1, 26) + 64)).ToString();
-                rString += ((char)(random.Next(1, 26) + 96)).ToString();
+                fileName = await _generator.Generate(ContentType[1], 20);
+                if (_context.ImageSlideShow.Where(s => s.ImageName == fileName).Count() == 0)
+                {
+                    break;
+                }
             }
-            string fileName = rString + '.' +  ContentType[1];
-            
+
             // Upload image to azure container.
             BlobResponseDto? response = await _storage.UploadAsync(file, fileName);
 
