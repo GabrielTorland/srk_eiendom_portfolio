@@ -15,6 +15,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 // Transients
+builder.Services.AddTransient<IGenerateRandomImageName, GenerateRandomImageName>();
 builder.Services.AddTransient<IAzureStorage, AzureStorage>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
