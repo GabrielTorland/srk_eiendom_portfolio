@@ -1,7 +1,5 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Admin";
 }
 
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -35,7 +33,7 @@
                     <a class="nav-link text-dark" asp-area="" asp-controller="Storage" asp-action="Index">Storage</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Team" asp-action="Index">Team</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="TeamMember" asp-action="Index">Team</a>
                 </li>
             </ul>
             <partial name="_LoginPartial" />
