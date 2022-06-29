@@ -1,0 +1,22 @@
+﻿@model srk_website.Models.TeamModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>@ViewData["Details"]</h1>
+
+<div>
+    <h4>Team Member</h4>
+    <hr />
+    <img src="@Model.Uri" alt="Image not found!"/>
+    <h6>@Model.FullName</h6> <h6>@Model.Position</h6>
+    <div>
+        <p>Email: @Model.Email</p>
+        <p>Phone: @Model.Phone</p>
+    </div>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
