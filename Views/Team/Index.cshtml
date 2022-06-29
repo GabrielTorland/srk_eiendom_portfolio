@@ -1,0 +1,77 @@
+﻿@model IEnumerable<srk_website.Models.TeamModel>
+
+@{
+    ViewData["Title"] = "Team";
+}
+
+<h1>@ViewData["Tean"] Members</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Position)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LinkedIn)
+            </th>
+            <th>
+                Image
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Position)
+            </td>
+            <td>
+                <a href = "mailto:@item.Email" class="icon"> <i class="ti-email"></i> </a>
+            </td>
+            <td>
+                <a href="tel:@item.Phone" class="icon"> <i class="ti-mobile"></i> </a>
+            </td>
+            <td>
+                <a href="@item.LinkedIn" class="icon"> <i class="ti-linkedin"></i> </a>
+            </td>
+            <td>
+                <img src="@item.Uri" class="img-thumbnail" alt="Image not found.">
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <form method="post" asp-action="Delete">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value=@item.Id>
+                    <div class="form-group">
+                        <input type="submit" value="Delete" class="btn btn-danger" />
+                    </div>
+                </form>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

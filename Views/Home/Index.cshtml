@@ -3,6 +3,8 @@
     var Services = ViewData["Services"] as List<ServiceModel>;
     var Contacts = ViewData["Contacts"] as List<ContactModel>;
     var About = ViewData["About"] as AboutModel;
+    var ImageSlideShows = ViewData["ImageSlideShows"] as List<ImageSlideShowModel>;
+    var TeamMembers = ViewData["TeamMembers"] as List<TeamModel>;
 }
 
   <!-- Loader -->
@@ -60,7 +62,7 @@
         <!-- Header Slider -->
         <header id="home" class="header pos-re slider-fade">
             <div class="owl-carousel owl-theme">
-                @foreach(var item in ViewData["ImageSlideShows"] as List<ImageSlideShowModel>){
+                @foreach(var item in @ImageSlideShows){
                 <div class="item bg-img" data-overlay-dark="3" data-background="@item.Uri">
                     <div class="container text-center v-middle caption">
                         <h4>Eiendom</h4>
@@ -102,7 +104,7 @@
                     <div class="col-md-6 mb-20">
                         <h6 class="small-title">OM OSS</h6>
                         <h4 class="title">OM @Title EIENDOM</h4>
-                        @Html.Raw(About.Text)
+                        @Html.Raw(About?.Text)
                     </div>
                     <div class="col-md-6 mb-20 image">
                         <div class="img"> <img src="~/img/25.png" alt="">
@@ -211,48 +213,22 @@
                     </div>
                     <div class="col-md-10 offset-md-1">
                         <div class="owl-carousel owl-theme text-center">
+                            @foreach(var item in TeamMembers){
                             <div class="item">
-                                <div class="team-img"> <img src="~/img/team/1.jpg" alt="">
+                                <div class="team-img"> <img src="@item.Uri" alt="Image not found!">
                                     <div class="info valign">
                                         <div class="text-center full-width">
                                             <div class="social">
-                                                <a href="#" class="icon"> <i class="ti-facebook"></i> </a>
-                                                <a href="#" class="icon"> <i class="ti-twitter"></i> </a>
-                                                <a href="#" class="icon"> <i class="ti-linkedin"></i> </a>
+                                                <a href="tel:@item.Phone" class="icon"> <i class="ti-mobile"></i> </a>
+                                                <a href = "mailto:@item.Email" class="icon"> <i class="ti-email"></i> </a>
+                                                <a href="@item.LinkedIn" class="icon"> <i class="ti-linkedin"></i> </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <h6>Matthew Adam</h6> <span>Managing Director</span>
+                                <h6>@item.FullName</h6> <span>@item.Position</span>
                             </div>
-                            <div class="item">
-                                <div class="team-img"> <img src="~/img/team/2.jpg" alt="">
-                                    <div class="info valign">
-                                        <div class="text-center full-width">
-                                            <div class="social">
-                                                <a href="#" class="icon"> <i class="ti-facebook"></i> </a>
-                                                <a href="#" class="icon"> <i class="ti-twitter"></i> </a>
-                                                <a href="#" class="icon"> <i class="ti-linkedin"></i> </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <h6>Linda Brown</h6> <span>Creative Director</span>
-                            </div>
-                            <div class="item">
-                                <div class="team-img"> <img src="~/img/team/3.jpg" alt="">
-                                    <div class="info valign">
-                                        <div class="text-center full-width">
-                                            <div class="social">
-                                                <a href="#" class="icon"> <i class="ti-facebook"></i> </a>
-                                                <a href="#" class="icon"> <i class="ti-twitter"></i> </a>
-                                                <a href="#" class="icon"> <i class="ti-linkedin"></i> </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <h6>Heidi Emma</h6> <span>Project Manager</span>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
