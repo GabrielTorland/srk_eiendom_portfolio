@@ -8,14 +8,13 @@
 
 <h4>Team Member</h4>
 <hr />
-
+<h6>@Model.FullName</h6> <h6>@Model.Position</h6>
 
 <div>
     <img src="@Model.Uri" alt="Image not found!"/>
-    <h6>@Model.FullName</h6> <h6>@Model.Position</h6>
     <div>
-        <p>Email: @Model.Email</p>
-        <p>Phone: @Model.Phone</p>
+        <p>Email: <a href=@($"mailto: {Model.Email}")>@Model.Email</a></p>
+        <p>Tlf: <a href=@($"tel: {Model.Phone}")>@Model.Phone</a></p>
     </div>
 </div>
 <div>
