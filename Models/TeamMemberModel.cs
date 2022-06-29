@@ -6,11 +6,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace srk_website.Models
 {
-    public class TeamModel
+    public class TeamMemberModel
     {
-        public TeamModel() { }
+        public TeamMemberModel() { }
         
-        public TeamModel(string firstName, string lastName, string position, string email, string phone, string linkedIn, IFormFile file)
+        public TeamMemberModel(string firstName, string lastName, string position, string email, string phone, string linkedIn, IFormFile file)
         {
             FirstName = firstName;
             LastName = lastName;

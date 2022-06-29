@@ -1,10 +1,10 @@
-﻿@model IEnumerable<srk_website.Models.TeamModel>
+﻿@model IEnumerable<srk_website.Models.TeamMemberModel>
 
 @{
     ViewData["Title"] = "Team";
 }
 
-<h1>@ViewData["Tean"] Members</h1>
+<h1>@ViewData["Tean"] Members </h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -61,8 +61,8 @@
                 <img src="@item.Uri" class="img-thumbnail" alt="Image not found.">
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a class="nav-link text-dark" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a class="nav-link text-dark" asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <form method="post" asp-action="Delete">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="id" value=@item.Id>
