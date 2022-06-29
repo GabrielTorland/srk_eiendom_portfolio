@@ -275,7 +275,7 @@ namespace srk_website.Controllers
             else
             {
                 // File has been successfully deleted
-                return RedirectToAction("Index", "Team");
+                return RedirectToAction(nameof(Index));
             }
         }
 
