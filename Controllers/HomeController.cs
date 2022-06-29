@@ -22,7 +22,8 @@ namespace srk_website.Controllers
         }
         
         public async Task<IActionResult> Index()
-        {   
+        {
+            ViewData["Experience"] = DateTime.Now.Year - 2018; // The firm was founded in 2018
             ViewData["About"] = await _context.About.FindAsync(1);
             ViewData["Services"] = await _context.Service.ToListAsync();
             ViewData["ImageSlideShows"] = await _context.ImageSlideShow.ToListAsync();
