@@ -53,7 +53,7 @@ namespace srk_website.Data
 
             await db.SaveChangesAsync();
             
-            //await _emailSender.SendEmailAsync(user.Email, "Initial password",$"<p>Here is your initial password: {password} . This password should be changed!<p>");
+            await _emailSender.SendEmailAsync(user.Email, "Initial password",$"<p>Here is your initial password: {password} . This password should be changed!<p>");
 
         }
     }

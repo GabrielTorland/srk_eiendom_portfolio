@@ -1,19 +1,36 @@
-﻿@model srk_website.Models.TeamModel
+﻿@model srk_website.Models.TeamMemberModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Create Team Member";
 }
 
-<h1>Edit</h1>
+<h1>Create</h1>
 
 <h4>Team Member</h4>
 <hr />
+
+@if (ViewBag.IsResponse != null)
+{
+    if (ViewBag.IsSuccess)
+    {
+        <div class="alert alert-success">
+            @ViewBag.Message
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Message
+        </div>
+    }
+
+}
+    
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @Html.AntiForgeryToken()
-            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
@@ -45,24 +62,18 @@
                 <span asp-validation-for="LinkedIn" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="ImageName" class="form-control" type="hidden" />
-            </div>
-            <div class="form-group">
-                <input asp-for="Uri" class="form-control" type="hidden" />
-            </div>
-            <div class="form-group">
                 <p>The image should be 600x600 pixels.</p>
                 <input type="file" name="file" class="form-control" />
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back to team member list</a>
 </div>
 
 @section Scripts {

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using srk_website.Data;
 using srk_website.Models;
@@ -13,7 +8,7 @@ using srk_website.Services;
 namespace srk_website.Controllers
 {
     [Authorize]
-    public class TeamController : Controller
+    public class TeamMemberController : Controller
     {
         private readonly IAzureStorage _storage;
         private readonly List<string> _imageFormats;
@@ -21,7 +16,7 @@ namespace srk_website.Controllers
         private readonly ILogger<ImageSlideShowController> _logger;
         private readonly IGenerateRandomImageName _generator;
 
-        public TeamController(IAzureStorage storage, ApplicationDbContext context, IConfiguration configuration, ILogger<ImageSlideShowController> logger, IGenerateRandomImageName generator)
+        public TeamMemberController(IAzureStorage storage, ApplicationDbContext context, IConfiguration configuration, ILogger<ImageSlideShowController> logger, IGenerateRandomImageName generator)
         {
             _storage = storage;
             _context = context;
@@ -34,20 +29,20 @@ namespace srk_website.Controllers
         // GET: Team
         public async Task<IActionResult> Index()
         {
-              return _context.Team != null ? 
-                          View(await _context.Team.ToListAsync()) :
+              return _context.TeamMember != null ? 
+                          View(await _context.TeamMember.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Team'  is null.");
         }
 
         // GET: Team/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Team == null)
+            if (id == null || _context.TeamMember == null)
             {
                 return NotFound();
             }
 
-            var teamModel = await _context.Team
+            var teamModel = await _context.TeamMember
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (teamModel == null)
             {
@@ -67,7 +62,7 @@ namespace srk_website.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [System.ComponentModel.Description("Upload image to azure container and store meta data in database.")]
-        public async Task<IActionResult> Create([Bind(include: "FirstName,LastName,Position,Email,Phone,LinkedIn")] TeamModel team, IFormFile file)
+        public async Task<IActionResult> Create([Bind(include: "FirstName,LastName,Position,Email,Phone,LinkedIn")] TeamMemberModel teamMember, IFormFile file)
         {
             if (file == null)
             {
@@ -103,7 +98,7 @@ namespace srk_website.Controllers
                 while (true)
                 {
                     fileName = await _generator.Generate(ContentType[1], 20);
-                    if (_context.Team.Where(s => s.ImageName == fileName).Count() == 0)
+                    if (_context.TeamMember.Where(s => s.ImageName == fileName).Count() == 0)
                     {
                         break;
                     }
@@ -134,10 +129,10 @@ namespace srk_website.Controllers
                     {
                         return Problem("Could not find image in azure container!");
                     }
-                    team.ImageName = fileName;
-                    team.Uri = uri;
+                    teamMember.ImageName = fileName;
+                    teamMember.Uri = uri;
                     // Try catch here in the future.
-                    await _context.Team.AddAsync(team);
+                    await _context.TeamMember.AddAsync(teamMember);
                     await _context.SaveChangesAsync();
                     ViewBag.IsResponse = true;
                     ViewBag.IsSuccess = true;
@@ -146,18 +141,19 @@ namespace srk_website.Controllers
                     return View();
                 }
             }
-            return View(team);
+            return View(teamMember);
         }
 
         // GET: Team/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Team == null)
+            if (id == null || _context.TeamMember == null)
             {
                 return NotFound();
             }
 
-            var teamModel = await _context.Team.FindAsync(id);
+            var teamModel = await _context.TeamMember.FindAsync(id);
             if (teamModel == null)
             {
                 return NotFound();
@@ -169,9 +165,9 @@ namespace srk_website.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [System.ComponentModel.Description("Edit image in azure container and edit meta data in database.")]
-        public async Task<IActionResult> Edit(int id, [Bind(include: "Id, FirstName,LastName,Position,Email,Phone,LinkedIn,ImageName,Uri")] TeamModel team, IFormFile file)
+        public async Task<IActionResult> Edit(int id, [Bind(include: "Id,FirstName,LastName,Position,Email,Phone,LinkedIn,ImageName,Uri")] TeamMemberModel teamMember, IFormFile file)
         {
-            if (id != team.Id)
+            if (id != teamMember.Id)
             {
                 return NotFound();
             }
@@ -200,7 +196,7 @@ namespace srk_website.Controllers
                     }
                     
                     // Delete old image from azure container.
-                    BlobResponseDto response = await _storage.DeleteAsync(team.ImageName);
+                    BlobResponseDto response = await _storage.DeleteAsync(teamMember.ImageName);
                     if (response.Error == true)
                     {
                         _logger.LogError("Failed to delete image from azure container.");
@@ -209,7 +205,7 @@ namespace srk_website.Controllers
                     else
                     {
                         // Upload new image to azure container.
-                        string imageName = team.ImageName.Split('.')[0] + '.' + ContentType[1];
+                        string imageName = teamMember.ImageName.Split('.')[0] + '.' + ContentType[1];
                         response = await _storage.UploadAsync(file, imageName);
                         if (response.Error == true)
                         {
@@ -219,19 +215,19 @@ namespace srk_website.Controllers
                         else
                         {
                             // Update the team member
-                            team.Uri = team.Uri.Replace(team.ImageName, imageName);
-                            team.ImageName = imageName;
+                            teamMember.Uri = teamMember.Uri.Replace(teamMember.ImageName, imageName);
+                            teamMember.ImageName = imageName;
                         }
                     }
                 }
                 try
                 {
-                    _context.Update(team);
+                    _context.Update(teamMember);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TeamModelExists(team.Id))
+                    if (!TeamModelExists(teamMember.Id))
                     {
                         return NotFound();
                     }
@@ -242,7 +238,7 @@ namespace srk_website.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(team);
+            return View(teamMember);
         }
 
         // POST: Team/Delete/5
@@ -251,19 +247,20 @@ namespace srk_website.Controllers
         [System.ComponentModel.Description("Delete image in azure container and meta data in database.")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Team == null)
+            if (_context.TeamMember == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Team'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.TeamMember'  is null.");
             }
-            var team = await _context.Team.FindAsync(id);
-            if (team == null)
+            var teamMember = await _context.TeamMember.FindAsync(id);
+            if (teamMember == null)
             {
                 return NotFound();
             }
-            string imageName = team.ImageName;
-            
+            string imageName = teamMember.ImageName;
+
             // Delete meta data from database
-            _context.Team.Remove(team);
+            // Try catch here in the future.
+            _context.TeamMember.Remove(teamMember);
             await _context.SaveChangesAsync();
             
             // Delete image from azure container.
@@ -284,7 +281,7 @@ namespace srk_website.Controllers
 
         private bool TeamModelExists(int id)
         {
-          return (_context.Team?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.TeamMember?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
