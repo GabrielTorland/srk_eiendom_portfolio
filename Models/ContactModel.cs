@@ -20,24 +20,27 @@ namespace srk_website.Models
         public int Id { get; set; }
         
         [Required]
-        public string Address { get; set; }
+        [StringLength(100)]        
+        public string? Address { get; set; }
 
         [Required]
         [StringLength(4)]
-        public string Zip { get; set; }
+        public string? Zip { get; set; }
 
         [Required]
-        public string City { get; set; }
+        [StringLength(40)]
+        public string? City { get; set; }
 
         [Required]
-        public string Country { get; set; }
+        [StringLength(40)]
+        public string? Country { get; set; }
 
         [Required]
         [Phone]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
 
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string? Email { get; set; }
     }
 }

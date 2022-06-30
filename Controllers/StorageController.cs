@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace srk_website.Controllers
 {
-    [Route("api/[controller]")]
     [Authorize]
     public class StorageController : Controller
     {
@@ -36,17 +35,24 @@ namespace srk_website.Controllers
                           Problem("Entity set 'ApplicationDbContext.Storage'  is null.");
         }
 
-        [HttpGet(nameof(Upload))]
+        [HttpGet]
         public IActionResult Upload()
         {
             return View();
         }
 
-        [HttpPost(nameof(Upload))]
+        [HttpPost]
         [System.ComponentModel.Description("Upload image to azure container and store meta data in database.")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Upload(IFormFile file)
         {
+            if (file == null) 
+            {
+                ViewBag.IsResponse = true;
+                ViewBag.IsSuccess = false;
+                ViewBag.Message = "You have to upload an image!";
+                return View();
+            }
             // Index 0 is description of the data, e.g image.
             // Index 1 is the datatype, e.g jpg... 
             var ContentType = file.ContentType.Split("/");
@@ -71,13 +77,13 @@ namespace srk_website.Controllers
             while (true)
             {
                 fileName = await _generator.Generate(ContentType[1], 20);
-                if (_context.Storage.Where(s => s.ImageName == fileName).Count() == 0)
+                if (!_context.Storage.Where(s => s.ImageName == fileName).Any())
                 {
                     break;
                 }
             }
             
-            BlobResponseDto? response = await _storage.UploadAsync(file, fileName);
+            BlobResponseDto response = await _storage.UploadAsync(file, fileName);
 
             // Check if we got an error
             if (response.Error == true)
@@ -93,7 +99,11 @@ namespace srk_website.Controllers
                 {
                     if (image.Name == fileName)
                     {
-                        uri = image.Uri;
+                        if (image.Uri != null)
+                        {
+                            uri = image.Uri;
+                            break;
+                        }
                     }
                 }
                 if (uri == "")
@@ -101,7 +111,7 @@ namespace srk_website.Controllers
                     return Problem("Could not find image in azure container!");
                 }
                 // Meta data about image.
-                StorageModel newImage = new StorageModel(fileName, uri);
+                StorageModel newImage = new(fileName, uri);
 
                 // Stored in the database.
                 // Try catch here in the future.
@@ -115,31 +125,40 @@ namespace srk_website.Controllers
             }
         }
 
-        [HttpPost(nameof(Delete))]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        [System.ComponentModel.Description("Delete image in azure container and meta data in database.")]
-        public async Task<IActionResult> Delete(string ImageName)
+        [System.ComponentModel.Description("Delete image in azure container and store meta data in database.")]
+        public async Task<IActionResult> Delete(int? id)
         {
-            if (ImageName == null)
+            if (id == null)
             {
-                return Problem("ImageName cant be null.");
+                return NotFound();
             }
-
+            
             // Find image in database.
-            var image = await _context.Storage.FirstOrDefaultAsync(s => s.ImageName == ImageName);
+            var image = await _context.Storage.FindAsync(id);
             if (image == null)
             {
                 _logger.LogError("Image meta data is not in database.");
                 // Return an error message to the client
                 return StatusCode(StatusCodes.Status500InternalServerError, "Image meta data is not in database.");
             }
-            // Remove image from database.
+
+            if (image.ImageName == null)
+            {
+                _logger.LogError("Image name is null.");
+                // Return an error message to the client
+                return StatusCode(StatusCodes.Status500InternalServerError, "Image name is null.");
+            }
+            string imageName = image.ImageName;
+            
+            // Remove image meta data from database.
             // Try catch here in the future.
             _context.Storage.Remove(image);
             await _context.SaveChangesAsync();
 
             // Delete image from azure container.
-            BlobResponseDto response = await _storage.DeleteAsync(ImageName);
+            BlobResponseDto response = await _storage.DeleteAsync(imageName);
 
             // Check if we got an error
             if (response.Error == true)

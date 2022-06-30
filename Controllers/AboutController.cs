@@ -56,7 +56,7 @@ namespace srk_website.Controllers
         // POST: About/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Text")] AboutModel aboutModel)
+        public async Task<IActionResult> Edit(int id, [Bind(include: "Id,Text")] AboutModel aboutModel)
         {
             if (id != aboutModel.Id)
             {

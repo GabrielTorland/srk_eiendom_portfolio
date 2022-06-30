@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-12 col-sm-8 col-lg-5">
             <h6 class="text-muted">Services</h6>
-            <a asp-action="Upload" asp-controller="Service" class="btn btn-info" role="button" >Add service</a>
+            <a asp-area="" asp-controller="Service" asp-action="Upload">Add service</a>
                 <ul class="list-group">            
                 @foreach (var item  in Model){
             
@@ -17,19 +17,14 @@
                             <img src="@item.Uri" class="img-fluid" alt="quixote">
                         </div>
                     </li>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>                    
                     <form method="post" asp-action="Delete">
                         @Html.AntiForgeryToken()
-                        <input type="hidden" name="ImageName" value=@item.ImageName>
+                        <input type="hidden" name="id" value=@item.Id>
                         <div class="form-group">
                             <input type="submit" value="Delete" class="btn btn-danger" />
                         </div>
                     </form>   
-                    <form method="get" asp-action="Edit">
-                        <input type="hidden" name="ImageName" value=@item.ImageName>
-                        <div class="form-group">
-                            <input type="submit" value="Edit" class="btn btn-primary" />
-                        </div>
-                    </form>
                 }   
             </ul>
             <a asp-action="Index" asp-controller="Admin" class="btn btn-info" role="button" >Back to admin page</a>

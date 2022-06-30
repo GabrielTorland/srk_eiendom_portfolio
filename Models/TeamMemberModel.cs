@@ -9,8 +9,8 @@ namespace srk_website.Models
     public class TeamMemberModel
     {
         public TeamMemberModel() { }
-        
-        public TeamMemberModel(string firstName, string lastName, string position, string email, string phone, string linkedIn, IFormFile file)
+
+        public TeamMemberModel(string firstName, string lastName, string position, string email, string phone, string linkedIn, string imageName, string uri)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -18,6 +18,8 @@ namespace srk_website.Models
             Email = email;
             Phone = phone;
             LinkedIn = linkedIn;
+            ImageName = imageName;
+            Uri = uri;
         }
 
         public int Id { get; set; }
@@ -25,30 +27,36 @@ namespace srk_website.Models
         [DisplayName("First name")]
         [RegularExpression("[A-Z][a-zA-Z]+")]
         [StringLength(50)]
-        public string FirstName { get; set; }
+        [Required]
+        public string? FirstName { get; set; }
 
         [DisplayName("Last name")]
         [RegularExpression("[A-Z][a-zA-Z]+")]
         [StringLength(50)]
-        public string LastName { get; set; }
+        [Required]
+        public string? LastName { get; set; }
 
         [StringLength(50)]
-        public string Position { get; set; }
+        [Required]
+        public string? Position { get; set; }
 
         [EmailAddress]
-        public string Email { get; set; }
+        [Required]
+        public string? Email { get; set; }
 
         [Phone]
-        public string Phone { get; set; }
+        [Required]
+        public string? Phone { get; set; }
 
         [Url]
-        public string LinkedIn { get; set; }
+        [Required]
+        public string? LinkedIn { get; set; }
 
         [ValidateNever]
-        public string ImageName { get; set; }
+        public string? ImageName { get; set; }
 
         [ValidateNever]
-        public string Uri { get; set; }
+        public string? Uri { get; set; }
 
         public string FullName
         {

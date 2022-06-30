@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace srk_website.Models
@@ -6,30 +7,35 @@ namespace srk_website.Models
     public class ImageSlideShowModel
     {
         public ImageSlideShowModel() { }
-
-        public ImageSlideShowModel(string imageName, string projectName, string city, string website, string uri) 
+        
+        public ImageSlideShowModel(string projectName, string city, string website, string imageName, string uri) 
         {
-            ImageName = imageName;
             ProjectName = projectName;
             City = city;
             Website = website;
+            ImageName = imageName;
             Uri = uri;
         }
-        [Key]
-        public string ImageName { get; set; }
+
+        public int Id { get; set; }
 
         [Required]
-        public string ProjectName { get; set; }
+        [StringLength(40)]
+        public string? ProjectName { get; set; }
 
         [Required]
-        public string City { get; set; }
+        [StringLength(40)]
+        public string? City { get; set; }
 
         [Url]
         [Required]
         [DisplayName("Website URI where you can buy the appartment/house")]
-        public string Website { get; set; }
+        public string? Website { get; set; }
 
-        [Url]
-        public string Uri { get; set; }
+        [ValidateNever]
+        public string? ImageName { get; set; }
+
+        [ValidateNever]
+        public string? Uri { get; set; }
     }
 }

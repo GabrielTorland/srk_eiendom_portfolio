@@ -2,8 +2,8 @@
 using srk_website.Data;
 using srk_website.Services;
 using srk_website.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace srk_website.Controllers
 {
@@ -11,7 +11,6 @@ namespace srk_website.Controllers
     /// This controller handles upload, delete and edit for services.
     /// </summary>
     /// <remarks></remarks>
-    [Route("api/[controller]")]
     [Authorize]
     public class ServiceController : Controller
     {
@@ -35,7 +34,7 @@ namespace srk_website.Controllers
             return View(_context.Service);
         }
             
-        [HttpGet(nameof(Upload))]
+        [HttpGet]
         public IActionResult Upload()
         {
             return View();
@@ -43,16 +42,22 @@ namespace srk_website.Controllers
 
         [System.ComponentModel.Description("Upload image to azure container and store meta data in database.")]
         [ValidateAntiForgeryToken]
-        [HttpPost(nameof(Upload))]
-        public async Task<IActionResult> Upload(string title, string description, IFormFile file)
-        {
-            if (title == null | description == null | file == null)
+        [HttpPost]
+        public async Task<IActionResult> Upload([Bind(include: "Title, Description")] ServiceModel service, IFormFile file)
+        {   
+            if (file == null)
             {
                 ViewBag.IsResponse = true;
                 ViewBag.IsSuccess = false;
-                ViewBag.Message = "All parameters needs to be filled!";
-                return View();
+                ViewBag.Message = "You have to upload an image!";
+                return View(service);
             }
+
+            if (!ModelState.IsValid)
+            {
+                return View(service);
+            }
+
             // Index 0 is description of the data, e.g image.
             // Index 1 is the datatype, e.g jpg... 
             var ContentType = file.ContentType.Split("/");
@@ -78,14 +83,14 @@ namespace srk_website.Controllers
             while (true)
             {
                 fileName = await _generator.Generate(ContentType[1], 20);
-                if (_context.Service.Where(s => s.ImageName == fileName).Count() == 0)
+                if (!_context.Service.Where(s => s.ImageName == fileName).Any())
                 {
                     break;
                 }
             }
 
             // Upload image to azure container.
-            BlobResponseDto? response = await _storage.UploadAsync(file, fileName);
+            BlobResponseDto response = await _storage.UploadAsync(file, fileName);
             
             if (response == null)
             {
@@ -111,8 +116,11 @@ namespace srk_website.Controllers
                 {
                     if (image.Name == fileName)
                     {
-                        uri = image.Uri;
-                        break;
+                        if (image.Uri != null)
+                        {
+                            uri = image.Uri;
+                            break;
+                        }
                     }
                 }
                 // This test is a little overkill, but what the heck:D
@@ -120,13 +128,14 @@ namespace srk_website.Controllers
                 {
                     return Problem("Could not find image in azure container!");
                 }
-                
-                // Meta data about image.
-                ServiceModel newImage = new ServiceModel(fileName, title, description, uri);
+
+                // Update parameters
+                service.ImageName = fileName;
+                service.Uri = uri;
 
                 // Stored in the database.
                 // Try catch here in the future.
-                await _context.Service.AddAsync(newImage);
+                await _context.Service.AddAsync(service);
                 await _context.SaveChangesAsync();
                 
                 ViewBag.IsResponse = true;
@@ -137,31 +146,38 @@ namespace srk_website.Controllers
 
         }
 
-        [HttpPost(nameof(Delete))]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         [System.ComponentModel.Description("Delete image in azure container and remove meta data in database.")]
-        public async Task<IActionResult> Delete(string ImageName)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (ImageName == null)
-            {
-                return Problem("ImageName cant be null.");
-            }
             
             // Find image in database.
-            var image = await _context.Service.FindAsync(ImageName);
+            var image = await _context.Service.FindAsync(id);
+            
             if (image == null)
             {
                 _logger.LogError("Service not found in database.");
                 // Return an error message to the client
                 return StatusCode(StatusCodes.Status500InternalServerError, "Service not in database!");
             }
+
+            if (image.ImageName == null)
+            {
+                _logger.LogError("Image name is null.");
+                // Return an error message to the client
+                return StatusCode(StatusCodes.Status500InternalServerError, "Image name is null!");
+            }
+
+            string imageName = image.ImageName;
+            
             // Remove image from database.
             // Try catch here in the future.
             _context.Service.Remove(image);
             await _context.SaveChangesAsync();
-
+            
             // Delete image from azure container.
-            BlobResponseDto response = await _storage.DeleteAsync(ImageName);            
+            BlobResponseDto response = await _storage.DeleteAsync(imageName);            
 
             // Check if we got an error
             if (response.Error == true)
@@ -177,14 +193,10 @@ namespace srk_website.Controllers
             }
         }
 
-        [HttpGet(nameof(Edit))]
-        public async Task<IActionResult> Edit(string ImageName)
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
         {
-            if (ImageName == null)
-            {
-                return NotFound();
-            }
-            var service = await _context.Service.FindAsync(ImageName);
+            var service = await _context.Service.FindAsync(id);
             if (service == null)
             {
                 return NotFound();
@@ -194,19 +206,27 @@ namespace srk_website.Controllers
         }
         
         // This method needs to be improved in the future!
-        [HttpPost(nameof(Edit))]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         [System.ComponentModel.Description("Edit image in azure container and edit meta data in database.")]
-        public async Task<IActionResult> Edit(string imageName, string title, string description, IFormFile file)
+        public async Task<IActionResult> Edit(int id, [Bind(include: "Id,Title,Description,ImageName,Uri")] ServiceModel service, IFormFile file)
         {
-            if (imageName == null | title == null | description == null)
+            if (id != service.Id)
             {
-                ViewBag.IsResponse = true;
-                ViewBag.IsSuccess = false;
-                ViewBag.Message = "All parameters needs to be filled!";
-                return View();
+                return NotFound();
             }
-            string ImageName = "";
+            if (!ModelState.IsValid)
+            {
+                return View(service);
+            }
+            
+            if (service.ImageName == null)
+            {
+                _logger.LogError("Image name is null.");
+                // Return an error message to the client
+                return StatusCode(StatusCodes.Status500InternalServerError, "Image name is null!");
+            }
+            string imageName;
             if (file != null)
             {
                 var ContentType = file.ContentType.Split("/");
@@ -215,7 +235,7 @@ namespace srk_website.Controllers
                     ViewBag.IsResponse = true;
                     ViewBag.IsSuccess = false;
                     ViewBag.Message = "You can only upload an image!";
-                    return View();
+                    return View(service);
                 }
                 if (!_imageFormats.Contains(ContentType[1]))
                 {
@@ -223,49 +243,63 @@ namespace srk_website.Controllers
                     ViewBag.IsSuccess = false;
                     var formats = _imageFormats.ToString();
                     ViewBag.Message = $"Formats supported: {formats}";
-                    return View();
+                    return View(service);
                 }
                 // ImageName change because another datatype is used.
-                ImageName = imageName.Split('.')[0] + '.' + ContentType[1];
+                imageName = service.ImageName.Split('.')[0] + '.' + ContentType[1];
             }
             else
             {
-                ImageName = imageName;
-            }
-            
-
-            var service = await _context.Service.FindAsync(imageName);
-            if (service == null)
-            {
-                return NotFound();
+                imageName = service.ImageName;
             }
 
-            var newService = new ServiceModel();
-            newService.ImageName = ImageName;
-            newService.Title = title;
-            newService.Description = description;
             // Replace old image name with new imagename(otherwise URI is still the same).
-            newService.Uri = service.Uri.Replace(imageName, ImageName);
+            service.ImageName = imageName;
+            if (service.Uri == null)
+            {
+                _logger.LogError("Uri is null.");
+                // Return an error message to the client
+                return StatusCode(StatusCodes.Status500InternalServerError, "Uri is null!");
+            }
+            service.Uri = service.Uri.Replace(service.ImageName, imageName);
 
-            // Try catch here in the future.
-            _context.Service.Remove(service);
-            _context.Service.Add(newService);
-            _context.SaveChanges();
+            try
+            {
+                _context.Service.Update(service);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ServiceModelExists(service.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             if (file != null)
             {
                 // Delete image in azure storage.
-                BlobResponseDto? response = await _storage.DeleteAsync(imageName);
+                BlobResponseDto response = await _storage.DeleteAsync(imageName);
                 if (response.Error == true)
                 {
                     _logger.LogError("Failed to delete image from azure container.");
+                    // Delete meta data from database if image was deleted unsuccessfully from azure storage.
+                    _context.Service.Remove(service);
+                    await _context.SaveChangesAsync();
                     return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
                 }
                 // Upload image to azure container.
-                response = await _storage.UploadAsync(file, ImageName);
+                response = await _storage.UploadAsync(file, imageName);
                 if (response.Error == true)
                 {
                     _logger.LogError("Failed to upload to azure container.");
+                    // Delete meta data from database if image was uploaded unsuccessfully to azure storage.
+                    _context.Service.Remove(service);
+                    await _context.SaveChangesAsync();
                     return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
                 }
             }
@@ -273,8 +307,12 @@ namespace srk_website.Controllers
             ViewBag.IsResponse = true;
             ViewBag.IsSuccess = true;
             ViewBag.Message = "Service was successfully edited!";
-            return View(newService);
+            return View(service);
             
+        }
+        private bool ServiceModelExists(int id)
+        {
+            return (_context.Service?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

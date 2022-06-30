@@ -17,7 +17,7 @@
                     <p class="text-danger"> Make sure that you have deleted all the references to the image before deleting It!</p>
                     <form method="post" asp-action="Delete" asp-controller="Storage">
                         @Html.AntiForgeryToken()
-                        <input type="hidden" name="ImageName" value=@item.ImageName>
+                        <input type="hidden" name="id" value=@item.Id>
                         <div class="form-group">
                             <input type="submit" value="Delete" class="btn btn-danger" />
                         </div>
