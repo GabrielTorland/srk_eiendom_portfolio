@@ -8,6 +8,25 @@
 
 <h4>Team Member</h4>
 <hr />
+
+@if (ViewBag.IsResponse != null)
+{
+    if (ViewBag.IsSuccess)
+    {
+        <div class="alert alert-success">
+            @ViewBag.Message
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Message
+        </div>
+    }
+
+}
+    
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit" enctype="multipart/form-data">

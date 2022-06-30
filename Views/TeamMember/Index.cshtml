@@ -55,7 +55,7 @@
                 <a href="@item.LinkedIn" class="icon"> <i class="ti-linkedin"></i> </a>
             </td>
             <td>
-                <a  asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <form method="post" asp-action="Delete">
                     @Html.AntiForgeryToken()

@@ -54,11 +54,9 @@ namespace srk_website.Controllers
         }
 
         // POST: Contact/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Address,Zip,City,Country,Phone,Email")] ContactModel contactModel)
+        public async Task<IActionResult> Create([Bind(include: "Address,Zip,City,Country,Phone,Email")] ContactModel contactModel)
         {
             if (ModelState.IsValid)
             {
@@ -86,11 +84,9 @@ namespace srk_website.Controllers
         }
 
         // POST: Contact/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Address,Zip,City,Country,Phone,Email")] ContactModel contactModel)
+        public async Task<IActionResult> Edit(int id, [Bind(include: "Id,Address,Zip,City,Country,Phone,Email")] ContactModel contactModel)
         {
             if (id != contactModel.Id)
             {
@@ -141,12 +137,18 @@ namespace srk_website.Controllers
         // POST: Contact/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            
             if (_context.Contact == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Contact'  is null.");
             }
+            
             var contactModel = await _context.Contact.FindAsync(id);
             if (contactModel != null)
             {

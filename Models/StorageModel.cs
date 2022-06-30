@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace srk_website.Models
 {
@@ -14,10 +15,13 @@ namespace srk_website.Models
         
         public int Id { get; set; }
         
-        public string ImageName { get; set; }
+        [Required]
+        [StringLength(30)]
+        public string ?ImageName { get; set; }
 
         [Url]
-        public string ImageUri { get; set; }
+        [Required]
+        public string ?ImageUri { get; set; }
 
     }
 }

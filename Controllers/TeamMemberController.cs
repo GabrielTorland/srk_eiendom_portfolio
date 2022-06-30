@@ -68,7 +68,7 @@ namespace srk_website.Controllers
             {
                 ViewBag.IsResponse = true;
                 ViewBag.IsSuccess = false;
-                ViewBag.Message = "All parameters needs to be filled!";
+                ViewBag.Message = "You have to upload an image!";
                 return View();
             }
             
@@ -122,7 +122,11 @@ namespace srk_website.Controllers
                     {
                         if (image.Name == fileName)
                         {
-                            uri = image.Uri;
+                            if (image.Uri != null)
+                            {
+                                uri = image.Uri;
+                                break;
+                            }
                         }
                     }
                     if (uri == "")
@@ -172,6 +176,9 @@ namespace srk_website.Controllers
                 return NotFound();
             }
 
+            // Ignore if file is null, because then the user did not change the image.
+            ModelState.Remove("file");
+
             if (ModelState.IsValid)
             {
                 if (file != null) {
@@ -199,6 +206,10 @@ namespace srk_website.Controllers
                     BlobResponseDto response = await _storage.DeleteAsync(teamMember.ImageName);
                     if (response.Error == true)
                     {
+                        // Remove meta data from database.
+                        _context.TeamMember.Remove(teamMember);
+                        await _context.SaveChangesAsync();
+                        
                         _logger.LogError("Failed to delete image from azure container.");
                         return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
                     }
@@ -209,11 +220,20 @@ namespace srk_website.Controllers
                         response = await _storage.UploadAsync(file, imageName);
                         if (response.Error == true)
                         {
+                            // Remove meta data from database.
+                            _context.TeamMember.Remove(teamMember);
+                            await _context.SaveChangesAsync();
+                            
                             _logger.LogError("Failed to new upload image to azure container.");
                             return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
                         }
                         else
                         {
+                            if (teamMember.Uri == null) 
+                            {
+                                _logger.LogError("Uri is null!");
+                                return StatusCode(StatusCodes.Status500InternalServerError, "Uri is null!");
+                            }
                             // Update the team member
                             teamMember.Uri = teamMember.Uri.Replace(teamMember.ImageName, imageName);
                             teamMember.ImageName = imageName;
@@ -236,8 +256,14 @@ namespace srk_website.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                ViewBag.IsResponse = true;
+                ViewBag.IsSuccess = true;
+                ViewBag.Message = "Team member was successfully edited!";
+                return View(teamMember);
             }
+            ViewBag.IsResponse = true;
+            ViewBag.IsSuccess = false;
+            ViewBag.Message = "Failed to edit team member!";
             return View(teamMember);
         }
 
@@ -245,17 +271,25 @@ namespace srk_website.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [System.ComponentModel.Description("Delete image in azure container and meta data in database.")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            if (_context.TeamMember == null)
+            if (id == null || _context.TeamMember == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.TeamMember'  is null.");
+                return NotFound();
             }
+            
             var teamMember = await _context.TeamMember.FindAsync(id);
             if (teamMember == null)
             {
                 return NotFound();
             }
+            
+            if (teamMember.ImageName == null)
+            {
+                _logger.LogError("ImageName is null!");
+                return StatusCode(StatusCodes.Status500InternalServerError, "ImageName is null!");
+            }
+            
             string imageName = teamMember.ImageName;
 
             // Delete meta data from database

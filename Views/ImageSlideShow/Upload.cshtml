@@ -23,7 +23,7 @@
 
     }
 
-<form method="post" enctype="multipart/form-data" asp-action="Upload">
+<form enctype="multipart/form-data" asp-action="Upload">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     @Html.AntiForgeryToken()
     <div class="form-group">
