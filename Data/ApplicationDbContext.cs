@@ -16,5 +16,6 @@ namespace srk_website.Data
         public DbSet<AboutModel> About { get; set; }
         public DbSet<StorageModel> Storage { get; set; }
         public DbSet<TeamMemberModel> TeamMember { get; set; }
+        public DbSet<TestimonialModel> Testimonial { get; set; }
     }
 }

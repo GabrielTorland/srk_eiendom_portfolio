@@ -29,6 +29,7 @@ namespace srk_website.Controllers
             ViewData["ImageSlideShows"] = await _context.ImageSlideShow.ToListAsync();
             ViewData["Contacts"] = await _context.Contact.ToListAsync();
             ViewData["TeamMembers"] = await _context.TeamMember.ToListAsync();
+            ViewData["Testimonials"] = await _context.Testimonial.ToListAsync();
             return View();
         }
         
