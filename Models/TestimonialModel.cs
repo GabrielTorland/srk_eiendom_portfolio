@@ -41,6 +41,14 @@ namespace srk_website.Models
         [Required]
         public string? Testimonial { get; set; }
 
+        public string FullName
+        {
+            get
+            {
+                return FirstName + ' ' + LastName;
+            }
+        }
+
 
     }
 }

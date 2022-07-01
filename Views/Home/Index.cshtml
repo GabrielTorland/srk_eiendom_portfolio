@@ -6,6 +6,7 @@
     var About = ViewData["About"] as AboutModel;
     var ImageSlideShows = ViewData["ImageSlideShows"] as List<ImageSlideShowModel>;
     var TeamMembers = ViewData["TeamMembers"] as List<TeamMemberModel>;
+    var Testimonials = ViewData["Testimonials"] as List<TestimonialModel>;
 }
 
   <!-- Loader -->
@@ -186,18 +187,15 @@
                     <div class="col-md-6 offset-md-3">
                         <div class="testimonials"> <span class="icon"><img src="~/img/left-quote.png" alt=""></span>
                             <div class="owl-carousel owl-theme text-center">
-                                <div class="item">
-                                    <div class="client-area">
-                                        <h6>Emma Brown</h6> <span>Claire Towers, CEO</span>
+                                @foreach (var item in Testimonials)
+                                {
+                                    <div class="item">
+                                        <div class="client-area">
+                                            <h6>@item.FullName</h6> <span>@item.Project, @item.Position</span>
+                                        </div>
+                                        @Html.Raw(item.Testimonial)
                                     </div>
-                                    <p>" Vivamus faucibus lorem non mi varius, vel euismod magna malesuada. Nam nec diam in nisl porttitor commodo in et ligula. "</p>
-                                </div>
-                                <div class="item">
-                                    <div class="client-area">
-                                        <h6>Jesica White</h6> <span>Drana Inc, Manager</span>
-                                    </div>
-                                    <p>" Qaulity faucibus lorem non mi varius, vel euismod magna malesuada. Nam nec diam in nisl porttitor commodo in et ligula. "</p>
-                                </div>
+                                }
                             </div>
                         </div>
                     </div>
