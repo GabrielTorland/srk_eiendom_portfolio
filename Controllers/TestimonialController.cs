@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using srk_website.Data;
 using srk_website.Models;
@@ -12,6 +7,7 @@ using srk_website.Models;
 namespace srk_website.Controllers
 {
     [Authorize]
+    [Route("Admin/[controller]")]
     public class TestimonialController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,6 +18,7 @@ namespace srk_website.Controllers
         }
 
         // GET: Testimonial
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
               return _context.Testimonial != null ? 
@@ -30,6 +27,7 @@ namespace srk_website.Controllers
         }
 
         // GET: Testimonial/Details/5
+        [HttpGet(nameof(Details))]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Testimonial == null)
@@ -48,13 +46,14 @@ namespace srk_website.Controllers
         }
 
         // GET: Testimonial/Create
+        [HttpGet(nameof(Create))]
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Testimonial/Create
-        [HttpPost]
+        [HttpPost(nameof(Create))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind(include: "FirstName,LastName,Project,Position,Testimonial")] TestimonialModel testimonialModel)
         {
@@ -68,6 +67,7 @@ namespace srk_website.Controllers
         }
 
         // GET: Testimonial/Edit/5
+        [HttpGet(nameof(Edit))]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Testimonial == null)
@@ -84,7 +84,7 @@ namespace srk_website.Controllers
         }
 
         // POST: Testimonial/Edit/5
-        [HttpPost]
+        [HttpPost(nameof(Edit))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind(include: "Id,FirstName,LastName,Project,Position,Testimonial")] TestimonialModel testimonialModel)
         {
@@ -117,6 +117,7 @@ namespace srk_website.Controllers
         }
 
         // GET: Testimonial/Delete/5
+        [HttpGet(nameof(Delete))]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Testimonial == null)
@@ -135,9 +136,9 @@ namespace srk_website.Controllers
         }
 
         // POST: Testimonial/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost(nameof(Delete))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (_context.Testimonial == null)
             {
