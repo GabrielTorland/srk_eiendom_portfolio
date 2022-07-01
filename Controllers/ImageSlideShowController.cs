@@ -3,7 +3,6 @@ using srk_website.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using srk_website.Data;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace srk_website.Controllers
 {
@@ -12,6 +11,7 @@ namespace srk_website.Controllers
     /// </summary>
     /// <remarks></remarks>
     [Authorize]
+    [Route("Admin/[controller]")]
     public class ImageSlideShowController : Controller
     {
         private readonly IAzureStorage _storage;

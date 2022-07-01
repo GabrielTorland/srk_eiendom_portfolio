@@ -8,6 +8,7 @@ using srk_website.Services;
 namespace srk_website.Controllers
 {
     [Authorize]
+    [Route("Admin/[controller]")]
     public class TeamMemberController : Controller
     {
         private readonly IAzureStorage _storage;
@@ -27,6 +28,7 @@ namespace srk_website.Controllers
         }
 
         // GET: Team
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
               return _context.TeamMember != null ? 
@@ -35,6 +37,7 @@ namespace srk_website.Controllers
         }
 
         // GET: Team/Details/5
+        [HttpGet(nameof(Details))]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.TeamMember == null)
@@ -53,13 +56,14 @@ namespace srk_website.Controllers
         }
 
         // GET: Team/Create
+        [HttpGet(nameof(Create))]
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Team/Create
-        [HttpPost]
+        [HttpPost(nameof(Create))]
         [ValidateAntiForgeryToken]
         [System.ComponentModel.Description("Upload image to azure container and store meta data in database.")]
         public async Task<IActionResult> Create([Bind(include: "FirstName,LastName,Position,Email,Phone,LinkedIn")] TeamMemberModel teamMember, IFormFile file)
@@ -149,7 +153,7 @@ namespace srk_website.Controllers
         }
 
         // GET: Team/Edit/5
-        [HttpGet]
+        [HttpGet(nameof(Edit))]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.TeamMember == null)
@@ -166,7 +170,7 @@ namespace srk_website.Controllers
         }
 
         // POST: Team/Edit/5
-        [HttpPost]
+        [HttpPost(nameof(Edit))]
         [ValidateAntiForgeryToken]
         [System.ComponentModel.Description("Edit image in azure container and edit meta data in database.")]
         public async Task<IActionResult> Edit(int id, [Bind(include: "Id,FirstName,LastName,Position,Email,Phone,LinkedIn,ImageName,Uri")] TeamMemberModel teamMember, IFormFile file)
@@ -268,10 +272,10 @@ namespace srk_website.Controllers
         }
 
         // POST: Team/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost(nameof(Delete))]
         [ValidateAntiForgeryToken]
         [System.ComponentModel.Description("Delete image in azure container and meta data in database.")]
-        public async Task<IActionResult> DeleteConfirmed(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.TeamMember == null)
             {

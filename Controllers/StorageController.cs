@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace srk_website.Controllers
 {
     [Authorize]
+    [Route("Admin/[controller]")]
     public class StorageController : Controller
     {
         private readonly IAzureStorage _storage;
@@ -34,14 +35,14 @@ namespace srk_website.Controllers
                           View(await _context.Storage.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Storage'  is null.");
         }
-
-        [HttpGet]
+        
+        [HttpGet(nameof(Upload))]
         public IActionResult Upload()
         {
             return View();
         }
 
-        [HttpPost]
+        [HttpPost(nameof(Upload))]
         [System.ComponentModel.Description("Upload image to azure container and store meta data in database.")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Upload(IFormFile file)
@@ -125,7 +126,7 @@ namespace srk_website.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost(nameof(Delete))]
         [ValidateAntiForgeryToken]
         [System.ComponentModel.Description("Delete image in azure container and store meta data in database.")]
         public async Task<IActionResult> Delete(int? id)

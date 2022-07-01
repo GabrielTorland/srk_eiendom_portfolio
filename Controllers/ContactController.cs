@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using srk_website.Data;
 using srk_website.Models;
@@ -12,6 +7,7 @@ using srk_website.Models;
 namespace srk_website.Controllers
 {
     [Authorize]
+    [Route("Admin/[controller]")]
     public class ContactController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -30,6 +26,7 @@ namespace srk_website.Controllers
         }
 
         // GET: Contact/Details/5
+        [HttpGet(nameof(Details))]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Contact == null)
@@ -48,13 +45,14 @@ namespace srk_website.Controllers
         }
 
         // GET: Contact/Create
+        [HttpGet(nameof(Create))]
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Contact/Create
-        [HttpPost]
+        [HttpPost(nameof(Create))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind(include: "Address,Zip,City,Country,Phone,Email")] ContactModel contactModel)
         {
@@ -68,6 +66,7 @@ namespace srk_website.Controllers
         }
 
         // GET: Contact/Edit/5
+        [HttpGet(nameof(Edit))]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Contact == null)
@@ -84,7 +83,7 @@ namespace srk_website.Controllers
         }
 
         // POST: Contact/Edit/5
-        [HttpPost]
+        [HttpPost(nameof(Edit))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind(include: "Id,Address,Zip,City,Country,Phone,Email")] ContactModel contactModel)
         {
@@ -117,6 +116,7 @@ namespace srk_website.Controllers
         }
 
         // GET: Contact/Delete/5
+        [HttpGet(nameof(Delete))]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Contact == null)
@@ -135,7 +135,7 @@ namespace srk_website.Controllers
         }
 
         // POST: Contact/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost(nameof(Delete))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int? id)
         {

@@ -12,6 +12,7 @@ using srk_website.Models;
 namespace srk_website.Controllers
 {
     [Authorize]
+    [Route("Admin/[controller]")]
     public class AboutController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -37,6 +38,7 @@ namespace srk_website.Controllers
         }
 
         // GET: About/Edit/5
+        [HttpGet(nameof(Edit))]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.About == null)
@@ -54,7 +56,7 @@ namespace srk_website.Controllers
         }
 
         // POST: About/Edit/5
-        [HttpPost]
+        [HttpPost(nameof(Edit))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind(include: "Id,Text")] AboutModel aboutModel)
         {

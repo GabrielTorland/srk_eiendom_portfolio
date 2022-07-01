@@ -12,6 +12,7 @@ namespace srk_website.Controllers
     /// </summary>
     /// <remarks></remarks>
     [Authorize]
+    [Route("Admin/[controller]")]
     public class ServiceController : Controller
     {
         private readonly IAzureStorage _storage;
@@ -29,12 +30,13 @@ namespace srk_website.Controllers
             _logger = logger;
             _generator = generator;
         }
+        [HttpGet]
         public IActionResult Index()
         {
             return View(_context.Service);
         }
             
-        [HttpGet]
+        [HttpGet(nameof(Upload))]
         public IActionResult Upload()
         {
             return View();
@@ -42,7 +44,7 @@ namespace srk_website.Controllers
 
         [System.ComponentModel.Description("Upload image to azure container and store meta data in database.")]
         [ValidateAntiForgeryToken]
-        [HttpPost]
+        [HttpPost(nameof(Upload))]
         public async Task<IActionResult> Upload([Bind(include: "Title, Description")] ServiceModel service, IFormFile file)
         {   
             if (file == null)
@@ -146,12 +148,16 @@ namespace srk_website.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost(nameof(Delete))]
         [ValidateAntiForgeryToken]
         [System.ComponentModel.Description("Delete image in azure container and remove meta data in database.")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             // Find image in database.
             var image = await _context.Service.FindAsync(id);
             
@@ -193,9 +199,14 @@ namespace srk_website.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        [HttpGet(nameof(Edit))]
+        public async Task<IActionResult> Edit(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            
             var service = await _context.Service.FindAsync(id);
             if (service == null)
             {
@@ -206,7 +217,7 @@ namespace srk_website.Controllers
         }
         
         // This method needs to be improved in the future!
-        [HttpPost]
+        [HttpPost(nameof(Edit))]
         [ValidateAntiForgeryToken]
         [System.ComponentModel.Description("Edit image in azure container and edit meta data in database.")]
         public async Task<IActionResult> Edit(int id, [Bind(include: "Id,Title,Description,ImageName,Uri")] ServiceModel service, IFormFile file)
@@ -215,6 +226,8 @@ namespace srk_website.Controllers
             {
                 return NotFound();
             }
+            
+            ModelState.Remove("file");
             if (!ModelState.IsValid)
             {
                 return View(service);
