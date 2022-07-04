@@ -1,371 +1,407 @@
 ﻿@{
     ViewData["Title"] = "Hjem";
     string Title = "SRK";
-    var Services = ViewData["Services"] as List<ServiceModel>;
-    var Contacts = ViewData["Contacts"] as List<ContactModel>;
-    var About = ViewData["About"] as AboutModel;
-    var ImageSlideShows = ViewData["ImageSlideShows"] as List<ImageSlideShowModel>;
-    var TeamMembers = ViewData["TeamMembers"] as List<TeamMemberModel>;
-    var Testimonials = ViewData["Testimonials"] as List<TestimonialModel>;
+    
+    var Services = new List<ServiceModel>();
+    if (ViewData["Services"] != null)
+    {
+        Services = ViewData["Services"] as List<ServiceModel>;
+    }
+    
+    var Contacts = new List<ContactModel>();
+    if (ViewData["Contacts"] != null)
+    {
+        Contacts = ViewData["Contacts"] as List<ContactModel>;
+    }
+    
+    var About = new AboutModel();
+    if (ViewData["About"] != null)
+    {
+        About = ViewData["About"] as AboutModel;
+    }
+
+    var ImageSlideShows = new List<ImageSlideShowModel>();
+    if (ViewData["ImageSlideShows"] != null)
+    {
+        ImageSlideShows = ViewData["ImageSlideShows"] as List<ImageSlideShowModel>;
+    }
+    
+    var TeamMembers = new List<TeamMemberModel>();
+    if (ViewData["TeamMembers"] != null)
+    {
+        TeamMembers = ViewData["TeamMembers"] as List<TeamMemberModel>;
+    }
+    
+    var Testimonials = new List<TestimonialModel>();
+    if (ViewData["Testimonials"] != null)
+    {
+        Testimonials = ViewData["Testimonials"] as List<TestimonialModel>;
+    }
 }
 
-  <!-- Loader -->
-    <div id="loader">
-        <div class="loading">
-            <div></div>
-        </div>
+<!-- Loader -->
+<div id="loader">
+    <div class="loading">
+        <div></div>
     </div>
+</div>
 
-    <!-- Sidebar -->
-    <div class="togo-fixed-sidebar togo-sidebar-left">
-		<div class="togo-header-container">
-			<!--Logo-->
-            <div class="logo">
-                <h1><a href="index.html">@Title<span>Eiendom</span></a></h1>
-            </div>
-			<!-- Burger menu -->
-			<div class="burger-menu">
-				<div class="line-menu line-half first-line"></div>
-				<div class="line-menu"></div>
-				<div class="line-menu line-half last-line"></div>
-			</div>
-			<!--Navigation menu-->
-            <nav class="togo-menu-fixed">
-                <ul>
-					<li class="current-menu"><a href="#home">HJEM</a></li>
-					<li><a href="#services">TJENESTER</a></li>
-					<li><a href="#about">OM OSS</a></li>
-					<li><a href="#project">PROSJEKTER</a></li>
-					<li><a href="#news">NYHETER</a></li>
-					<li><a href="#contact">KONTAKT</a></li>
-                    <li><a asp-controller="Home" asp-action="Privacy">Personvern</a></li>
-				</ul>
-			</nav>
-			<!-- Menu social media -->
-			<div class="togo-menu-social-media">
-                <div class="social">
-                    <a href="#"><i class="ti-facebook"></i></a>
-                    <a href="#"><i class="ti-twitter"></i></a>
-                    <a href="#"><i class="ti-instagram"></i></a>
-                </div>
-            </div>
+<!-- Sidebar -->
+<div class="togo-fixed-sidebar togo-sidebar-left">
+	<div class="togo-header-container">
+		<!--Logo-->
+        <div class="logo">
+            <h1><a href="index.html">@Title<span>Eiendom</span></a></h1>
+        </div>
+		<!-- Burger menu -->
+		<div class="burger-menu">
+			<div class="line-menu line-half first-line"></div>
+			<div class="line-menu"></div>
+			<div class="line-menu line-half last-line"></div>
 		</div>
-    </div>
+		<!--Navigation menu-->
+        <nav class="togo-menu-fixed">
+            <ul>
+				<li class="current-menu"><a href="#home">HJEM</a></li>
+				<li><a href="#services">TJENESTER</a></li>
+				<li><a href="#about">OM OSS</a></li>
+				<li><a href="#project">PROSJEKTER</a></li>
+				<li><a href="#news">NYHETER</a></li>
+				<li><a href="#contact">KONTAKT</a></li>
+                <li><a asp-controller="Home" asp-action="Privacy">Personvern</a></li>
+			</ul>
+		</nav>
+		<!-- Menu social media -->
+		<div class="togo-menu-social-media">
+            <div class="social">
+                <a href="#"><i class="ti-facebook"></i></a>
+                <a href="#"><i class="ti-twitter"></i></a>
+                <a href="#"><i class="ti-instagram"></i></a>
+            </div>
+        </div>
+	</div>
+</div>
     
 
-    <!-- Content -->
-    <div class="togo-side-content">
-        <!-- Lines -->
-        <div class="content-lines-wrapper">
-            <div class="content-lines-inner">
-                <div class="content-lines"></div>
-            </div>
+<!-- Content -->
+<div class="togo-side-content">
+    <!-- Lines -->
+    <div class="content-lines-wrapper">
+        <div class="content-lines-inner">
+            <div class="content-lines"></div>
         </div>
-        <!-- Header Slider -->
-        <header id="home" class="header pos-re slider-fade">
-            <div class="owl-carousel owl-theme">
-                @foreach(var item in @ImageSlideShows){
-                <div class="item bg-img" data-overlay-dark="3" data-background="@item.Uri">
-                    <div class="container text-center v-middle caption">
-                        <h4>Eiendom</h4>
-                        <h1>@item.ProjectName, @item.City</h1>
-                        <a href=@item.Website target="_blank" class="btn"><span>Kjøp nå<i class="ti-arrow-right"></i></span></a>
+    </div>
+    <!-- Header Slider -->
+    <header id="home" class="header pos-re slider-fade">
+        <div class="owl-carousel owl-theme">
+            @foreach(var item in ImageSlideShows){
+            <div class="item bg-img" data-overlay-dark="3" data-background="@item.Uri">
+                <div class="container text-center v-middle caption">
+                    <h4>Eiendom</h4>
+                    <h1>@item.ProjectName, @item.City</h1>
+                    <a href=@item.Website target="_blank" class="btn"><span>Kjøp nå<i class="ti-arrow-right"></i></span></a>
+                </div>
+            </div>
+            }
+        </div>
+    </header>
+    <!-- Services -->
+    <section id="services" class="services pt-100 pb-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-20 text-center">
+                    <h6 class="small-title">HVA VI GJØR</h6>
+                    <h4 class="title">VÅRE TJENESTER</h4>
+                </div>
+                <!-- Equivalent to enumerate in python -->
+                @foreach (var it in Services.Select((Value, Index) => new {Value, Index})){
+                <div class="col-md-4">
+                    <div class="@("item bg-"+(it.Index+1))" style="background-image: url(@it.Value.Uri);">
+                        <div class="con">
+                            <!-- Code will bug if there are more than 10 services. -->
+                            <div class="numb">@("0"+(it.Index+1).ToString())</div>
+                            <h5>@it.Value.Title</h5>
+                            <p>@it.Value.Description</p>
+                        </div>
                     </div>
                 </div>
                 }
             </div>
-        </header>
-        <!-- Services -->
-        <section id="services" class="services pt-100 pb-100">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12 mb-20 text-center">
-                        <h6 class="small-title">HVA VI GJØR</h6>
-                        <h4 class="title">VÅRE TJENESTER</h4>
-                    </div>
-                    <!-- Equivalent to enumerate in python -->
-                    @foreach (var it in Services.Select((Value, Index) => new {Value, Index})){
-                    <div class="col-md-4">
-                        <div class="@("item bg-"+(it.Index+1))" style="background-image: url(@it.Value.Uri);">
-                            <div class="con">
-                                <!-- Code will bug if there are more than 10 services. -->
-                                <div class="numb">@("0"+(it.Index+1).ToString())</div>
-                                <h5>@it.Value.Title</h5>
-                                <p>@it.Value.Description</p>
-                            </div>
-                        </div>
-                    </div>
-                    }
+        </div>
+    </section>
+    <!-- About -->
+    <section id="about" class="about pt-100 pb-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-20">
+                    <h6 class="small-title">OM OSS</h6>
+                    <h4 class="title">OM @Title EIENDOM</h4>
+                    @Html.Raw(About?.Text)
                 </div>
-            </div>
-        </section>
-        <!-- About -->
-        <section id="about" class="about pt-100 pb-100">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6 mb-20">
-                        <h6 class="small-title">OM OSS</h6>
-                        <h4 class="title">OM @Title EIENDOM</h4>
-                        @Html.Raw(About?.Text)
+                <div class="col-md-6 mb-20 image">
+                    <div class="img"> <img src="~/img/25.png" alt="">
+                        @*<a class="vid" href="https://www.youtube.com/watch?v=UrkXWG9WgC8">
+                            <span class="vid-togo-button"><i class="ti-control-play"></i></span>
+                        </a>*@
                     </div>
-                    <div class="col-md-6 mb-20 image">
-                        <div class="img"> <img src="~/img/25.png" alt="">
-                            @*<a class="vid" href="https://www.youtube.com/watch?v=UrkXWG9WgC8">
-                                <span class="vid-togo-button"><i class="ti-control-play"></i></span>
-                            </a>*@
-                        </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="yearimg">
+                        <div class="numb">@Html.Raw(ViewData["Experience"])</div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="yearimg">
-                            <div class="numb">@Html.Raw(ViewData["Experience"])</div>
-                        </div>
-                        <div class="year">
-                        <h6 class="small-title">INNEN EIENDOM</h6>
-                        <h4 class="title">ÅR MED ERFARING</h4>
-                        </div>
+                    <div class="year">
+                    <h6 class="small-title">INNEN EIENDOM</h6>
+                    <h4 class="title">ÅR MED ERFARING</h4>
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- Projects -->
-        <section id="project" class="projects pt-100 pb-100">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12 mb-20 text-center">
-                        <h6 class="small-title">PORTEFØLJE</h6>
-                        <h4 class="title">VÅRE PROSJEKTER</h4>
-                    </div>
+        </div>
+    </section>
+    <!-- Projects -->
+    <section id="project" class="projects pt-100 pb-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-20 text-center">
+                    <h6 class="small-title">PORTEFØLJE</h6>
+                    <h4 class="title">VÅRE PROSJEKTER</h4>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="owl-carousel owl-theme">
-                            <div class="item mb-50">
-                                <div class="position-re o-hidden"> <img src="~/img/projects/3.jpg" alt=""> </div>
-                                <div class="con"> <span class="category">
-                                        <a href="project.html">Interior</a>
-                                    </span>
-                                    <h5><a href="project.html">Art Museum, USA</a></h5> 
-                                    <a href="project.html"><i class="ti-arrow-right"></i></a>
-                                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="owl-carousel owl-theme">
+                        <div class="item mb-50">
+                            <div class="position-re o-hidden"> <img src="~/img/projects/3.jpg" alt=""> </div>
+                            <div class="con"> <span class="category">
+                                    <a href="project.html">Interior</a>
+                                </span>
+                                <h5><a href="project.html">Art Museum, USA</a></h5> 
+                                <a href="project.html"><i class="ti-arrow-right"></i></a>
                             </div>
-                            <div class="item mb-50">
-                                <div class="position-re o-hidden"> <img src="~/img/projects/2.jpg" alt=""> </div>
-                                <div class="con"> <span class="category">
-                                        <a href="project.html">Architecture</a>
-                                    </span>
-                                    <h5><a href="project.html">Drana Villa, CA</a></h5>
-                                    <a href="project.html"><i class="ti-arrow-right"></i></a>
-                                </div>
+                        </div>
+                        <div class="item mb-50">
+                            <div class="position-re o-hidden"> <img src="~/img/projects/2.jpg" alt=""> </div>
+                            <div class="con"> <span class="category">
+                                    <a href="project.html">Architecture</a>
+                                </span>
+                                <h5><a href="project.html">Drana Villa, CA</a></h5>
+                                <a href="project.html"><i class="ti-arrow-right"></i></a>
                             </div>
-                            <div class="item mb-50">
-                                <div class="position-re o-hidden"> <img src="~/img/projects/4.jpg" alt=""> </div>
-                                <div class="con"> <span class="category">
-                                        <a href="project.html">Design</a>
-                                    </span>
-                                    <h5><a href="#">Home Design, USA</a></h5>
-                                    <a href="project.html"><i class="ti-arrow-right"></i></a>
-                                </div>
+                        </div>
+                        <div class="item mb-50">
+                            <div class="position-re o-hidden"> <img src="~/img/projects/4.jpg" alt=""> </div>
+                            <div class="con"> <span class="category">
+                                    <a href="project.html">Design</a>
+                                </span>
+                                <h5><a href="#">Home Design, USA</a></h5>
+                                <a href="project.html"><i class="ti-arrow-right"></i></a>
                             </div>
-                            <div class="item mb-50">
-                                <div class="position-re o-hidden"> <img src="~/img/projects/1.jpg" alt=""> </div>
-                                <div class="con"> <span class="category">
-                                        <a href="project.html">Interior</a>
-                                    </span>
-                                    <h5><a href="project.html">House Office, CA</a></h5>
-                                    <a href="project.html"><i class="ti-arrow-right"></i></a>
-                                </div>
+                        </div>
+                        <div class="item mb-50">
+                            <div class="position-re o-hidden"> <img src="~/img/projects/1.jpg" alt=""> </div>
+                            <div class="con"> <span class="category">
+                                    <a href="project.html">Interior</a>
+                                </span>
+                                <h5><a href="project.html">House Office, CA</a></h5>
+                                <a href="project.html"><i class="ti-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- Testimonials -->
-        <section class="testimonial bg-img bg-fixed pos-re mt-100 pt-100 pb-100" data-overlay-dark="6" data-background="https://webapi.blob.core.windows.net/images/3.jpg">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6 offset-md-3">
-                        <div class="testimonials"> <span class="icon"><img src="https://webapi.blob.core.windows.net/images/left-quote.png" alt=""></span>
-                            <div class="owl-carousel owl-theme text-center">
-                                @foreach (var item in Testimonials)
-                                {
-                                    <div class="item">
-                                        <div class="client-area">
-                                            <h6>@item.FullName</h6> <span>@item.Project, @item.Position</span>
-                                        </div>
-                                        @Html.Raw(item.Testimonial)
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Our Team -->
-        <section class="team mt-100 pb-100">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12 mb-20 text-center">
-                        <h6 class="small-title">Profesjonell</h6>
-                        <h4 class="title">Vårt Team</h4>
-                    </div>
-                    <div class="col-md-10 offset-md-1">
+        </div>
+    </section>
+    <!-- Testimonials -->
+    <section class="testimonial bg-img bg-fixed pos-re mt-100 pt-100 pb-100" data-overlay-dark="6" data-background="https://webapi.blob.core.windows.net/images/3.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="testimonials"> <span class="icon"><img src="https://webapi.blob.core.windows.net/images/left-quote.png" alt=""></span>
                         <div class="owl-carousel owl-theme text-center">
-                            @foreach(var item in TeamMembers){
-                            <div class="item">
-                                <div class="team-img"> <img src="@item.Uri" alt="Image not found!">
-                                    <div class="info valign">
-                                        <div class="text-center full-width">
-                                            <div class="social">
-                                                <a href="tel:@item.Phone" class="icon"> <i class="ti-mobile"></i> </a>
-                                                <a href = "mailto:@item.Email" class="icon"> <i class="ti-email"></i> </a>
-                                                <a href="@item.LinkedIn" class="icon"> <i class="ti-linkedin"></i> </a>
-                                            </div>
-                                        </div>
+                            @foreach (var item in Testimonials)
+                            {
+                                <div class="item">
+                                    <div class="client-area">
+                                        <h6>@item.FullName</h6> <span>@item.Project, @item.Position</span>
                                     </div>
+                                    @Html.Raw(item.Testimonial)
                                 </div>
-                                <h6>@item.FullName</h6> <span>@item.Position</span>
-                            </div>
                             }
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- Blog -->
-        @*<section id="news" class="blog pt-100 pb-100">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12 mb-20">
-                        <h6 class="small-title">Our Blog</h6>
-                        <h4 class="title">Latest News</h4>
-                    </div>
-                    <div class="col-md-6">
+        </div>
+    </section>
+    <!-- Our Team -->
+    <section class="team mt-100 pb-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-20 text-center">
+                    <h6 class="small-title">Profesjonell</h6>
+                    <h4 class="title">Vårt Team</h4>
+                </div>
+                <div class="col-md-10 offset-md-1">
+                    <div class="owl-carousel owl-theme text-center">
+                        @foreach(var item in TeamMembers){
                         <div class="item">
-                            <div class="post-img">
-                                <div class="img">
-                                    <a href="blog.html"><img src="~/img/blog/1.jpg" alt=""> </a>
-                                </div>
-                            </div>
-                            <div class="cont">
-                                <h6><a href="post.html">Trending in Modern Architecture 2022</a></h6>
-                                <div class="info"> <a href="blog.html"><b>Event</b> Dec 28, 2022 </a> </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="item">
-                            <div class="post-img">
-                                <div class="img">
-                                    <a href="blog.html"><img src="~/img/blog/2.jpg" alt=""> </a>
-                                </div>
-                            </div>
-                            <div class="cont">
-                                <h6><a href="blog.html">Renovation Architecture and Design</a></h6>
-                                <div class="info"> <a href="blog.html"><b>Discover</b> Dec 26, 2022 </a> </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>*@
-        <!-- Contact -->
-        <section id="contact" class="contact pt-100 pb-100">
-            <div class="container">
-                <div class="row text-center">
-                    <div class="col-md-12 mb-20">
-                        <h6 class="small-title">KONTAKT</h6>
-                        <h4 class="title">KONTAKT OSS</h4>
-                    </div>
-                </div>
-                <div class="row">
-                    <!-- Equivalent to enumerate in python -->
-                    @foreach (var it in Contacts.Select((Value, Index) => new {Value, Index})){
-                    <div class="col-md-4">
-                        <div class="item bg-4" style="background-image: url(https://webapi.blob.core.windows.net/images/contact.jpg);">
-                            <div class="con">
-                                <h5>@it.Value.Country.ToUpper()</h5>
-                                <p><i class="ti-home" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Address, @it.Value.Zip @it.Value.City, @it.Value.Country, UK</p>
-                                <p><i class="ti-mobile" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Phone</p>
-                                <p><i class="ti-envelope" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Email</p>
-                            </div>
-                        </div>
-                    </div>
-                    }
-                </div>
-                <div class="row mt-100">
-                    <div class="col-md-4 offset-md-4">
-                        <form method="post" class="contact__form" action="mail.php">
-                            <!-- Form message -->
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="alert alert-success contact__msg" style="display: none" role="alert">
-                                        Your message was sent successfully.
+                            <div class="team-img"> <img src="@item.Uri" alt="Image not found!">
+                                <div class="info valign">
+                                    <div class="text-center full-width">
+                                        <div class="social">
+                                            <a href="tel:@item.Phone" class="icon"> <i class="ti-mobile"></i> </a>
+                                            <a href = "mailto:@item.Email" class="icon"> <i class="ti-email"></i> </a>
+                                            <a href="@item.LinkedIn" class="icon"> <i class="ti-linkedin"></i> </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Form elements -->
-                            <div class="row">
-                                <div class="col-md-12 form-group">
-                                    <input name="name" type="text" placeholder="Your Name *" required> 
-                                </div>
-                                <div class="col-md-12 form-group">
-                                    <input name="email" type="email" placeholder="Your Email *" required> 
-                                </div>
-                                <div class="col-md-12 form-group">
-                                    <input name="phone" type="text" placeholder="Your Number *" required> 
-                                </div>
-                                <div class="col-md-12 form-group">
-                                    <input name="subject" type="text" placeholder="Subject *" required> 
-                                </div>
-                                <div class="col-md-12 form-group">
-                                    <textarea name="message" id="message" cols="30" rows="4" placeholder="Message *" required></textarea>
-                                </div>
-                                <div class="col-md-12">
-                                    <input name="submit" type="submit"  value="Send Message">
-                                </div>
-                            </div>
-                        </form>
+                            <h6>@item.FullName</h6> <span>@item.Position</span>
+                        </div>
+                        }
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- Clients -->
-        <div class="clients text-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12 owl-carousel owl-theme">
-                        <div class="client-logo">
-                            <a href="#"><img src="~/img/clients/1.png" alt=""></a>
+        </div>
+    </section>
+    <!-- Blog -->
+    @*<section id="news" class="blog pt-100 pb-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-20">
+                    <h6 class="small-title">Our Blog</h6>
+                    <h4 class="title">Latest News</h4>
+                </div>
+                <div class="col-md-6">
+                    <div class="item">
+                        <div class="post-img">
+                            <div class="img">
+                                <a href="blog.html"><img src="~/img/blog/1.jpg" alt=""> </a>
+                            </div>
                         </div>
-                        <div class="client-logo">
-                            <a href="#"><img src="~/img/clients/2.png" alt=""></a>
+                        <div class="cont">
+                            <h6><a href="post.html">Trending in Modern Architecture 2022</a></h6>
+                            <div class="info"> <a href="blog.html"><b>Event</b> Dec 28, 2022 </a> </div>
                         </div>
-                        <div class="client-logo">
-                            <a href="#"><img src="~/img/clients/3.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="item">
+                        <div class="post-img">
+                            <div class="img">
+                                <a href="blog.html"><img src="~/img/blog/2.jpg" alt=""> </a>
+                            </div>
                         </div>
-                        <div class="client-logo">
-                            <a href="#"><img src="~/img/clients/4.png" alt=""></a>
-                        </div>
-                        <div class="client-logo">
-                            <a href="#"><img src="~/img/clients/5.png" alt=""></a>
-                        </div>
-                        <div class="client-logo">
-                            <a href="#"><img src="~/img/clients/6.png" alt=""></a>
+                        <div class="cont">
+                            <h6><a href="blog.html">Renovation Architecture and Design</a></h6>
+                            <div class="info"> <a href="blog.html"><b>Discover</b> Dec 26, 2022 </a> </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Footer -->
-        <footer class="text-center pos-re">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4 offset-md-8">
-                        <p>&copy; 2022 Gabriel Torland. ALL RIGHT RESERVED.</p>
+    </section>*@
+    <!-- Contact -->
+    <section id="contact" class="contact pt-100 pb-100">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-12 mb-20">
+                    <h6 class="small-title">KONTAKT</h6>
+                    <h4 class="title">KONTAKT OSS</h4>
+                </div>
+            </div>
+            <div class="row">
+                <!-- Equivalent to enumerate in python -->
+                @foreach (var it in Contacts.Select((Value, Index) => new {Value, Index})){
+                <div class="col-md-4">
+                    <div class="item bg-4" style="background-image: url(https://webapi.blob.core.windows.net/images/contact.jpg);">
+                        <div class="con">
+                            <h5>@it.Value.Country.ToUpper()</h5>
+                            <p><i class="ti-home" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Address, @it.Value.Zip @it.Value.City, @it.Value.Country, UK</p>
+                            <p><i class="ti-mobile" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Phone</p>
+                            <p><i class="ti-envelope" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Email</p>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+            <div class="row mt-100">
+                <div class="col-md-4 offset-md-4">
+                    <form method="post" id="contact_form">
+                        @Html.AntiForgeryToken()
+                        <!-- Form message -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="alert alert-success contact__msg" id="contact_msg" style="display: none" role="alert">
+                                    Din melding er sendt.
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Form elements -->
+                        <div class="row">
+                            <div class="col-md-12 form-group">
+                                <input name="Name" type="text" id="name_input_contact" placeholder="Navn *" required>
+                                <span id="name_error_message_contact" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <input name="Email" type="email" id="email_input_contact" placeholder="Email *" required> 
+                                <span id="email_error_message_contact" class="text-danger"></span>                                    
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <input name="Phone" type="text" id="phone_input_contact" placeholder="Nummer *" required> 
+                                <span id="phone_error_message_contact" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <input name="Subject" type="text" id="subject_input_contact" placeholder="Emne *" required> 
+                                <span id="subject_error_message_contact" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <textarea name="Message" id="message_input_contact" cols="30" rows="4" placeholder="Melding *" required></textarea>
+                                <span id="message_error_message_contact" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="submit" name="submit" value="Send Message">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Clients -->
+    <div class="clients text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 owl-carousel owl-theme">
+                    <div class="client-logo">
+                        <a href="#"><img src="~/img/clients/1.png" alt=""></a>
+                    </div>
+                    <div class="client-logo">
+                        <a href="#"><img src="~/img/clients/2.png" alt=""></a>
+                    </div>
+                    <div class="client-logo">
+                        <a href="#"><img src="~/img/clients/3.png" alt=""></a>
+                    </div>
+                    <div class="client-logo">
+                        <a href="#"><img src="~/img/clients/4.png" alt=""></a>
+                    </div>
+                    <div class="client-logo">
+                        <a href="#"><img src="~/img/clients/5.png" alt=""></a>
+                    </div>
+                    <div class="client-logo">
+                        <a href="#"><img src="~/img/clients/6.png" alt=""></a>
                     </div>
                 </div>
             </div>
-        </footer>
+        </div>
     </div>
+    <!-- Footer -->
+    <footer class="text-center pos-re">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 offset-md-8">
+                    <p>&copy; 2022 Gabriel Torland. ALL RIGHT RESERVED.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
