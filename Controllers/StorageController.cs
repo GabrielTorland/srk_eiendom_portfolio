@@ -45,8 +45,14 @@ namespace srk_website.Controllers
         [HttpPost(nameof(Upload))]
         [System.ComponentModel.Description("Upload image to azure container and store meta data in database.")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upload(IFormFile file)
+        public async Task<IActionResult> Upload(string name, IFormFile file)
         {
+            if (name == null) {
+                ViewBag.IsResponse = true;
+                ViewBag.IsSuccess = false;
+                ViewBag.Message = "All parameters need to be filled.";
+                return View();
+            }
             if (file == null) 
             {
                 ViewBag.IsResponse = true;
@@ -112,7 +118,7 @@ namespace srk_website.Controllers
                     return Problem("Could not find image in azure container!");
                 }
                 // Meta data about image.
-                StorageModel newImage = new(fileName, uri);
+                StorageModel newImage = new(name, fileName, uri);
 
                 // Stored in the database.
                 // Try catch here in the future.

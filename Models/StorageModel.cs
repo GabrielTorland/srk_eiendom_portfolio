@@ -7,21 +7,26 @@ namespace srk_website.Models
     {
         public StorageModel() { }
         
-        public StorageModel(string imageName, string imageUri)
+        public StorageModel(string name, string imageName, string imageUri)
         {
+            Name = name;
             ImageName = imageName;
             ImageUri = imageUri;
         }
         
         public int Id { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string? Name { get; set; }
         
         [Required]
         [StringLength(30)]
-        public string ?ImageName { get; set; }
+        public string? ImageName { get; set; }
 
-        [Url]
+        [Url]        
         [Required]
-        public string ?ImageUri { get; set; }
+        public string? ImageUri { get; set; }
 
     }
 }

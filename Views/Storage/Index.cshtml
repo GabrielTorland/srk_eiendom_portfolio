@@ -10,6 +10,8 @@
             <a asp-action="Upload" asp-controller="Storage" class="btn btn-info" role="button" >Add image</a>
                 <ul class="list-group">            
                 @foreach (var item  in Model){
+                    @item.Name
+                    <br>
                     @item.ImageUri
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <img src="@item.ImageUri" class="img-fluid" alt="quixote">

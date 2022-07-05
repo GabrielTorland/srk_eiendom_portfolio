@@ -27,10 +27,13 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     @Html.AntiForgeryToken()
     <div class="form-group">
+        <input name="name" class="form-control" />
+    </div>
+    <div class="form-group">
         <input type="file" name="file" /> 
     </div>
     <div class="form-group">
-        <input type="submit" value="Upload"/>
+        <input type="submit" value="Upload" />
     </div>
 </form>
 
