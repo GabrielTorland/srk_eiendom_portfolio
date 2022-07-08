@@ -141,9 +141,12 @@ namespace srk_website.Controllers
             {
                 return NotFound();
             }
-            
+
             // Find image in database.
-            var image = await _context.Storage.FindAsync(id);
+            var image = await _context.Storage
+                .Include(s => s.Projects)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            
             if (image == null)
             {
                 _logger.LogError("Image meta data is not in database.");
@@ -160,7 +163,13 @@ namespace srk_website.Controllers
             string imageName = image.ImageName;
             
             // Remove image meta data from database.
-            // Try catch here in the future.
+            if (image.Projects.Any())
+            {
+                TempData["IsResponse"] = true;
+                TempData["IsSuccess"] = false;
+                TempData["Message"] = "Image is used in a project, you cannot delete it.";
+                return RedirectToAction(nameof(Index));
+            }
             _context.Storage.Remove(image);
             await _context.SaveChangesAsync();
 

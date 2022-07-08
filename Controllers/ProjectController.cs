@@ -40,6 +40,7 @@ namespace srk_website.Controllers
             }
 
             var projectModel = await _context.Project
+                .Include(p => p.Images)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (projectModel == null)
             {
@@ -49,36 +50,70 @@ namespace srk_website.Controllers
             return View(projectModel);
         }
 
-        // GET: Project/Create     
+        // GET: Project/Create
+        [HttpGet]
         public IActionResult Create()
         {
             var images = _context.Storage.Select(a =>
                                   new SelectListItem
                                   {
-                                      Value = a.ImageName,
+                                      Value = a.ImageUri,
                                       Text = a.Name
                                   }).ToList();
-            images = new List<SelectListItem>();
-            for (int i = 0; i < 3; i++)
+            if (images.Count == 0)
             {
-                images.Add(new SelectListItem{ Value = "LOL.png", Text = "LOL" });
+                ViewBag.IsResponse = true;
+                ViewBag.IsSuccess = false;
+                ViewBag.Message = "<p> No images found in the remote storage. You have to <a style='font-weight:bold' href='/Admin/Storage/Upload'> upload </a> an image before you can create a project. </p>";
             }
-            ViewBag.Images = new MultiSelectList(images, "Value", "Text");
+            else
+            {
+                ViewBag.Images = new MultiSelectList(images, "Value", "Text");
+            }
+            
             return View();
         }
 
         // POST: Project/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ProjectDescription")] ProjectModel projectModel, string[] selectedImages)
+        public async Task<IActionResult> Create([Bind(include: "Id,Title,ProjectDescription,CoverImageId")] ProjectModel projectModel, string[] selectedImages)
         {
-            _logger.LogInformation(selectedImages.Length.ToString());
+            var images = _context.Storage.Select(a =>
+                                  new SelectListItem
+                                  {
+                                      Value = a.ImageUri,
+                                      Text = a.Name
+                                  }).ToList();
+            
+            if (selectedImages.Length <= 0)
+            {
+                ViewBag.Images = new MultiSelectList(images, "Value", "Text");
+                ViewBag.NoImages = "You have to select at least one image.";
+                return View(projectModel);
+            }
             if (ModelState.IsValid)
             {
-                _context.Add(projectModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                projectModel.Images = _context.Storage.Where(a => selectedImages.Contains(a.ImageUri)).ToList();
+                
+                if (projectModel.Images.Count != selectedImages.Length)
+                {
+                    ViewBag.Images = new MultiSelectList(images, "Value", "Text");
+                    ViewBag.IsResponse = true;
+                    ViewBag.IsSuccess = false;
+                    ViewBag.Message = "<p> Someone deleted the image while you were creating the project. You have to <a style='font-weight:bold' href='/Admin/Storage/Upload'> upload </a> the image again. </p>";
+                    return View(projectModel);
+                }
+                else
+                {
+                    _context.Add(projectModel);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
+            
+            ViewBag.Images = new MultiSelectList(images, "Value", "Text");
+            ViewBag.SelectedImages = selectedImages;
             return View(projectModel);
         }
 

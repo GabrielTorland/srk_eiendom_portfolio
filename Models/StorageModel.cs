@@ -5,13 +5,17 @@ namespace srk_website.Models
 {
     public class StorageModel
     {
-        public StorageModel() { }
+        public StorageModel() 
+        {
+            Projects = new HashSet<ProjectModel>();
+        }
         
         public StorageModel(string name, string imageName, string imageUri)
         {
             Name = name;
             ImageName = imageName;
             ImageUri = imageUri;
+            Projects = new HashSet<ProjectModel>();
         }
         
         public int Id { get; set; }
@@ -27,6 +31,8 @@ namespace srk_website.Models
         [Url]        
         [Required]
         public string? ImageUri { get; set; }
+
+        public virtual ICollection<ProjectModel> Projects { get; set; }
 
     }
 }

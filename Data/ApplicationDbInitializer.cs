@@ -5,7 +5,7 @@ using srk_website.Models;
 namespace srk_website.Data
 {
     public class ApplicationDbInitializer
-    { 
+    {
         
         public static async void Initialize(ApplicationDbContext db, UserManager<IdentityUser> um, IEmailSender _emailSender)
         {

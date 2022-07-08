@@ -49,12 +49,8 @@
     <a asp-action="Index">Back to Testimonial List</a>
 </div>
 
-<script>
-    $(document).ready(function () {
-        CKEDITOR.replace('#Description');
-    });
-</script>
-
 @section Scripts {
+    <!-- Wordpress ich tool (converts text to html) -->
+    <script src="~/lib/ckeditor/ckeditor.js"></script> 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
