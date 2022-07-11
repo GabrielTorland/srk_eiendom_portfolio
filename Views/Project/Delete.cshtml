@@ -1,7 +1,7 @@
 ﻿@model srk_website.Models.ProjectModel
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete Project";
 }
 
 <h1>Delete</h1>
@@ -17,17 +17,11 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Title)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProjectDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProjectDescription)
-        </dd>
     </dl>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index" asp-controller="Project">Back to Project List</a>
     </form>
 </div>

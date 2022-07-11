@@ -1,23 +1,26 @@
-﻿@model IEnumerable<srk_website.Models.StorageModel>
+﻿@model IEnumerable<srk_website.Models.ProjectImageModel>
 
 @{
-    ViewData["Title"] = "Images";
+    ViewData["Title"] = "Project Images";
 }
 <div class="container">
     <div class="row">
         <div class="col-12 col-sm-8 col-lg-5">
             <h6 class="text-muted">Images</h6>
-            <a asp-action="Upload" asp-controller="Storage" class="btn btn-info" role="button" >Add image</a>
+            <a asp-action="Upload" asp-controller="ProjectImage" class="btn btn-info" role="button" >Add image</a>
                 <ul class="list-group">            
                 @foreach (var item  in Model){
-                    @item.Name
-                    <br>
-                    @item.ImageUri
+                    <li>
+                        @item.Name
+                        <br/>
+                        @item.ImageUri
+                    </li>
+                    
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <img src="@item.ImageUri" class="img-fluid" alt="quixote">
                     </li>
                     <p class="text-danger"> Make sure that you have deleted all the references to the image before deleting It!</p>
-                    <form method="post" asp-action="Delete" asp-controller="Storage">
+                    <form method="post" asp-action="Delete" asp-controller="ProjectImage">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="id" value=@item.Id>
                         <div class="form-group">

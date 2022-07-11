@@ -2,12 +2,9 @@
 
 @{
     ViewData["Title"] = "Create Project";
-    var Images = (MultiSelectList)ViewBag.Images;
-    var SelectedImages = (string[])ViewBag.SelectedImages;
-    if (SelectedImages != null)
-    {
-        SelectedImages.ToList();
-    }
+    // The Multiselect has two properties: Value and Text. Value is the ImageUri and Text is the Name.
+    var Images = (IDictionary<string, MultiSelectList>)ViewBag.Images;
+    var SelectedImages = (IDictionary<string, string>)ViewBag.SelectedImages;
 }
 
 @section Styles {
@@ -51,42 +48,101 @@
                 <span asp-validation-for="ProjectDescription" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Location" class="control-label"></label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label for="selectedProjectImages" class="control-label">Images</label>
                 <br />
+                <p class="text-info">Select four images only</p>
                 <select name="selectedImages" id="selectedProjectImages" class="selectpicker" multiple data-live-search="true">
                     @if (Images != null)
                     {
-                        @foreach (var image in Images){
-                            @if (SelectedImages == null)
-                            {
-                                <option id="@image.Value" value="@image.Value" >@image.Text</option>
-                            }
-                            else
-                            {
-                                @if (SelectedImages.Contains(image.Value))
+                        @foreach (var item in Images)
+                        {
+                            <optgroup label=@item.Key>
+                                @if (@item.Value != null)
                                 {
-                                    <option id="@image.Value" value="@image.Value" selected>@image.Text</option>
+                                     @if (SelectedImages == null)
+                                    {
+                                        @foreach (var image in @item.Value)
+                                        {
+                                            <option value="@image.Value" >@image.Text</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @foreach (var image in @item.Value)
+                                        {
+                                            @if (SelectedImages.Keys.Contains(image.Value))
+                                            {
+                                                <option value="@image.Value" selected>@image.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@image.Value" >@image.Text</option>
+                                            }
+                                        }
+                                    }
+                                    
                                 }
-                                else
-                                {
-                                    <option id="@image.Value" value="@image.Value">@image.Text</option>
-                                }
-                            }
-                            
+                            </optgroup>
                         }
                     }
                 </select>
-                @if (ViewBag.NoImages != null)
+                @if (ViewBag.selectedProjectImagesError != null)
                 {
-                    <span for="selectedProjectImages" class="text-danger">@ViewBag.NoImages</span>
+                    <span for="selectedProjectImages" class="text-danger">@ViewBag.selectedProjectImagesError</span>
+                }
+                else
+                {
+                    <span for="selectedProjectImages" class="text-danger"></span>
                 }
             </div>
-            <p>Select some images before choosing the cover image.</p>
             <div class="form-group">
-                <label asp-for="CoverImageId" class="control-label"></label>
+                <label asp-for="CoverImageUri" class="control-label"></label>
                 <br />
-                <select asp-for="CoverImageId" class="selectpicker"></select>
-                <span asp-validation-for="CoverImageId" class="text-danger"></span>
+                <p class="text-info">The cover image should be 1920x1080 pixels</p>
+                <select asp-for="CoverImageUri" class="selectpicker">
+                    @if (SelectedImages != null)
+                    {
+                        foreach (var item in SelectedImages)
+                        {
+                            @if (item.Key == Model.CoverImageUri)
+                            {
+                                <option value="@item.Key" selected>@item.Value</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Key" >@item.Value</option>
+                            }
+                        }
+                    }
+                </select>
+                <span asp-validation-for="CoverImageUri" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ThumbnailUri" class="control-label"></label>
+                <br />
+                <p class="text-info">Thumbnail image should be 600x900 pixels</p>
+                <select asp-for="ThumbnailUri" class="selectpicker">
+                    @if (SelectedImages != null)
+                    {
+                        foreach (var item in SelectedImages)
+                        {
+                            @if (item.Key == Model.ThumbnailUri)
+                            {
+                                <option value="@item.Key" selected>@item.Value</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Key" >@item.Value</option>
+                            }
+                        }
+                    }
+                </select>
+                <span asp-validation-for="ThumbnailUri" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -96,7 +152,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to Project List</a>
+    <a asp-action="Index" asp-controller="Project">Back to Project List</a>
 </div>
 
 @section Scripts {
@@ -110,22 +166,10 @@
             $('select').selectpicker();
         });
 
-        $('#selectedProjectImages').change(function(){
-            var data = $(this).val();
-            alert(data);
-            var values = data.split(",");
-            var names = [];
-            for (var i = 0; i < values.length; i++) { 
-                names.push($(`#${values[i]}`).html());
-                console.log($(`#${values[i]}`).html())
-            }
-            $('#CoverImageId').html("");
-            for (var i = 0; i < names.length; i++) {
-                $('#CoverImageId').append(`<option value="${values[i]}">
-                                       ${names[i]}
-                                  </option>`);
-            }
-        });
+        // Compatible for tablets, phones etc.
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+            $('.selectpicker').selectpicker('mobile');
+        }
     </script>
     
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

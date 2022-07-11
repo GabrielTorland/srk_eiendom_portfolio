@@ -87,3 +87,52 @@ function clearInputMessages() {
     $("#subject_input_contact").val("");
     $("#message_input_contact").val("");
 }
+
+
+
+// Update cover image selector
+$('#selectedProjectImages').change(function () {
+    var values = $(this).val();
+    var names = $('#selectedProjectImages option:selected').toArray().map(item => item.text);
+
+    // Remove image from cover images when it's unselected.
+    $('#CoverImageUri option').each(function () {
+        if ($.inArray($(this).val(), values) == -1) {
+            $(this).remove();
+        }
+    });
+    // Remove image from thumbnail images when it's unselected
+    $('#ThumbnailUri option').each(function () {
+        if ($.inArray($(this).val(), values) == -1) {
+            $(this).remove();
+        }
+    });
+
+    // Add selected image to cover images.
+    for (let i = 0; i < values.length; i++) {
+        let contain = false;
+        $("#CoverImageUri option").each(function () {
+            if ($(this).val() == values[i]) {
+                contain = true;
+            }
+        });
+
+        if (contain == false) {
+            $('#CoverImageUri').append(`<option value="${values[i]}"> ${names[i]} </option>`);
+        }
+    }
+    // Add selected image to thumnail images.
+    for (let i = 0; i < values.length; i++) {
+        let contain = false;
+        $("#ThumbnailUri option").each(function () {
+            if ($(this).val() == values[i]) {
+                contain = true;
+            }
+        });
+
+        if (contain == false) {
+            $('#ThumbnailUri').append(`<option value="${values[i]}"> ${names[i]} </option>`);
+        }
+    }
+    $('.selectpicker').selectpicker('refresh');
+});

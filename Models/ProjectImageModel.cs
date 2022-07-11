@@ -1,18 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace srk_website.Models
 {
-    public class StorageModel
+    public class ProjectImageModel
     {
-        public StorageModel() 
+        public ProjectImageModel() 
         {
             Projects = new HashSet<ProjectModel>();
         }
         
-        public StorageModel(string name, string imageName, string imageUri)
+        public ProjectImageModel(string name, string projectName, string imageName, string imageUri)
         {
             Name = name;
+            ProjectName = projectName;
             ImageName = imageName;
             ImageUri = imageUri;
             Projects = new HashSet<ProjectModel>();
@@ -23,13 +26,16 @@ namespace srk_website.Models
         [Required]
         [StringLength(50)]
         public string? Name { get; set; }
-        
+
         [Required]
-        [StringLength(30)]
+        [DisplayName("Project Name")]
+        [StringLength(50)]
+        public string? ProjectName { get; set; }
+
+        [ValidateNever]
         public string? ImageName { get; set; }
 
-        [Url]        
-        [Required]
+        [ValidateNever]
         public string? ImageUri { get; set; }
 
         public virtual ICollection<ProjectModel> Projects { get; set; }

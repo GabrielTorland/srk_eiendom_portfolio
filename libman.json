@@ -27,42 +27,25 @@
         "umd/popper.js.map",
         "umd/popper.min.js.map"
       ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "owl.carousel@2.2.0",
+      "destination": "wwwroot/lib/owl.carousel/",
+      "files": [
+        "dist/owl.carousel.js",
+        "dist/owl.carousel.min.js",
+        "dist/LICENSE",
+        "dist/README.md",
+        "dist/assets/ajax-loader.gif",
+        "dist/assets/owl.carousel.css",
+        "dist/assets/owl.carousel.min.css",
+        "dist/assets/owl.theme.default.css",
+        "dist/assets/owl.theme.default.min.css",
+        "dist/assets/owl.theme.green.css",
+        "dist/assets/owl.theme.green.min.css",
+        "dist/assets/owl.video.play.png"
+      ]
     }
-,
-{
-  "provider": "unpkg",
-  "library": "owl.carousel@2.2.0",
-  "destination": "wwwroot/lib/owl.carousel/",
-  "files": [
-    "dist/owl.carousel.js",
-    "dist/owl.carousel.min.js",
-    "dist/LICENSE",
-    "dist/README.md",
-    "dist/assets/ajax-loader.gif",
-    "dist/assets/owl.carousel.css",
-    "dist/assets/owl.carousel.min.css",
-    "dist/assets/owl.theme.default.css",
-    "dist/assets/owl.theme.default.min.css",
-    "dist/assets/owl.theme.green.css",
-    "dist/assets/owl.theme.green.min.css",
-    "dist/assets/owl.video.play.png"
   ]
-}
-,
-{
-  "provider": "unpkg",
-  "library": "lightgallery@2.5.0",
-  "destination": "wwwroot/lib/lightgallery/",
-  "files": [
-    "lightgallery.min.js",
-    "README.md",
-    "package.json",
-    "css/lightgallery.css",
-    "plugins/thumbnail/lg-thumbnail.min.js",
-    "plugins/fullscreen/lg-fullscreen.min.js",
-    "plugins/thumbnail/package.json",
-    "plugins/fullscreen/package.json"
-  ]
-}
-]
 }

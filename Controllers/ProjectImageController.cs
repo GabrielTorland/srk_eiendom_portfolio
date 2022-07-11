@@ -9,7 +9,7 @@ namespace srk_website.Controllers
 {
     [Authorize]
     [Route("Admin/[controller]")]
-    public class StorageController : Controller
+    public class ProjectImageController : Controller
     {
         private readonly IAzureStorage _storage;
         private readonly List<string> _imageFormats;
@@ -17,7 +17,7 @@ namespace srk_website.Controllers
         private readonly ILogger<ImageSlideShowController> _logger;
         private readonly IGenerateRandomImageName _generator;
 
-        public StorageController(IAzureStorage storage, ApplicationDbContext context, IConfiguration configuration, ILogger<ImageSlideShowController> logger, IGenerateRandomImageName generator)
+        public ProjectImageController(IAzureStorage storage, ApplicationDbContext context, IConfiguration configuration, ILogger<ImageSlideShowController> logger, IGenerateRandomImageName generator)
         {
             _storage = storage;
             _context = context;
@@ -27,12 +27,11 @@ namespace srk_website.Controllers
             _generator = generator;
         }
 
-        [HttpGet]
         public async Task<IActionResult> Index()
         {
             // Returns an empty array if no files are present at the storage container
-            return _context.Contact != null ?
-                          View(await _context.Storage.ToListAsync()) :
+            return _context.ProjectImage != null ?
+                          View(await _context.ProjectImage.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Storage'  is null.");
         }
         
@@ -45,20 +44,19 @@ namespace srk_website.Controllers
         [HttpPost(nameof(Upload))]
         [System.ComponentModel.Description("Upload image to azure container and store meta data in database.")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upload(string name, IFormFile file)
+        public async Task<IActionResult> Upload([Bind(include: "Id,Name,ProjectName")] ProjectImageModel projectImage, IFormFile file)
         {
-            if (name == null) {
-                ViewBag.IsResponse = true;
-                ViewBag.IsSuccess = false;
-                ViewBag.Message = "All parameters need to be filled.";
-                return View();
-            }
             if (file == null) 
             {
                 ViewBag.IsResponse = true;
                 ViewBag.IsSuccess = false;
                 ViewBag.Message = "You have to upload an image!";
-                return View();
+                return View(projectImage);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(projectImage);
             }
             // Index 0 is description of the data, e.g image.
             // Index 1 is the datatype, e.g jpg... 
@@ -84,7 +82,7 @@ namespace srk_website.Controllers
             while (true)
             {
                 fileName = await _generator.Generate(ContentType[1], 20);
-                if (!_context.Storage.Where(s => s.ImageName == fileName).Any())
+                if (!_context.ProjectImage.Where(s => s.ImageName == fileName).Any())
                 {
                     break;
                 }
@@ -117,18 +115,19 @@ namespace srk_website.Controllers
                 {
                     return Problem("Could not find image in azure container!");
                 }
-                // Meta data about image.
-                StorageModel newImage = new(name, fileName, uri);
+
+                projectImage.ImageName = fileName;
+                projectImage.ImageUri = uri;
 
                 // Stored in the database.
                 // Try catch here in the future.
-                await _context.Storage.AddAsync(newImage);
+                await _context.ProjectImage.AddAsync(projectImage);
                 await _context.SaveChangesAsync();
 
                 ViewBag.IsResponse = true;
                 ViewBag.IsSuccess = true;
                 ViewBag.Message = "Image was successfully uploaded!";
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -143,7 +142,7 @@ namespace srk_website.Controllers
             }
 
             // Find image in database.
-            var image = await _context.Storage
+            var image = await _context.ProjectImage
                 .Include(s => s.Projects)
                 .FirstOrDefaultAsync(m => m.Id == id);
             
@@ -170,7 +169,7 @@ namespace srk_website.Controllers
                 TempData["Message"] = "Image is used in a project, you cannot delete it.";
                 return RedirectToAction(nameof(Index));
             }
-            _context.Storage.Remove(image);
+            _context.ProjectImage.Remove(image);
             await _context.SaveChangesAsync();
 
             // Delete image from azure container.
@@ -185,7 +184,7 @@ namespace srk_website.Controllers
             else
             {
                 // File has been successfully deleted
-                return RedirectToAction("Index", "Storage");
+                return RedirectToAction(nameof(Index));
             }
         }
     }

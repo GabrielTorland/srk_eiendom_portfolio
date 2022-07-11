@@ -22,7 +22,9 @@ namespace srk_website.Controllers
             _logger = logger;
         }
 
-        // GET: Project
+        [Authorize]
+        [Route("Admin/Project")]
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
               return _context.Project != null ? 
@@ -30,8 +32,9 @@ namespace srk_website.Controllers
                           Problem("Entity set 'ApplicationDbContext.Project'  is null.");
         }
 
-        // GET: Project/Details/5
         [Authorize]
+        [Route("Admin/Project/Details")]
+        [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Project == null)
@@ -39,86 +42,147 @@ namespace srk_website.Controllers
                 return NotFound();
             }
 
-            var projectModel = await _context.Project
+            var project = await _context.Project
                 .Include(p => p.Images)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (projectModel == null)
+            if (project == null)
             {
                 return NotFound();
             }
 
-            return View(projectModel);
+            return View(project);
         }
 
-        // GET: Project/Create
+        [Route("Prosjekt")]
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Prosjekt(int? id)
         {
-            var images = _context.Storage.Select(a =>
-                                  new SelectListItem
-                                  {
-                                      Value = a.ImageUri,
-                                      Text = a.Name
-                                  }).ToList();
-            if (images.Count == 0)
+            if (id == null || _context.Project == null)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Project
+                .Include(p => p.Images)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            return View(project);
+        }
+
+        [Authorize]
+        [Route("Admin/Project/Create")]
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            var oImages = await _context.ProjectImage.OrderBy(pi => pi.ProjectName).ToListAsync();
+            if (oImages.Count == 0)
             {
                 ViewBag.IsResponse = true;
                 ViewBag.IsSuccess = false;
-                ViewBag.Message = "<p> No images found in the remote storage. You have to <a style='font-weight:bold' href='/Admin/Storage/Upload'> upload </a> an image before you can create a project. </p>";
+                ViewBag.Message = "<p> No images found in the remote storage. You have to <a style='font-weight:bold' href='/Admin/ProjectImage/Upload'> upload </a> an image before you can create a project. </p>";
             }
             else
             {
-                ViewBag.Images = new MultiSelectList(images, "Value", "Text");
+                if (oImages.First().ProjectName == null)
+                {
+                    return Problem("ProjectName is null!");
+                }
+                string? currentGroup = oImages.First().ProjectName;
+
+                if (currentGroup == null)
+                {
+                    return Problem("Something went wrong");
+                }
+
+                var images = ProjectImagesDict(oImages, currentGroup);
+
+                ViewBag.Images = images;
             }
             
             return View();
         }
 
-        // POST: Project/Create
+        [Authorize]
+        [Route("Admin/Project/Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind(include: "Id,Title,ProjectDescription,CoverImageId")] ProjectModel projectModel, string[] selectedImages)
+        public async Task<IActionResult> Create([Bind(include: "Title,ProjectDescription,Location,CoverImageUri,ThumbnailUri")] ProjectModel project, string[] selectedImages)
         {
-            var images = _context.Storage.Select(a =>
-                                  new SelectListItem
-                                  {
-                                      Value = a.ImageUri,
-                                      Text = a.Name
-                                  }).ToList();
-            
-            if (selectedImages.Length <= 0)
+
+            if (!selectedImages.Contains(project.CoverImageUri))
             {
-                ViewBag.Images = new MultiSelectList(images, "Value", "Text");
-                ViewBag.NoImages = "You have to select at least one image.";
-                return View(projectModel);
+                return Problem("The cover image has to be one of the selected images");
             }
+
+            if (!selectedImages.Contains(project.ThumbnailUri))
+            {
+                return Problem("The thumbnail image has to be one of the selected images");
+            }
+            
+            var oImages = await _context.ProjectImage.OrderBy(pi => pi.ProjectName).ToListAsync();
+
+            if (oImages == null)
+            {
+                return Problem("oImages is null");
+            }
+
+            if (oImages.First().ProjectName == null)
+            {
+                return Problem("ProjectName is null!");
+            }
+            string? currentGroup = oImages.First().ProjectName;
+
+            if (currentGroup == null)
+            {
+                return Problem("Something went wrong");
+            }
+
+            var images = ProjectImagesDict(oImages, currentGroup);
+            ViewBag.Images = images;
+
+            var sImages = _context.ProjectImage.Where(a => selectedImages.Contains(a.ImageUri)).ToList();
+            var selected = new Dictionary<string, string>();
+            foreach (var image in sImages)
+            {
+                if (image.Name == null || image.ImageUri == null)
+                {
+                    return Problem("Name or Uri is null!");
+                }
+                selected[image.ImageUri] = image.Name;
+            }
+            ViewBag.SelectedImages = selected;
+
+            if (selectedImages.Length != 4)
+            {
+                ViewBag.selectedProjectImagesError = "You have to select 4 images.";
+                return View(project);
+            }
+
             if (ModelState.IsValid)
             {
-                projectModel.Images = _context.Storage.Where(a => selectedImages.Contains(a.ImageUri)).ToList();
+                project.Images = _context.ProjectImage.Where(a => selectedImages.Contains(a.ImageUri)).ToList();
                 
-                if (projectModel.Images.Count != selectedImages.Length)
+                if (project.Images.Count != selectedImages.Length)
                 {
-                    ViewBag.Images = new MultiSelectList(images, "Value", "Text");
-                    ViewBag.IsResponse = true;
-                    ViewBag.IsSuccess = false;
-                    ViewBag.Message = "<p> Someone deleted the image while you were creating the project. You have to <a style='font-weight:bold' href='/Admin/Storage/Upload'> upload </a> the image again. </p>";
-                    return View(projectModel);
+                    return Problem("A selected image got deleted while you were creating the project. Try again!");
                 }
                 else
                 {
-                    _context.Add(projectModel);
+                    _context.Add(project);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
             }
-            
-            ViewBag.Images = new MultiSelectList(images, "Value", "Text");
-            ViewBag.SelectedImages = selectedImages;
-            return View(projectModel);
+            return View(project);
         }
 
-        // GET: Project/Edit/5
         [Authorize]
+        [Route("Admin/Project/Edit")]
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Project == null)
@@ -126,37 +190,118 @@ namespace srk_website.Controllers
                 return NotFound();
             }
 
-            var projectModel = await _context.Project.FindAsync(id);
-            if (projectModel == null)
+            var oImages = await _context.ProjectImage.OrderBy(pi => pi.ProjectName).ToListAsync();
+
+            if (oImages == null)
+            {
+                return Problem("oImages is null");
+            }
+
+            if (oImages.First().ProjectName == null)
+            {
+                return Problem("ProjectName is null!");
+            }
+            string? currentGroup = oImages.First().ProjectName;
+
+            if (currentGroup == null)
+            {
+                return Problem("Something went wrong");
+            }
+
+            var images = ProjectImagesDict(oImages, currentGroup);
+            ViewBag.Images = images;
+
+            var project = await _context.Project
+                .Include(p => p.Images)
+                .FirstOrDefaultAsync(p => p.Id == id);
+            if (project == null)
             {
                 return NotFound();
             }
-            return View(projectModel);
+            IDictionary<string, string> selected = new Dictionary<string, string>();
+            foreach (var image in project.Images)
+            {
+                if (image.Name == null || image.ImageUri == null)
+                {
+                    return Problem("Name or Uri is null!");
+                }
+                selected[image.ImageUri] = image.Name;
+            }
+            ViewBag.SelectedImages = selected;
+
+            return View(project);
         }
 
-        // POST: Project/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize]
+        [Route("Admin/Project/Edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ProjectDescription")] ProjectModel projectModel)
+        public async Task<IActionResult> Edit(int id, [Bind(include: "Id,Title,ProjectDescription,Location,CoverImageUri,ThumbnailUri")] ProjectModel project, string[] selectedImages)
         {
-            if (id != projectModel.Id)
+
+            if (id != project.Id)
             {
                 return NotFound();
+            }
+
+            if (!selectedImages.Contains(project.CoverImageUri))
+            {
+                return Problem("The cover image has to be one of the selected images");
+            }
+            if (!selectedImages.Contains(project.ThumbnailUri))
+            {
+                return Problem("The thumbnail image has to be one of the selected images");
+            }
+
+            var oImages = await _context.ProjectImage.OrderBy(pi => pi.ProjectName).ToListAsync();
+
+            if (oImages == null)
+            {
+                return Problem("oImages is null");
+            }
+
+            if (oImages.First().ProjectName == null)
+            {
+                return Problem("ProjectName is null!");
+            }
+            string? currentGroup = oImages.First().ProjectName;
+
+            if (currentGroup == null)
+            {
+                return Problem("Something went wrong");
+            }
+
+            var images = ProjectImagesDict(oImages, currentGroup);
+            ViewBag.Images = images;
+
+            var sImages = _context.ProjectImage.Where(a => selectedImages.Contains(a.ImageUri)).ToList();
+            var selected = new Dictionary<string, string>();
+            foreach (var image in sImages)
+            {
+                if (image.Name == null || image.ImageUri == null)
+                {
+                    return Problem("Name or Uri is null!");
+                }
+                selected[image.ImageUri] = image.Name;
+            }
+            ViewBag.SelectedImages = selected;
+
+            if (selectedImages.Length != 4)
+            {
+                ViewBag.selectedProjectImagesError = "You have to select 4 images.";
+                return View(project);
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(projectModel);
+                    _context.Update(project);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectModelExists(projectModel.Id))
+                    if (!ProjectModelExists(project.Id))
                     {
                         return NotFound();
                     }
@@ -165,13 +310,18 @@ namespace srk_website.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                ViewBag.IsResponse = true;
+                ViewBag.IsSuccess = true;
+                ViewBag.Message = "Project successfully edited.";
+                return View(project);
             }
-            return View(projectModel);
+
+            return View(project);
         }
 
-        // GET: Project/Delete/5
         [Authorize]
+        [Route("Admin/Project/Delete")]
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Project == null)
@@ -179,30 +329,31 @@ namespace srk_website.Controllers
                 return NotFound();
             }
 
-            var projectModel = await _context.Project
+            var project = await _context.Project
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (projectModel == null)
+            if (project == null)
             {
                 return NotFound();
             }
 
-            return View(projectModel);
+            return View(project);
         }
 
         // POST: Project/Delete/5
         [Authorize]
-        [HttpPost, ActionName("Delete")]
+        [Route("Admin/Project/Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (_context.Project == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Project'  is null.");
             }
-            var projectModel = await _context.Project.FindAsync(id);
-            if (projectModel != null)
+            var project = await _context.Project.FindAsync(id);
+            if (project != null)
             {
-                _context.Project.Remove(projectModel);
+                _context.Project.Remove(project);
             }
             
             await _context.SaveChangesAsync();
@@ -212,6 +363,39 @@ namespace srk_website.Controllers
         private bool ProjectModelExists(int id)
         {
           return (_context.Project?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        // Convert a sorted list of ProjectImageModel to a dictionary(key: ProjectName, value: Multiselect)
+        private IDictionary<string, MultiSelectList>? ProjectImagesDict(List<ProjectImageModel> oImages, string? currentGroup)
+        {
+            IDictionary<string, MultiSelectList> images = new Dictionary<string, MultiSelectList>();
+            var items = new List<SelectListItem>();
+            foreach (var item in oImages)
+            {
+                if (item.ProjectName != currentGroup)
+                {
+                    if (items.Count != 0)
+                    {
+                        if (currentGroup == null)
+                        {
+                            _logger.LogError("currentGroup is null in ProjectImageDict function");
+                            return null;
+                        }
+                        images[currentGroup] = new MultiSelectList(items, "Value", "Text");
+                        items = new List<SelectListItem>();
+                    }
+                    currentGroup = item.ProjectName;
+                }
+                items.Add(new SelectListItem { Value = item.ImageUri, Text = item.Name });
+            }
+            if (currentGroup == null)
+            {
+                _logger.LogError("currentGroup is null in ProjectImageDict function");
+                return null;
+            }
+            images[currentGroup] = new MultiSelectList(items, "Value", "Text");
+            return images;
+
         }
     }
 }
