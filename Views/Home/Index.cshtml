@@ -1,19 +1,19 @@
 ﻿@{
     ViewData["Title"] = "Hjem";
     string Title = "SRK";
-    
+
     var Services = new List<ServiceModel>();
     if (ViewData["Services"] != null)
     {
         Services = ViewData["Services"] as List<ServiceModel>;
     }
-    
+
     var Contacts = new List<ContactModel>();
     if (ViewData["Contacts"] != null)
     {
         Contacts = ViewData["Contacts"] as List<ContactModel>;
     }
-    
+
     var About = new AboutModel();
     if (ViewData["About"] != null)
     {
@@ -25,17 +25,22 @@
     {
         ImageSlideShows = ViewData["ImageSlideShows"] as List<ImageSlideShowModel>;
     }
-    
+
     var TeamMembers = new List<TeamMemberModel>();
     if (ViewData["TeamMembers"] != null)
     {
         TeamMembers = ViewData["TeamMembers"] as List<TeamMemberModel>;
     }
-    
+
     var Testimonials = new List<TestimonialModel>();
     if (ViewData["Testimonials"] != null)
     {
         Testimonials = ViewData["Testimonials"] as List<TestimonialModel>;
+    }
+    var Projects = new List<ProjectModel>();
+    if (ViewData["Projects"] != null)
+    {
+        Projects = ViewData["Projects"] as List<ProjectModel>;
     }
 }
 
@@ -51,7 +56,7 @@
 	<div class="togo-header-container">
 		<!--Logo-->
         <div class="logo">
-            <h1><a href="index.html">@Title<span>Eiendom</span></a></h1>
+            <h1><a asp-action="Index" asp-controller="Home">@Title<span>Eiendom</span></a></h1>
         </div>
 		<!-- Burger menu -->
 		<div class="burger-menu">
@@ -169,42 +174,18 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="owl-carousel owl-theme">
-                        <div class="item mb-50">
-                            <div class="position-re o-hidden"> <img src="~/img/projects/3.jpg" alt=""> </div>
-                            <div class="con"> <span class="category">
-                                    <a href="project.html">Interior</a>
-                                </span>
-                                <h5><a href="project.html">Art Museum, USA</a></h5> 
-                                <a href="project.html"><i class="ti-arrow-right"></i></a>
+                        @foreach (var item in Projects)
+                        {
+                            <div class="item mb-50">
+                                <div class="position-re o-hidden"> <img src=@item.ThumbnailUri alt="Image not found!"> </div>
+                                <div class="con"> <span class="category">
+                                        <a asp-action="Prosjekt" asp-controller="Project" asp-route-id=@item.Id>Eiendom</a>
+                                    </span>
+                                    <h5><a asp-action="Prosjekt" asp-controller="Project" asp-route-id=@item.Id>@item.Title, @item.Location</a></h5> 
+                                    <a asp-action="Prosjekt" asp-controller="Project" asp-route-id=@item.Id><i class="ti-arrow-right"></i></a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="item mb-50">
-                            <div class="position-re o-hidden"> <img src="~/img/projects/2.jpg" alt=""> </div>
-                            <div class="con"> <span class="category">
-                                    <a href="project.html">Architecture</a>
-                                </span>
-                                <h5><a href="project.html">Drana Villa, CA</a></h5>
-                                <a href="project.html"><i class="ti-arrow-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="item mb-50">
-                            <div class="position-re o-hidden"> <img src="~/img/projects/4.jpg" alt=""> </div>
-                            <div class="con"> <span class="category">
-                                    <a href="project.html">Design</a>
-                                </span>
-                                <h5><a href="#">Home Design, USA</a></h5>
-                                <a href="project.html"><i class="ti-arrow-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="item mb-50">
-                            <div class="position-re o-hidden"> <img src="~/img/projects/1.jpg" alt=""> </div>
-                            <div class="con"> <span class="category">
-                                    <a href="project.html">Interior</a>
-                                </span>
-                                <h5><a href="project.html">House Office, CA</a></h5>
-                                <a href="project.html"><i class="ti-arrow-right"></i></a>
-                            </div>
-                        </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -263,43 +244,6 @@
             </div>
         </div>
     </section>
-    <!-- Blog -->
-    @*<section id="news" class="blog pt-100 pb-100">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 mb-20">
-                    <h6 class="small-title">Our Blog</h6>
-                    <h4 class="title">Latest News</h4>
-                </div>
-                <div class="col-md-6">
-                    <div class="item">
-                        <div class="post-img">
-                            <div class="img">
-                                <a href="blog.html"><img src="~/img/blog/1.jpg" alt=""> </a>
-                            </div>
-                        </div>
-                        <div class="cont">
-                            <h6><a href="post.html">Trending in Modern Architecture 2022</a></h6>
-                            <div class="info"> <a href="blog.html"><b>Event</b> Dec 28, 2022 </a> </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="item">
-                        <div class="post-img">
-                            <div class="img">
-                                <a href="blog.html"><img src="~/img/blog/2.jpg" alt=""> </a>
-                            </div>
-                        </div>
-                        <div class="cont">
-                            <h6><a href="blog.html">Renovation Architecture and Design</a></h6>
-                            <div class="info"> <a href="blog.html"><b>Discover</b> Dec 26, 2022 </a> </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>*@
     <!-- Contact -->
     <section id="contact" class="contact pt-100 pb-100">
         <div class="container">
@@ -399,7 +343,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 offset-md-8">
-                    <p>&copy; 2022 Gabriel Torland. ALL RIGHT RESERVED.</p>
+                    <a href="https://github.com/GabrielTorland">Gabriel Torland</a>
                 </div>
             </div>
         </div>

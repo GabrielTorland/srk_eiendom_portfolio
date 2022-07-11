@@ -1,0 +1,68 @@
+﻿@model srk_website.Models.ProjectModel
+
+@{
+    ViewData["Title"] = "Project Details";
+}
+
+<h1>Details</h1>
+
+<!-- Loader -->
+<div id="loader">
+    <div class="loading">
+        <div></div>
+    </div>
+</div>
+
+<!-- Content -->
+<div class="togo-side-content">
+    <!-- Lines -->
+    <div class="content-lines-wrapper">
+        <div class="content-lines-inner">
+            <div class="content-lines"></div>
+        </div>
+    </div>
+    <!-- Post -->
+    <section class="post pt-80 pb-100">
+        <div class="container">
+            <div class="row">
+                <!-- Content -->
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="item">
+                                <div class="post-img">
+                                    <div class="img"> <img src=@Model.CoverImageUri> </div>
+                                </div>
+                                <div class="cont">
+                                    <h5>@Model.Title</h5>
+                                    @Html.Raw(Model.ProjectDescription)
+                                    <div class="row mt-30 mb-30">
+                                        @foreach (var item in Model.Images)
+                                        {
+                                            @if (item.ImageUri == Model.CoverImageUri || item.ImageUri == Model.ThumbnailUri)
+                                            {
+                                                continue;
+                                            }
+                                            <div class="col-md-6 gallery-item">
+                                                <a href=@item.Name title=@item.Name class="img-zoom">
+                                                    <div class="gallery-box">
+                                                        <div class="gallery-img"> <img src=@item.ImageUri class="img-fluid mx-auto d-block" alt=@item.Name> </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-controller="Project" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index" asp-controller="Project">Back to List</a>
+</div>

@@ -6,17 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <title>@ViewData["Title"] - SRK Eiendom</title>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="shortcut icon" type="image/x-icon" href="~/img/favicon.png" />
-    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/bootstrap.menu.css" />
+    
+    <!-- Logo -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/img/favicon.png" />
+    
     <link rel="stylesheet" href="~/css/animate.min.css" />
     <link rel="stylesheet" href="~/css/themify-icons.css">
+    <link rel="stylesheet" href="/css/magnific-popup.css" />    
     <link rel="stylesheet" href="~/css/YouTubePopUp.css" />
     <link rel="stylesheet" href="~/css/owl.carousel.min.css" />
-    <link rel="stylesheet" href="~/css/owl.theme.default.min.css" />
-    <link rel="stylesheet" href="~/css/style.css" />
-    <link rel="stylesheet" href="~/css/test.css" />
+    <link rel="stylesheet" href="~/css/owl.theme.default.min.css" />   
+
+    <!-- Custom -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/test.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />    
+
+    @await RenderSectionAsync("Styles", required: false)
+    
 </head>
 
 <body>
@@ -25,25 +35,52 @@
             @RenderBody()
         </main>
     </div>
-    
   
     <!-- jQuery -->
     <script src="~/js/jquery-3.0.0.min.js"></script>
     <script src="~/js/jquery-migrate-3.0.0.min.js"></script>
-    <script src="~/js/popper.min.js"></script>
-    <script src="~/js/bootstrap.min.js"></script>
+    
+    <!-- JQuery Waypoints -->
     <script src="~/js/jquery.waypoints.min.js"></script>
-    <script src="~/js/owl.carousel.min.js"></script>
-    <script src="~/js/jquery.stellar.min.js"></script>
-    <script src="~/js/YouTubePopUp.jquery.js"></script>
-    <script src="~/js/validator.js"></script>
+    
+    <!-- JQuery Stellar -->
+    <script src="~/js/jquery.stellar.min.js"></script>    
+
+    <!-- Owl Carousel -->
+    <script src="~/lib/owl.carousel/dist/owl.carousel.min.js"></script>
+    
+    <!-- Autotype -->
     <script src="~/js/autotype.js"></script>
-    <script src="~/js/bootstrap.menu.js"></script>
+    
+    <!-- ScrollIt -->
     <script src="~/js/scrollIt.min.js"></script>
-    <script src="~/js/smooth-scroll.min.js"></script>
-    <script src="~/js/scripts.js"></script>
-    <script src="~/lib/ckeditor/ckeditor.js"></script>
+    
+    <!-- Popper -->
+    <script src="~/lib/popper.js/umd/popper.min.js"></script>
+    
+    <!-- Smoth Scroll -->
+    <script src="~/lib/smooth-scroll/dist/smooth-scroll.min.js"></script>
+    
+    <!-- Bootstrap -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Bootstrap Menu -->
+    <script src="~/js/bootstrap.menu.js"></script>
+
+    <!-- Validator -->
+    <script src="~/js/validator.js"></script>
+
+    <!-- Youtube pop up -->
+    <script src="~/js/YouTubePopUp.jquery.js"></script>
+    
+    <!-- Magnific Popup -->
+    <script src="~/js/jquery.magnific-popup.min.js"></script>
+    
+    <!-- Custom -->
+    <script src="~/js/scripts.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

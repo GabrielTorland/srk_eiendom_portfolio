@@ -5,14 +5,14 @@ using srk_website.Models;
 namespace srk_website.Data
 {
     public class ApplicationDbInitializer
-    { 
+    {
         
         public static async void Initialize(ApplicationDbContext db, UserManager<IdentityUser> um, IEmailSender _emailSender)
         {
             // Delete the database before we initialize it. This is common to do during development.
             
             // Reenable this after first build
-            db.Database.EnsureDeleted();
+            //db.Database.EnsureDeleted();
 
             // Recreate the database and tables according to our models
             db.Database.EnsureCreated();
