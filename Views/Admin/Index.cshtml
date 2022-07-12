@@ -1,45 +1,46 @@
 ﻿@{
     ViewData["Title"] = "Admin";
+    var Title = "Admin";
 }
 
-<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-    <div class="container-fluid">
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SRK Eiendom</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-            <ul class="navbar-nav flex-grow-1">
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="ImageSlideShow" asp-action="Index">Slideshow</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="Index">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Contact" asp-action="Index">Contacts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="About" asp-action="Index">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="ProjectImage" asp-action="Index">Project Images</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="TeamMember" asp-action="Index">Team</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Testimonial" asp-action="Index">Testimonial</a>
-                </li>
-            </ul>
-            <partial name="_LoginPartial" />
+<!-- Sidebar -->
+<div class="togo-fixed-sidebar togo-sidebar-left">
+	<div class="togo-header-container">
+		<!--Logo-->
+        <div class="logo">
+            <h1><a asp-action="Index" asp-controller="Admin">@Title<span>Page</span></a></h1>
         </div>
-    </div>
-</nav>
+		<!-- Burger menu -->
+		<div class="burger-menu">
+			<div class="line-menu line-half first-line"></div>
+			<div class="line-menu"></div>
+			<div class="line-menu line-half last-line"></div>
+		</div>
+		<!--Navigation menu-->
+        <nav class="togo-menu-fixed">
+            <ul>
+				<li class="current-menu"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+				<li><a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+				<li><a asp-area="" asp-controller="ImageSlideShow" asp-action="Index">Slideshow</a></li>
+				<li><a asp-area="" asp-controller="Service" asp-action="Index">Services</a></li>
+                <li><a asp-area="" asp-controller="About" asp-action="Index">About</a></li>
+                <li>
+                    <div class="dropdown">
+                      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Projects
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" asp-action="Index" asp-controller="Project">Projects</a>
+                        <a class="dropdown-item" asp-action="Index" asp-controller="ProjectImage">Project Images</a>
+                      </div>
+                    </div>
+                </li>
+				<li><a asp-area="" asp-controller="Contact" asp-action="Index">Contact</a></li>
+				<li><a asp-area="" asp-controller="TeamMember" asp-action="Index">Team</a></li>
+                <li><a asp-area="" asp-controller="Testimonial" asp-action="Index">Testimonial</a></li>
+			</ul>
+		</nav>
+	</div>
+</div>
+
+<partial name="_LoginPartial" />

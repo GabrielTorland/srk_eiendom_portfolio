@@ -5,3 +5,11 @@
 .image-parent {
     max-width: 40px; 
 }
+
+.topright {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    display: flex;
+    justify-content: center;
+}

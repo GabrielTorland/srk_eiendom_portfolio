@@ -44,8 +44,8 @@ namespace srk_website.Areas.Identity.Pages.Account
         /// </summary>
         public string EmailConfirmationUrl { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string email, string returnUrl = null)
-        {
+        //public async Task<IActionResult> OnGetAsync(string email, string returnUrl = null)
+        //{
             //if (email == null)
             //{
             //    return RedirectToPage("/Index");
@@ -74,7 +74,7 @@ namespace srk_website.Areas.Identity.Pages.Account
             //}
 
             //return Page();
-            return RedirectToPage("/Index");
-        }
+            //return RedirectToPage("/Index");
+        //}
     }
 }

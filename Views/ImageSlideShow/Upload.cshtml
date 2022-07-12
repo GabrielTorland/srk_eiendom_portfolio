@@ -4,7 +4,10 @@
     ViewData["Title"] = "Upload Image To Slideshow";
 }
 
-<h1>Image Upload</h1>
+<h1>Upload</h1>
+
+<h4>Image</h4>
+<hr />
 
 @if (ViewBag.IsResponse != null)
     {
@@ -43,15 +46,16 @@
     </div>
     
     <div class="form-group">
-        <p>The image should be 1920x1080 pixels.</p>
-        <input type="file" name="file" /> 
+        <label for="file" class="control-label">Image Upload</label>
+        <p class="alert alert-info">The image should be 1920x1080 pixels.</p>
+        <input type="file" id="file" name="file" /> 
     </div>
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-primary" />
     </div>
 </form>
 
-<a asp-action="Index" asp-controller="ImageSlideShow" class="btn btn-info" role="button" >Back to image slideshow</a>
+<a asp-action="Index" asp-controller="ImageSlideShow">Back to Image Slideshow</a>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
