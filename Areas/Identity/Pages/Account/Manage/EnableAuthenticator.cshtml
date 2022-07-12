@@ -22,8 +22,14 @@
         </li>
         <li>
             <p>Scan the QR Code or enter this key <kbd>@Model.SharedKey</kbd> into your two factor authenticator app. Spaces and casing do not matter.</p>
-            <div id="qrCode"></div>
-            <div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-5 col-sm-5 col-lg-5">
+                        <div id="qrCode"></div>
+                        <div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
+                    </div>
+                </div>
+            </div>
         </li>
         <li>
             <p>
