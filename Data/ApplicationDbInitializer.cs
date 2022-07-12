@@ -51,9 +51,26 @@ namespace srk_website.Data
             var about = new AboutModel("");
             db.About.Add(about);
 
-            await db.SaveChangesAsync();
-            
+
             //await _emailSender.SendEmailAsync(user.Email, "Initial password",$"<p>Here is your initial password: {password} . This password should be changed!<p>");
+
+
+            if (!db.Contact.Any())
+            {
+                var newContact = new ContactModel();
+                newContact.Email = "Roy@srkeiendom.no";
+                newContact.Address = "Ålgårds veien 21";
+                newContact.Phone = "94875234";
+                newContact.City = "Ålgård";
+                newContact.Country = "Norge";
+                newContact.Zip = "4330";
+                db.Contact.Add(newContact);
+            }
+
+
+            await db.SaveChangesAsync();
+
+
 
         }
     }
