@@ -4,11 +4,8 @@
     ViewData["Title"] = "Contacts";
 }
 
-<h1>Contacts</h1>
+<h1>Contact</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -55,13 +52,11 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
 
+<a asp-action="Edit" asp-route-id="@Model.First().Id" class="btn btn-info m-2">Edit</a>
 <a asp-action="Index" asp-controller="Admin" class="btn btn-info" role="button" >Back to admin page</a>

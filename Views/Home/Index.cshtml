@@ -254,21 +254,6 @@
                 </div>
             </div>
             <div class="row">
-                <!-- Equivalent to enumerate in python -->
-                @foreach (var it in Contacts.Select((Value, Index) => new {Value, Index})){
-                <div class="col-md-4">
-                    <div class="item bg-4" style="background-image: url(https://webapi.blob.core.windows.net/images/contact.jpg);">
-                        <div class="con">
-                            <h5>@it.Value.Country.ToUpper()</h5>
-                            <p><i class="ti-home" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Address, @it.Value.Zip @it.Value.City, @it.Value.Country, UK</p>
-                            <p><i class="ti-mobile" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Phone</p>
-                            <p><i class="ti-envelope" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Email</p>
-                        </div>
-                    </div>
-                </div>
-                }
-            </div>
-            <div class="row mt-100">
                 <div class="col-md-4 offset-md-4">
                     <form method="post" id="contact_form">
                         @Html.AntiForgeryToken()
@@ -282,32 +267,46 @@
                         </div>
                         <!-- Form elements -->
                         <div class="row">
-                            <div class="col-md-12 form-group">
+                            <div class="col-sm-12 m-auto form-group">
                                 <input name="Name" type="text" id="name_input_contact" placeholder="Navn *" required>
                                 <span id="name_error_message_contact" class="text-danger"></span>
                             </div>
-                            <div class="col-md-12 form-group">
-                                <input name="Email" type="email" id="email_input_contact" placeholder="Email *" required> 
-                                <span id="email_error_message_contact" class="text-danger"></span>                                    
+                            <div class="col-md-12 m-auto form-group">
+                                <input name="Email" type="email" id="email_input_contact" placeholder="Email *" required>
+                                <span id="email_error_message_contact" class="text-danger"></span>
                             </div>
-                            <div class="col-md-12 form-group">
-                                <input name="Phone" type="text" id="phone_input_contact" placeholder="Nummer *" required> 
+                            <div class="col-md-12 m-auto form-group">
+                                <input name="Phone" type="text" id="phone_input_contact" placeholder="Nummer *" required>
                                 <span id="phone_error_message_contact" class="text-danger"></span>
                             </div>
-                            <div class="col-md-12 form-group">
-                                <input name="Subject" type="text" id="subject_input_contact" placeholder="Emne *" required> 
+                            <div class="col-md-12 m-auto form-group">
+                                <input name="Subject" type="text" id="subject_input_contact" placeholder="Emne *" required>
                                 <span id="subject_error_message_contact" class="text-danger"></span>
                             </div>
-                            <div class="col-md-12 form-group">
+                            <div class="col-md-12 m-auto form-group">
                                 <textarea name="Message" id="message_input_contact" cols="30" rows="4" placeholder="Melding *" required></textarea>
                                 <span id="message_error_message_contact" class="text-danger"></span>
                             </div>
-                            <div class="col-md-12">
-                                <input type="submit" name="submit" value="Send Message">
+                            <div class="col-md-12 text-center">
+                                <input type="submit" name="submit" value="Send Melding">
                             </div>
                         </div>
                     </form>
                 </div>
+            </div>
+            <br>
+            <br>
+            <div class="row text-center">
+                <!-- Equivalent to enumerate in python -->
+                @foreach (var it in Contacts.Select((Value, Index) => new {Value, Index})){
+                <div class="col-md-12">
+                    <div class="con">
+                        <p><i class="ti-home" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Address, @it.Value.Zip @it.Value.City, @it.Value.Country</p>
+                        <p><i class="ti-mobile" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Phone</p>
+                        <p><i class="ti-envelope" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Email</p>
+                    </div>
+                </div>
+                }
             </div>
         </div>
     </section>
