@@ -6,8 +6,8 @@
 <div class="container">
     <div class="row">
         <div class="col-12 col-sm-8 col-lg-5">
-            <h6 class="text-muted">Slide show images</h6>
-            <a asp-action="Upload" asp-controller="ImageSlideShow">Add Image to Slideshow</a>
+            <h6 class="text-muted">Slideshow Images</h6>
+            <a asp-action="Upload" asp-controller="ImageSlideShow">Create Slideshow Image</a>
                 <ul class="list-group">            
                 @foreach (var item  in Model){
             
@@ -16,14 +16,14 @@
                         <div class="image-parent">
                             <img src="@item.Uri" class="img-fluid" alt="quixote">
                         </div>
+                        <form method="post" asp-action="Delete">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value=@item.Id>
+                            <div class="form-group">
+                                <input type="submit" value="Delete" />
+                            </div>
+                        </form>
                     </li>
-                    <form method="post" asp-action="Delete">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="id" value=@item.Id>
-                        <div class="form-group">
-                            <input type="submit" value="Delete" />
-                        </div>
-                    </form>
                 }   
             </ul>
             <a asp-action="Index" asp-controller="Admin" >Back to Admin Page</a>
