@@ -122,14 +122,10 @@ namespace srk_website.Controllers
                 imageSlideShow.ImageName = fileName;
 
                 // Store in the database.
-                // Try catch here in the future.
                 await _context.ImageSlideShow.AddAsync(imageSlideShow);
                 await _context.SaveChangesAsync();
                 
-                ViewBag.IsResponse = true;
-                ViewBag.IsSuccess = true;
-                ViewBag.Message = "Image was successfully uploaded to the slideshow!";
-                return View();
+                return RedirectToAction(nameof(Index));
             }
 
         }
@@ -162,7 +158,6 @@ namespace srk_website.Controllers
             string imageName = image.ImageName;
 
             // Remove image from database.
-            // Try catch here in the future.
             _context.ImageSlideShow.Remove(image);
             await _context.SaveChangesAsync();
 
