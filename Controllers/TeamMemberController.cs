@@ -205,8 +205,13 @@ namespace srk_website.Controllers
                         ViewBag.Message = $"Formats supported: {formats}";
                         return View();
                     }
-                    
-                    // Delete old image from azure container.
+
+                    if (teamMember.ImageName == null)
+                    {
+                        return Problem("ImageName is null");
+                    }
+
+                    // Delete old image from azure container
                     BlobResponseDto response = await _storage.DeleteAsync(teamMember.ImageName);
                     if (response.Error == true)
                     {
