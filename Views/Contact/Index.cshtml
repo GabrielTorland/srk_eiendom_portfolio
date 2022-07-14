@@ -1,62 +1,32 @@
-﻿@model IEnumerable<srk_website.Models.ContactModel>
+﻿@model srk_website.Models.ContactModel
 
 @{
-    ViewData["Title"] = "Contacts";
+    ViewData["Title"] = "Contact";
 }
 
-<h1>Contact</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-8 col-lg-5">
+            <h1>Contact</h1>
+            <br />
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Zip)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Country)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Zip)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+            Address: @Model.Address
+            <br />
+            Zip: @Model.Zip
+            <br />
+            City: @Model.City
+            <br />
+            Country: @Model.Country
+            <br />
+            Phone: @Model.Phone
+            <br />
+            Email: @Model.Email
+            <br />
+            <a asp-action="Edit" asp-route-id="1">Edit</a>
+            <br />
+            <a asp-action="Index" asp-controller="Admin">Back To Admin Page</a>
+        </div>
+    </div>
+</div>
 
-<a asp-action="Edit" asp-route-id="@Model.First().Id" class="btn btn-info m-2">Edit</a>
-<a asp-action="Index" asp-controller="Admin" class="btn btn-info" role="button" >Back to admin page</a>
+

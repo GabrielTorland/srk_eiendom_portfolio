@@ -12,10 +12,10 @@ namespace srk_website.Controllers
         
         private readonly string _srkEmailAddress;
 
-        public EmailSenderController(IEmailSender emailSender)
+        public EmailSenderController(IEmailSender emailSender, IConfiguration configuration)
         {
             _emailSender = emailSender;
-            _srkEmailAddress = "gabri.torland@gmail.com";
+            _srkEmailAddress = configuration.GetValue<string>("Email"); ;
         }
 
         [HttpPost]

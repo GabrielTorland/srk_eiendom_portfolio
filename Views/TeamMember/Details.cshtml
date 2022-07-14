@@ -4,20 +4,26 @@
     ViewData["Title"] = "Team Member Details";
 }
 
-<h1>Details</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-8 col-lg-5">
+            <h1>Details</h1>
 
-<h4>Team Member</h4>
-<hr />
-<h6>@Model.FullName</h6> <h6>@Model.Position</h6>
+            <h4>Team Member</h4>
+            <hr />
+            <h6>@Model.FullName</h6> <h6>@Model.Position</h6>
 
-<div>
-    <img src="@Model.Uri" alt="Image not found!"/>
-    <div>
-        <p>Email: <a href=@($"mailto: {Model.Email}")>@Model.Email</a></p>
-        <p>Tlf: <a href=@($"tel: {Model.Phone}")>@Model.Phone</a></p>
+            <div>
+                <img src="@Model.Uri" alt="Image Not Found!"/>
+                <div>
+                    <p>Email: <a href=@($"mailto: {Model.Email}")>@Model.Email</a></p>
+                    <p>Tlf: <a href=@($"tel: {Model.Phone}")>@Model.Phone</a></p>
+                </div>
+            </div>
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+                <a asp-action="Index">Back To Team Members</a>
+            </div>
+        </div>
     </div>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to team member list</a>
 </div>

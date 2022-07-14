@@ -136,14 +136,10 @@ namespace srk_website.Controllers
                 service.Uri = uri;
 
                 // Stored in the database.
-                // Try catch here in the future.
                 await _context.Service.AddAsync(service);
                 await _context.SaveChangesAsync();
-                
-                ViewBag.IsResponse = true;
-                ViewBag.IsSuccess = true;
-                ViewBag.Message = "Service was successfully uploaded!";
-                return View();
+
+                return RedirectToAction(nameof(Index));
             }
 
         }
@@ -178,7 +174,6 @@ namespace srk_website.Controllers
             string imageName = image.ImageName;
             
             // Remove image from database.
-            // Try catch here in the future.
             _context.Service.Remove(image);
             await _context.SaveChangesAsync();
             
@@ -216,7 +211,6 @@ namespace srk_website.Controllers
             return View(service);
         }
         
-        // This method needs to be improved in the future!
         [HttpPost(nameof(Edit))]
         [ValidateAntiForgeryToken]
         [System.ComponentModel.Description("Edit image in azure container and edit meta data in database.")]
@@ -271,6 +265,7 @@ namespace srk_website.Controllers
             if (service.Uri == null)
             {
                 _logger.LogError("Uri is null.");
+
                 // Return an error message to the client
                 return StatusCode(StatusCodes.Status500InternalServerError, "Uri is null!");
             }
@@ -300,6 +295,7 @@ namespace srk_website.Controllers
                 if (response.Error == true)
                 {
                     _logger.LogError("Failed to delete image from azure container.");
+
                     // Delete meta data from database if image was deleted unsuccessfully from azure storage.
                     _context.Service.Remove(service);
                     await _context.SaveChangesAsync();
@@ -310,6 +306,7 @@ namespace srk_website.Controllers
                 if (response.Error == true)
                 {
                     _logger.LogError("Failed to upload to azure container.");
+
                     // Delete meta data from database if image was uploaded unsuccessfully to azure storage.
                     _context.Service.Remove(service);
                     await _context.SaveChangesAsync();

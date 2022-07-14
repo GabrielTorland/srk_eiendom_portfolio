@@ -139,14 +139,12 @@ namespace srk_website.Controllers
                     }
                     teamMember.ImageName = fileName;
                     teamMember.Uri = uri;
-                    // Try catch here in the future.
+
                     await _context.TeamMember.AddAsync(teamMember);
                     await _context.SaveChangesAsync();
-                    ViewBag.IsResponse = true;
-                    ViewBag.IsSuccess = true;
-                    ViewBag.Message = "Image was successfully uploaded to the slideshow!";
+
+                    return RedirectToAction(nameof(Index));
                     
-                    return View();
                 }
             }
             return View(teamMember);

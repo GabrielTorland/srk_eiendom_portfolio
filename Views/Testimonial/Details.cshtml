@@ -4,45 +4,51 @@
     ViewData["Title"] = "Testimonial Details";
 }
 
-<h1>Details</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-8 col-lg-5">
+            <h1>Details</h1>
 
-<div>
-    <h4>Testimonial</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Project)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Project)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Position)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Position)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Testimonial)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.Raw(Model.Testimonial)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to Testimonial List</a>
+            <div>
+                <h4>Testimonial</h4>
+                <hr />
+                <dl class="row">
+                    <dt class = "col-sm-2">
+                        @Html.DisplayNameFor(model => model.FirstName)
+                    </dt>
+                    <dd class = "col-sm-10">
+                        @Html.DisplayFor(model => model.FirstName)
+                    </dd>
+                    <dt class = "col-sm-2">
+                        @Html.DisplayNameFor(model => model.LastName)
+                    </dt>
+                    <dd class = "col-sm-10">
+                        @Html.DisplayFor(model => model.LastName)
+                    </dd>
+                    <dt class = "col-sm-2">
+                        @Html.DisplayNameFor(model => model.Project)
+                    </dt>
+                    <dd class = "col-sm-10">
+                        @Html.DisplayFor(model => model.Project)
+                    </dd>
+                    <dt class = "col-sm-2">
+                        @Html.DisplayNameFor(model => model.Position)
+                    </dt>
+                    <dd class = "col-sm-10">
+                        @Html.DisplayFor(model => model.Position)
+                    </dd>
+                    <dt class = "col-sm-2">
+                        @Html.DisplayNameFor(model => model.Testimonial)
+                    </dt>
+                    <dd class = "col-sm-10">
+                        @Html.Raw(Model.Testimonial)
+                    </dd>
+                </dl>
+            </div>
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+                <a asp-action="Index">Back to Testimonials</a>
+            </div>
+        </div>
+    </div>
 </div>

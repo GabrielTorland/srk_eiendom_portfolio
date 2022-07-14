@@ -21,51 +21,10 @@ namespace srk_website.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Contact != null ? 
-                          View(await _context.Contact.ToListAsync()) :
+                          View(await _context.Contact.FindAsync(1)) :
                           Problem("Entity set 'ApplicationDbContext.Contact'  is null.");
         }
 
-        // GET: Contact/Details/5
-        [HttpGet(nameof(Details))]
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Contact == null)
-            {
-                return NotFound();
-            }
-
-            var contactModel = await _context.Contact
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (contactModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(contactModel);
-        }
-
-        // GET: Contact/Create
-        [HttpGet(nameof(Create))]
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Contact/Create
-        [HttpPost(nameof(Create))]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind(include: "Address,Zip,City,Country,Phone,Email")] ContactModel contactModel)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(contactModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(contactModel);
-        }
-
-        // GET: Contact/Edit/5
         [HttpGet(nameof(Edit))]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -82,7 +41,6 @@ namespace srk_website.Controllers
             return View(contactModel);
         }
 
-        // POST: Contact/Edit/5
         [HttpPost(nameof(Edit))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind(include: "Id,Address,Zip,City,Country,Phone,Email")] ContactModel contactModel)
@@ -113,50 +71,6 @@ namespace srk_website.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(contactModel);
-        }
-
-        // GET: Contact/Delete/5
-        [HttpGet(nameof(Delete))]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Contact == null)
-            {
-                return NotFound();
-            }
-
-            var contactModel = await _context.Contact
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (contactModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(contactModel);
-        }
-
-        // POST: Contact/Delete/5
-        [HttpPost(nameof(Delete))]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            
-            if (_context.Contact == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Contact'  is null.");
-            }
-            
-            var contactModel = await _context.Contact.FindAsync(id);
-            if (contactModel != null)
-            {
-                _context.Contact.Remove(contactModel);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool ContactModelExists(int id)

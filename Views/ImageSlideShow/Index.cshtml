@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<srk_website.Models.ImageSlideShowModel>
 
 @{
-    ViewData["Title"] = "Image Slide Show";
+    ViewData["Title"] = "Slideshow";
 }
 <div class="container">
     <div class="row">
         <div class="col-12 col-sm-8 col-lg-5">
-            <h6 class="text-muted">Slideshow Images</h6>
+            <h1 class="text-muted">Slideshow</h1>
             <a asp-action="Upload" asp-controller="ImageSlideShow">Create Slideshow Image</a>
                 <ul class="list-group">            
                 @foreach (var item  in Model){
@@ -26,7 +26,7 @@
                     </li>
                 }   
             </ul>
-            <a asp-action="Index" asp-controller="Admin" >Back to Admin Page</a>
+            <a asp-action="Index" asp-controller="Admin" >Back To Admin Page</a>
         </div>
     </div>
 </div>
