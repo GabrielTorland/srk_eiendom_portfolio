@@ -8,11 +8,7 @@
         Services = ViewData["Services"] as List<ServiceModel>;
     }
 
-    var Contacts = new List<ContactModel>();
-    if (ViewData["Contacts"] != null)
-    {
-        Contacts = ViewData["Contacts"] as List<ContactModel>;
-    }
+    var Contact = ViewData["Contact"] as ContactModel;
 
     var About = new AboutModel();
     if (ViewData["About"] != null)
@@ -68,12 +64,11 @@
         <nav class="togo-menu-fixed">
             <ul>
 				<li class="current-menu"><a href="#home">HJEM</a></li>
+                <li><a asp-controller="Home" asp-action="Privacy">Personvern</a></li>
 				<li><a href="#services">TJENESTER</a></li>
 				<li><a href="#about">OM OSS</a></li>
 				<li><a href="#project">PROSJEKTER</a></li>
-				<li><a href="#news">NYHETER</a></li>
 				<li><a href="#contact">KONTAKT</a></li>
-                <li><a asp-controller="Home" asp-action="Privacy">Personvern</a></li>
 			</ul>
 		</nav>
 		<!-- Menu social media -->
@@ -298,12 +293,12 @@
             <br>
             <div class="row text-center">
                 <!-- Equivalent to enumerate in python -->
-                @foreach (var it in Contacts.Select((Value, Index) => new {Value, Index})){
+                @if (Contact != null){
                 <div class="col-md-12">
                     <div class="con">
-                        <p><i class="ti-home" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Address, @it.Value.Zip @it.Value.City, @it.Value.Country</p>
-                        <p><i class="ti-mobile" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Phone</p>
-                        <p><i class="ti-envelope" style="font-size: 16px; color: #c5a47e;"></i> @it.Value.Email</p>
+                        <p><i class="ti-home" style="font-size: 16px; color: #c5a47e;"></i> @Contact.Address, @Contact.Zip @Contact.City, @Contact.Country</p>
+                        <p><i class="ti-mobile" style="font-size: 16px; color: #c5a47e;"></i> <a href="tel: @Contact.Phone">@Contact.Phone</a> </p>
+                        <p><i class="ti-envelope" style="font-size: 16px; color: #c5a47e;"></i> <a href="mailto: @Contact.Email">@Contact.Email</a> </p>
                     </div>
                 </div>
                 }

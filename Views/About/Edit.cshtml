@@ -4,30 +4,31 @@
     ViewData["Title"] = "Edit About";
 }
 
-<h1>Edit</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-8 col-lg-5">
+            <h1>Edit</h1>
+            <h4>About</h4>
+            <hr />
 
-<h4>About</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @Html.AntiForgeryToken()
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Text" class="control-label"></label>
-                 <textarea asp-for="Text" class="ckeditor" name="text" rows="200"></textarea>
-                <span asp-validation-for="Text" class="text-danger"></span>
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="Text" class="control-label"></label>
+                     <textarea asp-for="Text" class="ckeditor" name="text" rows="200"></textarea>
+                    <span asp-validation-for="Text" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+            <div>
+                <a asp-action="Index">Back To About</a>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to about</a>
 </div>
 
 @section Scripts {

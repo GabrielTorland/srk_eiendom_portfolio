@@ -11,148 +11,149 @@
     <link rel="stylesheet" href="~/lib/bootstrap-select/dist/css/bootstrap-select.css" />
 }
 
-<h1>Create</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-8 col-lg-5">
+            <h1>Create</h1>
 
-<h4>Project</h4>
-<hr />
+            <h4>Project</h4>
+            <hr />
 
-@if (ViewBag.IsResponse != null)
-    {
-        if (ViewBag.IsSuccess)
-        {
-            <div class="alert alert-success">
-                @Html.Raw(ViewBag.Message)
-            </div>
-        }
-        else
-        {
-            <div class="alert alert-danger">
-                @Html.Raw(ViewBag.Message)
-            </div>
-        }
-    }
+            @if (ViewBag.IsResponse != null)
+            {
+                if (ViewBag.IsSuccess)
+                {
+                    <div class="alert alert-success">
+                        @Html.Raw(ViewBag.Message)
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger">
+                        @Html.Raw(ViewBag.Message)
+                    </div>
+                }
+            }
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @Html.AntiForgeryToken()
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProjectDescription" class="control-label"></label>
-                <textarea asp-for="ProjectDescription" class="ckeditor" rows="200"></textarea>
-                <span asp-validation-for="ProjectDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="selectedProjectImages" class="control-label">Images</label>
-                <br />
-                <p class="text-info">Select four images only</p>
-                <select name="selectedImages" id="selectedProjectImages" class="selectpicker" multiple data-live-search="true">
-                    @if (Images != null)
-                    {
-                        @foreach (var item in Images)
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProjectDescription" class="control-label"></label>
+                    <textarea asp-for="ProjectDescription" class="ckeditor" rows="200"></textarea>
+                    <span asp-validation-for="ProjectDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Location" class="control-label"></label>
+                    <input asp-for="Location" class="form-control" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="selectedProjectImages" class="control-label">Images</label>
+                    <br />
+                    <p class="text-info">Select four images only</p>
+                    <select name="selectedImages" id="selectedProjectImages" class="selectpicker" multiple data-live-search="true">
+                        @if (Images != null)
                         {
-                            <optgroup label=@item.Key>
-                                @if (@item.Value != null)
-                                {
-                                     @if (SelectedImages == null)
+                            @foreach (var item in Images)
+                            {
+                                <optgroup label=@item.Key>
+                                    @if (@item.Value != null)
                                     {
-                                        @foreach (var image in @item.Value)
+                                         @if (SelectedImages == null)
                                         {
-                                            <option value="@image.Value" >@image.Text</option>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        @foreach (var image in @item.Value)
-                                        {
-                                            @if (SelectedImages.Keys.Contains(image.Value))
-                                            {
-                                                <option value="@image.Value" selected>@image.Text</option>
-                                            }
-                                            else
+                                            @foreach (var image in @item.Value)
                                             {
                                                 <option value="@image.Value" >@image.Text</option>
                                             }
                                         }
-                                    }
+                                        else
+                                        {
+                                            @foreach (var image in @item.Value)
+                                            {
+                                                @if (SelectedImages.Keys.Contains(image.Value))
+                                                {
+                                                    <option value="@image.Value" selected>@image.Text</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@image.Value" >@image.Text</option>
+                                                }
+                                            }
+                                        }
                                     
+                                    }
+                                </optgroup>
+                            }
+                        }
+                    </select>
+                    @if (ViewBag.selectedProjectImagesError != null)
+                    {
+                        <span for="selectedProjectImages" class="text-danger">@ViewBag.selectedProjectImagesError</span>
+                    }
+                    else
+                    {
+                        <span for="selectedProjectImages" class="text-danger"></span>
+                    }
+                </div>
+                <div class="form-group">
+                    <label asp-for="CoverImageUri" class="control-label"></label>
+                    <br />
+                    <p class="text-info">The cover image should be 1920x1080 pixels</p>
+                    <select asp-for="CoverImageUri" class="selectpicker">
+                        @if (SelectedImages != null)
+                        {
+                            foreach (var item in SelectedImages)
+                            {
+                                @if (item.Key == Model.CoverImageUri)
+                                {
+                                    <option value="@item.Key" selected>@item.Value</option>
                                 }
-                            </optgroup>
+                                else
+                                {
+                                    <option value="@item.Key" >@item.Value</option>
+                                }
+                            }
                         }
-                    }
-                </select>
-                @if (ViewBag.selectedProjectImagesError != null)
-                {
-                    <span for="selectedProjectImages" class="text-danger">@ViewBag.selectedProjectImagesError</span>
-                }
-                else
-                {
-                    <span for="selectedProjectImages" class="text-danger"></span>
-                }
-            </div>
-            <div class="form-group">
-                <label asp-for="CoverImageUri" class="control-label"></label>
-                <br />
-                <p class="text-info">The cover image should be 1920x1080 pixels</p>
-                <select asp-for="CoverImageUri" class="selectpicker">
-                    @if (SelectedImages != null)
-                    {
-                        foreach (var item in SelectedImages)
+                    </select>
+                    <span asp-validation-for="CoverImageUri" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ThumbnailUri" class="control-label"></label>
+                    <br />
+                    <p class="text-info">Thumbnail image should be 600x900 pixels</p>
+                    <select asp-for="ThumbnailUri" class="selectpicker">
+                        @if (SelectedImages != null)
                         {
-                            @if (item.Key == Model.CoverImageUri)
+                            foreach (var item in SelectedImages)
                             {
-                                <option value="@item.Key" selected>@item.Value</option>
-                            }
-                            else
-                            {
-                                <option value="@item.Key" >@item.Value</option>
-                            }
-                        }
-                    }
-                </select>
-                <span asp-validation-for="CoverImageUri" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ThumbnailUri" class="control-label"></label>
-                <br />
-                <p class="text-info">Thumbnail image should be 600x900 pixels</p>
-                <select asp-for="ThumbnailUri" class="selectpicker">
-                    @if (SelectedImages != null)
-                    {
-                        foreach (var item in SelectedImages)
-                        {
-                            @if (item.Key == Model.ThumbnailUri)
-                            {
-                                <option value="@item.Key" selected>@item.Value</option>
-                            }
-                            else
-                            {
-                                <option value="@item.Key" >@item.Value</option>
+                                @if (item.Key == Model.ThumbnailUri)
+                                {
+                                    <option value="@item.Key" selected>@item.Value</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Key" >@item.Value</option>
+                                }
                             }
                         }
-                    }
-                </select>
-                <span asp-validation-for="ThumbnailUri" class="text-danger"></span>
+                    </select>
+                    <span asp-validation-for="ThumbnailUri" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+            <div>
+                <a asp-action="Index" asp-controller="Project">Back To Projects</a>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index" asp-controller="Project">Back to Project List</a>
 </div>
 
 @section Scripts {

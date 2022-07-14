@@ -23,11 +23,11 @@ namespace srk_website.Controllers
         
         public async Task<IActionResult> Index()
         {
-            ViewData["Experience"] = DateTime.Now.Year - 2018; // The firm was founded in 2018
+            ViewData["Experience"] = DateTime.Now.Year - 2010; // The firm was founded in 2018
             ViewData["About"] = await _context.About.FindAsync(1);
             ViewData["Services"] = await _context.Service.ToListAsync();
             ViewData["ImageSlideShows"] = await _context.ImageSlideShow.ToListAsync();
-            ViewData["Contacts"] = await _context.Contact.ToListAsync();
+            ViewData["Contact"] = await _context.Contact.FindAsync(1);
             ViewData["TeamMembers"] = await _context.TeamMember.ToListAsync();
             ViewData["Testimonials"] = await _context.Testimonial.ToListAsync();
             ViewData["Projects"] = await _context.Project.ToListAsync();

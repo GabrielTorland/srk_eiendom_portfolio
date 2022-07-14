@@ -4,54 +4,57 @@
     ViewData["Title"] = "Create Service";
 }
 
-<h1>Create</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-8 col-lg-5">
+            <h1>Create</h1>
+            <h4>Service</h4>
+            <hr />
 
-<h4>Service</h4>
-<hr />
+            @if (ViewBag.IsResponse != null)
+            {
+                if (ViewBag.IsSuccess)
+                {
+                    <div class="alert alert-success">
+                        @ViewBag.Message
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger">
+                        @ViewBag.Message
+                    </div>
+                }
 
-@if (ViewBag.IsResponse != null)
-    {
-        if (ViewBag.IsSuccess)
-        {
-            <div class="alert alert-success">
-                @ViewBag.Message
-            </div>
-        }
-        else
-        {
-            <div class="alert alert-danger">
-                @ViewBag.Message
-            </div>
-        }
-
-    }
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Upload" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @Html.AntiForgeryToken()
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <p>The image should be 1500x1000 pixels.</p>
-                <input type="file" name="file" /> 
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+            }
+            <form asp-action="Upload" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="file">Image Upload</label>
+                    <p class="alert alert-info">The image should be 1500x1000 pixels.</p>
+                    <input type="file" name="file" /> 
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+            <a asp-action="Index" asp-controller="Service">Back To Services</a>
+        </div>
     </div>
-</div>   
+</div>
 
-<a asp-action="Index" asp-controller="Service" class="btn btn-info" role="button" >Back to services</a>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

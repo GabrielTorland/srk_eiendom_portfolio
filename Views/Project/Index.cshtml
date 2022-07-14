@@ -4,32 +4,40 @@
     ViewData["Title"] = "Projects";
 }
 
-<h1>Projects</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-8 col-lg-5">
+            <h1>Projects</h1>
+            <p>
+                <a asp-action="Create" asp-controller="Project">Create Project</a>
+            </p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+            @foreach (var item in Model) {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-controller="Project" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-controller="Project" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-controller="Project" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+            }
+                </tbody>
+            </table>
+            <a asp-action="Index" asp-controller="Admin">Back To Admin Page</a>
+        </div>
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create" asp-controller="Project">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-controller="Project" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-controller="Project" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-controller="Project" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+

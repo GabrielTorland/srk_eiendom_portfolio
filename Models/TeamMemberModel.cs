@@ -25,13 +25,11 @@ namespace srk_website.Models
         public int Id { get; set; }
 
         [DisplayName("First name")]
-        [RegularExpression("[A-Z][a-zA-Z]+")]
         [StringLength(50)]
         [Required]
         public string? FirstName { get; set; }
 
         [DisplayName("Last name")]
-        [RegularExpression("[A-Z][a-zA-Z]+")]
         [StringLength(50)]
         [Required]
         public string? LastName { get; set; }

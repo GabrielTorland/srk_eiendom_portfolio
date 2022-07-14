@@ -19,13 +19,11 @@ namespace srk_website.Models
         public int Id { get; set; }
 
         [Required]
-        [RegularExpression("[A-Z][a-zA-Z]+")]
         [DisplayName("First name")]
         [StringLength(40, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
         public string? FirstName { get; set; }
 
         [Required]
-        [RegularExpression("[A-Z][a-zA-Z]+")]
         [DisplayName("Last name")]
         [StringLength(40, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
         public string? LastName { get; set; }

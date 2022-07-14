@@ -4,70 +4,77 @@
     ViewData["Title"] = "Team";
 }
 
-<h1>@ViewData["Tean"] Members </h1>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-8 col-lg-5">
+            <h1>Team Members </h1>
+            <p>
+                <a asp-action="Create">Create Team Member</a>
+            </p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.LastName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Position)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Phone)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.LinkedIn)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+            @foreach (var item in Model) {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Position)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            <a href=@($"tel:{item.Phone}")>@item.Phone</a>
+                        </td>
+                        <td>
+                            <a href="@item.LinkedIn" class="icon"> <i class="ti-linkedin"></i> </a>
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <br />
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <br />
+                            <form method="post" asp-action="Delete">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value=@item.Id>
+                                <div class="form-group">
+                                    <input type="submit" value="Delete"/>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+            }
+                </tbody>
+            </table>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Position)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LinkedIn)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Position)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                <a href=@($"tel:{item.Phone}")>@item.Phone</a>
-            </td>
-            <td>
-                <a href="@item.LinkedIn" class="icon"> <i class="ti-linkedin"></i> </a>
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <form method="post" asp-action="Delete">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" name="id" value=@item.Id>
-                    <div class="form-group">
-                        <input type="submit" value="Delete"/>
-                    </div>
-                </form>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-
-<a asp-action="Index" asp-controller="Admin" class="btn btn-info" role="button" >Back to admin page</a>
+            <a asp-action="Index" asp-controller="Admin">Back To Admin Page</a>
+        </div>
+    </div>
+</div>
