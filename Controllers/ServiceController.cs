@@ -261,6 +261,7 @@ namespace srk_website.Controllers
             }
 
             // Replace old image name with new imagename(otherwise URI is still the same).
+            string oldImageName = service.ImageName;
             service.ImageName = imageName;
             if (service.Uri == null)
             {
@@ -269,7 +270,7 @@ namespace srk_website.Controllers
                 // Return an error message to the client
                 return StatusCode(StatusCodes.Status500InternalServerError, "Uri is null!");
             }
-            service.Uri = service.Uri.Replace(service.ImageName, imageName);
+            service.Uri = service.Uri.Replace(oldImageName, imageName);
 
             try
             {
@@ -291,7 +292,7 @@ namespace srk_website.Controllers
             if (file != null)
             {
                 // Delete image in azure storage.
-                BlobResponseDto response = await _storage.DeleteAsync(imageName);
+                BlobResponseDto response = await _storage.DeleteAsync(oldImageName);
                 if (response.Error == true)
                 {
                     _logger.LogError("Failed to delete image from azure container.");

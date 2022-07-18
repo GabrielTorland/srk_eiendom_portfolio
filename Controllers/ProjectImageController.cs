@@ -184,6 +184,9 @@ namespace srk_website.Controllers
             else
             {
                 // File has been successfully deleted
+                TempData["IsResponse"] = true;
+                TempData["IsSuccess"] = true;
+                TempData["Message"] = "Project image was successfully deleted.";
                 return RedirectToAction(nameof(Index));
             }
         }
