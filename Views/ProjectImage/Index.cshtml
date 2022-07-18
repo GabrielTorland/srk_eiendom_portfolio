@@ -7,8 +7,23 @@
 <div class="container">
     <div class="row">
         <div class="col-12 col-sm-8 col-lg-5"> 
-            <h6 class="text-muted">Images</h6>
+            <h6 class="text-muted">Project Images</h6>
             <a asp-action="Upload" asp-controller="ProjectImage">Create Project Image</a>
+            @if (TempData["IsResponse"] != null)
+                {
+                    if ((bool)TempData["IsSuccess"])
+                    {
+                        <div class="alert alert-success">
+                            @TempData["Message"]
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["Message"]
+                        </div>
+                    }
+                }
                 <ul class="list-group">            
                 @foreach (var item  in Model){
                     <li>
