@@ -7,24 +7,24 @@ namespace srk_website.Services
 {
     public class EmailSender : IEmailSender
     {
+        #region Dependency Injection / Constructor
         private readonly ILogger _logger;
+        private readonly string? _sendGridKey;
 
-        public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor,
-                           ILogger<EmailSender> logger)
+        public EmailSender(IConfiguration configuration, ILogger<EmailSender> logger)
         {
-            Options = optionsAccessor.Value;
+            _sendGridKey = configuration.GetValue<string>("SendGridKey");
             _logger = logger;
         }
-
-        public AuthMessageSenderOptions Options { get; } //Set with Secret Manager.
-
+        #endregion
+        
         public async Task SendEmailAsync(string toEmail, string subject, string message)
         {
-            if (string.IsNullOrEmpty(Options.SendGridKey))
+            if (string.IsNullOrEmpty(_sendGridKey))
             {
                 throw new Exception("Null SendGridKey");
             }
-            await Execute(Options.SendGridKey, subject, message, toEmail);
+            await Execute(_sendGridKey, subject, message, toEmail);
         }
 
         public async Task Execute(string apiKey, string subject, string message, string toEmail)

@@ -6,8 +6,7 @@ namespace srk_website.Data
 {
     public class ApplicationDbInitializer
     {
-        
-        public static async void Initialize(ApplicationDbContext db, UserManager<IdentityUser> um, IEmailSender _emailSender)
+        public static void Initialize(ApplicationDbContext db, UserManager<IdentityUser> um, IEmailSender _emailSender)
         {
             // Delete the database before we initialize it. This is common to do during development.
             
@@ -17,44 +16,37 @@ namespace srk_website.Data
             // Recreate the database and tables according to our models
             db.Database.EnsureCreated();
 
-            // If there are any uses in the database, we dont create a new admin.
-
+            // Create admins
             if (!um.Users.Any())
             {
                 // Generating random string.
                 Random random = new Random();
-                int length = 8;
-                var rString = "";
-                for (var i = 0; i < length; i++)
-                {
-                    rString += ((char)(random.Next(1, 26) + 64)).ToString();
-                    rString += ((char)(random.Next(1, 26) + 96)).ToString();
-                    rString += ((char)(random.Next(1, 10) + 47)).ToString();
-                }
-                rString += "?";
+                string charPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+                var rString = new string(Enumerable.Repeat(charPool, 15).Select(s => s[random.Next(s.Length)]).ToArray());
 
                 // This is the admin user.
+                var user = new IdentityUser();                
                 var email = "gabri.torland@gmail.com";
-                var user = new IdentityUser();
                 user.UserName = email;
                 user.Email = email;
                 user.EmailConfirmed = true;
                 // Change to rString later.
                 var password = "Password1.";
-                await um.CreateAsync(user, password);
-
-                //await _emailSender.SendEmailAsync(user.Email, "Initial password", $"<p>Here is your initial password: {password} . This password should be changed!<p>");
+                
+                um.CreateAsync(user, password);
+                
+                // Send email with password
+                _emailSender.SendEmailAsync(user.Email, "Initial password", $"<p>Here is your initial password: {password} . This password should be changed!<p>");
             }
 
-
+            // Create about page
             if (!db.About.Any())
             {
-                // Create about page.
                 var about = new AboutModel("");
                 db.About.Add(about);
             }
 
-
+            // Create contact page
             if (!db.Contact.Any())
             {
                 var newContact = new ContactModel();
@@ -67,10 +59,7 @@ namespace srk_website.Data
                 db.Contact.Add(newContact);
             }
 
-
-            await db.SaveChangesAsync();
-
-
+            db.SaveChangesAsync();
 
         }
     }

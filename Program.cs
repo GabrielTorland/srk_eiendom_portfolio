@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using srk_website.Data;
+using Azure.Core;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using srk_website.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +21,27 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IGenerateRandomImageName, GenerateRandomImageName>();
 builder.Services.AddTransient<IAzureStorage, AzureStorage>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
-builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
+
+// Key vault options
+SecretClientOptions options = new SecretClientOptions()
+{
+    Retry =
+                {
+                    Delay= TimeSpan.FromSeconds(2),
+                    MaxDelay = TimeSpan.FromSeconds(16),
+                    MaxRetries = 5,
+                    Mode = RetryMode.Exponential
+                 }
+};
+// Key vault connection
+var kVUrl = builder.Configuration.GetValue<string>("AzureKeyVaultUrl");
+var secretsClient = new SecretClient(new Uri(kVUrl), new DefaultAzureCredential(), options);
+
+// Get BlobConnectionString from key vault and store it in appsettings.json
+builder.Configuration["BlobConnectionString"] = secretsClient.GetSecret("BlobConnectionString").Value.Value;
+
+builder.Configuration["SendGridKey"] = secretsClient.GetSecret("SendGridKey").Value.Value;
+
 
 // The default inactivity timeout is 14 days. The following code sets the inactivity timeout to 5 days:
 builder.Services.ConfigureApplicationCookie(o => {
@@ -65,7 +88,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-// migrate any database changes on startup (includes initial db creation)
+// Migrate any database changes on startup (includes initial db creation)
 using (var scope = app.Services.CreateScope())
 {
     var dataContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
