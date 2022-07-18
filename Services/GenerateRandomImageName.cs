@@ -4,11 +4,9 @@
     {
         #region Dependency Injection / Constructor
         private readonly string _randomCharPool;
-        private readonly ILogger<AzureStorage> _logger;
-        private static Random random = new Random();
-        public GenerateRandomImageName(ILogger<AzureStorage> logger, IConfiguration configuration)
+        private readonly static Random random = new();
+        public GenerateRandomImageName(IConfiguration configuration)
         {
-            _logger = logger;
             // Random chars that we choose from.
             _randomCharPool = configuration.GetValue<string>("RandomCharPool");
         }
