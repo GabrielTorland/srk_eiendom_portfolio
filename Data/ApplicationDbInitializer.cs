@@ -11,7 +11,7 @@ namespace srk_website.Data
             // Delete the database before we initialize it. This is common to do during development.
             
             // Reenable this after first build
-            db.Database.EnsureDeleted();
+            //db.Database.EnsureDeleted();
 
             // Recreate the database and tables according to our models
             db.Database.EnsureCreated();
@@ -36,7 +36,7 @@ namespace srk_website.Data
                 um.CreateAsync(user, password);
                 
                 // Send email with password
-                _emailSender.SendEmailAsync(user.Email, "Initial password", $"<p>Here is your initial password: {password} . This password should be changed!<p>");
+                //_emailSender.SendEmailAsync(user.Email, "Initial password", $"<p>Here is your initial password: {password} . This password should be changed!<p>");
             }
 
             // Create about page
