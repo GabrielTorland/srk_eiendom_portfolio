@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Text.RegularExpressions;
 using srk_website.Services;
 using srk_website.Models;
 
@@ -6,23 +7,25 @@ namespace srk_website.Data
 {
     public class ApplicationDbInitializer
     {
-        public static void Initialize(ApplicationDbContext db, UserManager<IdentityUser> um, IEmailSender _emailSender)
+        public async static Task Initialize(ApplicationDbContext db, UserManager<IdentityUser> um, IEmailSender _emailSender)
         {
-            // Delete the database before we initialize it. This is common to do during development.
-            
-            // Reenable this after first build
             //db.Database.EnsureDeleted();
-
-            // Recreate the database and tables according to our models
-            db.Database.EnsureCreated();
+            //db.Database.EnsureCreated();
 
             // Create admins
-            if (!um.Users.Any())
+           if (!um.Users.Any())
             {
                 // Generating random string.
                 Random random = new Random();
-                string charPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+                string charPool = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 var rString = new string(Enumerable.Repeat(charPool, 15).Select(s => s[random.Next(s.Length)]).ToArray());
+                
+                // Validate strong password
+                Regex validatePassword = new Regex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[-._@+]).{6,}$");
+                while (!validatePassword.IsMatch(rString))
+                {
+                    rString = new string(Enumerable.Repeat(charPool, 15).Select(s => s[random.Next(s.Length)]).ToArray());
+                }
 
                 // This is the admin user.
                 var user = new IdentityUser();                
@@ -30,20 +33,19 @@ namespace srk_website.Data
                 user.UserName = email;
                 user.Email = email;
                 user.EmailConfirmed = true;
-                // Change to rString later.
-                var password = "Password1.";
-                
-                um.CreateAsync(user, password);
-                
+                var password = rString;
+
+                await um.CreateAsync(user, password);
+
                 // Send email with password
-                //_emailSender.SendEmailAsync(user.Email, "Initial password", $"<p>Here is your initial password: {password} . This password should be changed!<p>");
+                await _emailSender.SendEmailAsync(user.Email, "Initial password", $"<p>Here is your initial password: {password} . This password should be changed!<p>");
             }
 
             // Create about page
             if (!db.About.Any())
             {
                 var about = new AboutModel("");
-                db.About.Add(about);
+                await db.About.AddAsync(about);
             }
 
             // Create contact page
@@ -56,11 +58,10 @@ namespace srk_website.Data
                 newContact.City = "Ålgård";
                 newContact.Country = "Norge";
                 newContact.Zip = "4330";
-                db.Contact.Add(newContact);
+                await db.Contact.AddAsync(newContact);
             }
-
-            db.SaveChangesAsync();
-
+            
+            await db.SaveChangesAsync();
         }
     }
 }
