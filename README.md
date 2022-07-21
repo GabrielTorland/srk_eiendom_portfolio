@@ -20,7 +20,7 @@
 
 👤 **Gabriel Torland**
 
-* Website: gabrieltorland.com
+* Website: https://gabrieltorland.com
 * Twitter: [@GabrielTorland](https://twitter.com/GabrielTorland)
 * Github: [@GabrielTorlnad](https://github.com/GabrielTorlnad)
 * LinkedIn: [@gabriel-torland-37b75a230](https://linkedin.com/in/gabriel-torland-37b75a230)
