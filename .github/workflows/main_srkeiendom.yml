@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'srkeiendom'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D9653C474E714B16943400D16E9D4F6E }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1F4A2EA70D80499BBD565029300F611F }}
           package: .
