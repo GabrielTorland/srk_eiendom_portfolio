@@ -31,7 +31,7 @@ builder.Configuration["SendGridKey"] = secretsClient.GetSecret("SendGridKey").Va
 
 // Get MySQL connection string from key vault and store it in appsettings.json
 builder.Configuration["ConnectionStrings:DefaultConnection"] = secretsClient.GetSecret("DefaultConnectionString").Value.Value;
-
+    
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
