@@ -53,6 +53,7 @@ namespace srk_website.Controllers
             return View(project);
         }
 
+        [Authorize]
         [Route("Prosjekt")]
         [HttpGet]
         public async Task<IActionResult> Prosjekt(int? id)
