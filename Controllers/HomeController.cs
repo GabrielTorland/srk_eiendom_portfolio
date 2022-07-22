@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using srk_website.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace srk_website.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -34,6 +36,7 @@ namespace srk_website.Controllers
             return View();
         }
         
+        [HttpGet("Hjem/Personvern")]
         public IActionResult Privacy()
         {
             return View();
