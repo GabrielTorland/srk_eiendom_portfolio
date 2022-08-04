@@ -12,7 +12,7 @@
   </a>
 </p>
 
-> User-friendliness was the main objective of developing the website. A client/admin that has little or no experience in web development should be able to edit the website.
+> User-friendliness was the main objective of developing the website. A client or an admin that has little or no experience in web development should be able to edit the website.
 
 ### 🏠 [Homepage](https://andreasernoob.tk)
 
