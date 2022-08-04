@@ -12,9 +12,9 @@
   </a>
 </p>
 
-> Portfolio website that a non programmer can easily setup and edit. The portfolio website also supports projects
+> User-friendliness was the main objective of developing the website. A client/admin that has little or no experience in web development should be able to edit the website.
 
-### 🏠 [Homepage](andreasernoob.tk)
+### 🏠 [Homepage](https://andreasernoob.tk)
 
 ## Author
 
