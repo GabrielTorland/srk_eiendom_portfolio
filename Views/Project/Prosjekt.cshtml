@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Prosjekt";
-    var Title = "SRK";
 }
 
 <!-- Loader -->
@@ -13,40 +12,7 @@
 </div>
 
 <!-- Sidebar -->
-<div class="togo-fixed-sidebar togo-sidebar-left">
-	<div class="togo-header-container">
-		<!--Logo-->
-        <div class="logo">
-            <h1><a asp-action="Index" asp-controller="Home">@Title<span>Eiendom</span></a></h1>
-        </div>
-		<!-- Burger menu -->
-		<div class="burger-menu">
-			<div class="line-menu line-half first-line"></div>
-			<div class="line-menu"></div>
-			<div class="line-menu line-half last-line"></div>
-		</div>
-		<!--Navigation menu-->
-        <nav class="togo-menu-fixed">
-            <ul>
-				<li class="current-menu"><a href="/Home#home">HJEM</a></li>
-				<li><a href="/Home#services">TJENESTER</a></li>
-				<li><a href="/Home#about">OM OSS</a></li>
-				<li><a href="/Home#project">PROSJEKTER</a></li>
-				<li><a href="/Home#news">NYHETER</a></li>
-				<li><a href="/Home#contact">KONTAKT</a></li>
-                <li><a asp-controller="Home" asp-action="Privacy">Personvern</a></li>
-			</ul>
-		</nav>
-		<!-- Menu social media -->
-		<div class="togo-menu-social-media">
-            <div class="social">
-                <a href="#"><i class="ti-facebook"></i></a>
-                <a href="#"><i class="ti-twitter"></i></a>
-                <a href="#"><i class="ti-instagram"></i></a>
-            </div>
-        </div>
-	</div>
-</div>
+<partial name="_SidebarPartial"></partial>
 
 <!-- Content -->
 <div class="togo-side-content">
