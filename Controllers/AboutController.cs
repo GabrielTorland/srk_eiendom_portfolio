@@ -16,25 +16,26 @@ namespace srk_website.Controllers
     public class AboutController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<AboutController> _logger;
 
-        public AboutController(ApplicationDbContext context)
+        public AboutController(ApplicationDbContext context, ILogger<AboutController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: About
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            // We only have one about page(i.e. only id equal 1).
-            var about = await _context.About.FindAsync(1);
-            if (about == null)
+            if (_context.About.Count() != 1)
             {
-                // About page was not created in db initilizer.
-                return StatusCode(StatusCodes.Status500InternalServerError, "About doesnt exist");
+                _logger.LogError("There is zero or more than one 'About' in the database");
+                return Problem("Can only have one 'About' in the database");
             }
-            return View(about);
- 
+            return _context.About != null ?
+                         View(await _context.About.FirstOrDefaultAsync()) :
+                         Problem("Entity set 'ApplicationDbContext.About'  is null.");
         }
 
         // GET: About/Edit/5

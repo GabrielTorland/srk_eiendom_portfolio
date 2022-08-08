@@ -11,17 +11,25 @@ namespace srk_website.Controllers
     public class ContactController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<ContactController> _logger;
 
-        public ContactController(ApplicationDbContext context)
+        public ContactController(ApplicationDbContext context, ILogger<ContactController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: Contact
         public async Task<IActionResult> Index()
-        {
-              return _context.Contact != null ? 
-                          View(await _context.Contact.FindAsync(1)) :
+        {   
+            if (_context.Contact.Count() != 1)
+            {
+                _logger.LogError("There is zero or more than one 'Contact' in the database");
+                return Problem("Can only have one 'Contact' in the database");
+            }
+            
+            return _context.Contact != null ? 
+                          View(await _context.Contact.FirstOrDefaultAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Contact'  is null.");
         }
 
