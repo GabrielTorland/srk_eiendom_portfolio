@@ -33,7 +33,13 @@ namespace srk_website.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View(_context.ImageSlideShow);
+            return View(_context.ImageSlideShow.Take(10));
+        }
+
+        [HttpGet(nameof(GetAll))]
+        public JsonResult GetAll()
+        {
+            return Json(_context.ImageSlideShow);
         }
         
         [HttpGet(nameof(Upload))]
