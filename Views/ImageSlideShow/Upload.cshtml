@@ -1,7 +1,7 @@
 ﻿@model srk_website.Models.ImageSlideShowModel
 
 @{
-    ViewData["Title"] = "Upload Image To Slideshow";
+    ViewData["Title"] = "Create Slideshow Image";
 }
 
 <div class="container">
@@ -50,7 +50,7 @@
     
                 <div class="form-group">
                     <label for="file" class="control-label">Image Upload</label>
-                    <p class="alert alert-info">The image should be 1920x1080 pixels.</p>
+                    <p class="alert alert-info">Recommended image size is 1920x1080 pixels</p>
                     <input type="file" id="file" name="file" /> 
                 </div>
                 <div class="form-group">
@@ -58,7 +58,7 @@
                 </div>
             </form>
 
-            <a asp-action="Index" asp-controller="ImageSlideShow">Back To Slideshow</a>
+            <a asp-action="Index" asp-controller="ImageSlideShow">Back to Slideshows</a>
         </div>
     </div>
 </div>

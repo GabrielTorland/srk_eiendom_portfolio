@@ -33,9 +33,30 @@ namespace srk_website.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View(_context.ImageSlideShow);
+            return View(_context.ImageSlideShow.Take(10));
         }
-        
+
+        [HttpGet(nameof(GetAll))]
+        public JsonResult GetAll()
+        {
+            return Json(_context.ImageSlideShow);
+        }
+
+        [HttpGet(nameof(Details))]
+        public IActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var imageSlideShow = _context.ImageSlideShow.Find(id);
+            if (imageSlideShow == null)
+            {
+                return NotFound();
+            }
+            return View(imageSlideShow);
+        }
+
         [HttpGet(nameof(Upload))]
         public IActionResult Upload()
         {
