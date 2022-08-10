@@ -18,17 +18,10 @@
             <ul class="list-group" id="image_slideshows">            
                 @foreach (var item  in Model){
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        @item.ProjectName 
+                        <a asp-action="Details" asp-route-id="@item.Id">@item.ProjectName</a>
                         <div class="image-parent">
                             <img src="@item.Uri" class="img-fluid" alt="quixote">
                         </div>
-                        <form method="post" asp-action="Delete">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="id" value=@item.Id>
-                            <div class="form-group">
-                                <input type="submit" value="Delete" />
-                            </div>
-                        </form>
                     </li>
                 }   
             </ul>
@@ -38,5 +31,49 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/slideshow.js" asp-append-version="true"></script>
+    <script>
+        $(document).ready(function () {
+            $("#search_images").on("keyup", function () {
+                let value = $(this).val();
+                fetch("/Admin/ImageSlideShow/GetAll", {
+                    method: "GET"
+                }).then(function (response) {
+                    if (!response.ok) {
+                        return [];
+                    } 
+                    return response.json();
+                }).then(function (data) {
+                    $("#image_slideshows").empty();
+                    for (var i = 0; i < data.length; i++)
+                    {
+                        // i: case insensitive
+                        let pattern = new RegExp(value, "i")
+
+                        if (pattern.test(data[i]["city"])) {
+                            $("#image_slideshows").append(`
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <a href="/Admin/ImageSlideShow/Details?id=${data[i]["id"]}">${data[i]["projectName"]}</a>
+                                <div class="image-parent">
+                                    <img src="${data[i]["uri"]}" class="img-fluid" alt="quixote">
+                                </div>
+                            </li>
+                            `);
+                        }
+                        else if (pattern.test(data[i]["projectName"])) {
+                            $("#image_slideshows").append(`
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <a href="/Admin/ImageSlideShow/Details?id=${data[i]["id"]}">${data[i]["projectName"]}</a>
+                                <div class="image-parent">
+                                    <img src="${data[i]["uri"]}" class="img-fluid" alt="quixote">
+                                </div>
+                            </li>
+                            `);
+                        }
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            });
+        });
+    </script>
 }

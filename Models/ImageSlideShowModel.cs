@@ -30,7 +30,7 @@ namespace srk_website.Models
 
         [Url]
         [Required]
-        [DisplayName("Website URI where you can buy the appartment/house")]
+        [DisplayName("Website URL where you can buy the appartment/house")]
         public string? Website { get; set; }
 
         [ValidateNever]

@@ -41,7 +41,22 @@ namespace srk_website.Controllers
         {
             return Json(_context.ImageSlideShow);
         }
-        
+
+        [HttpGet(nameof(Details))]
+        public IActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var imageSlideShow = _context.ImageSlideShow.Find(id);
+            if (imageSlideShow == null)
+            {
+                return NotFound();
+            }
+            return View(imageSlideShow);
+        }
+
         [HttpGet(nameof(Upload))]
         public IActionResult Upload()
         {
