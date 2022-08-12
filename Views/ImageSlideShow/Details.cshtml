@@ -8,24 +8,15 @@
     <div class="row">
         <div class="col-12 col-sm-8 col-lg-5">
             <h1>Details</h1>
-            <h4>Slideshow Image</h4>
+            <h4>@Model.ProjectName</h4>
             <hr />
-            <img href="@Model.Uri" alt="Image not found!"/>
-            <div>                
-                <dl class="row">
-                    <dt class = "col-sm-4">
-                        @Html.DisplayNameFor(model => model.ProjectName)
-                    </dt>
-                    <dd class = "col-sm-10">
-                        @Html.DisplayFor(model => model.ProjectName)
-                    </dd>
-                    <dt class = "col-sm-4">
-                        @Html.DisplayNameFor(model => model.City)
-                    </dt>
-                    <dd class = "col-sm-10">
-                        @Html.DisplayFor(model => model.City)
-                    </dd>
-                </dl>
+            <img src="@Model.Uri" alt="Image not found!"/>
+            <br />
+            <div>
+                Project Name: @Model.ProjectName
+                <br />
+                City: @Model.City
+                <br />
             </div>
             <div>
                  <form method="post" asp-action="Delete">
@@ -35,7 +26,7 @@
                         <input type="submit" value="Delete" />
                     </div>
                 </form>
-                <a asp-action="Index">Back to Slideshow Images</a>
+                <a asp-action="Index">Back</a>
             </div>
         </div>
     </div>
