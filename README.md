@@ -1,7 +1,7 @@
 <h1 align="center">Welcome to SRK Eiendom Portfolio 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0-blue.svg?cacheSeconds=2592000" />
-  <a href="andreasernoob.tk" target="_blank">
+  <a href="https://gabrieltorland.com" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
   <a href="https://github.com/GabrielTorland/srk_eiendom_portfolio/blob/main/LICENSE.md" target="_blank">
@@ -12,7 +12,7 @@
   </a>
 </p>
 
-> User-friendliness was the main objective of developing the website. A client or an admin that has little or no experience in web development should be able to edit the website.
+> User-friendliness was the main objective of developing the website. A client or an admin that has little or no experience in web development should be able to edit this website.
 
 ### 🏠 [Homepage](https://andreasernoob.tk)
 
