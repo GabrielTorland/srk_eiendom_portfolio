@@ -14,7 +14,7 @@
 
 > User-friendliness was the main objective of developing the website. A client or an admin that has little or no experience in web development should be able to edit this website.
 
-### 🏠 [Homepage](https://andreasernoob.tk)
+### 🏠 [Homepage](https://gabrieltorland.com)
 
 ## Author
 
