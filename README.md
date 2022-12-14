@@ -1,4 +1,19 @@
-<h1 align="center">Welcome to SRK Eiendom Portfolio 👋</h1>
+<h1 align="center">SRK Eiendom Portfolio</h1>
+
+<p>
+This repo contains the source code for the SRK Eiendom portfolio website, a work in progress that will showcase their previous projects and services.
+</p>
+<p>
+SRK Eiendom is a real estate firm specializing in the acquisition of land and the construction of properties. They handle every aspect of the development process, from engineering to sales.
+</p>
+<p>
+I am currently working on creating a portfolio website for SRK Eiendom, which will feature detailed descriptions and images of their completed projects, as well as contact forms for interested clients.
+</p>  
+<p>
+The website is not yet available online, but you can check out the code in this repo to see my progress. When the website is ready, it will be published for everyone to see.
+</p>
+
+
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0-blue.svg?cacheSeconds=2592000" />
   <a href="https://gabrieltorland.com" target="_blank">
