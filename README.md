@@ -24,9 +24,6 @@ I am currently working on creating a portfolio website for SRK Eiendom, which wi
 The website is not yet available online, but you can check out the code in this repo to see my progress. When the website is ready, it will be published for everyone to see.
 </p>
 
-
-> User-friendliness was the main objective of developing the website. A client or an admin that has little or no experience in web development should be able to edit this website.
-
 ### 🏠 [Homepage](https://gabrieltorland.com)
 
 ## Author
