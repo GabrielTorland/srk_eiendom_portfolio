@@ -1,5 +1,16 @@
 <h1 align="center">SRK Eiendom Portfolio</h1>
-
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0-blue.svg?cacheSeconds=2592000" />
+  <a href="https://gabrieltorland.com" target="_blank">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
+  </a>
+  <a href="https://github.com/GabrielTorland/srk_eiendom_portfolio/blob/main/LICENSE.md" target="_blank">
+    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+  </a>
+  <a href="https://twitter.com/GabrielTorland" target="_blank">
+    <img alt="Twitter: GabrielTorland" src="https://img.shields.io/twitter/follow/GabrielTorland.svg?style=social" />
+  </a>
+</p>
 <p>
 This repo contains the source code for the SRK Eiendom portfolio website, a work in progress that will showcase their previous projects and services.
 </p>
@@ -13,19 +24,6 @@ I am currently working on creating a portfolio website for SRK Eiendom, which wi
 The website is not yet available online, but you can check out the code in this repo to see my progress. When the website is ready, it will be published for everyone to see.
 </p>
 
-
-<p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0-blue.svg?cacheSeconds=2592000" />
-  <a href="https://gabrieltorland.com" target="_blank">
-    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
-  </a>
-  <a href="https://github.com/GabrielTorland/srk_eiendom_portfolio/blob/main/LICENSE.md" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
-  </a>
-  <a href="https://twitter.com/GabrielTorland" target="_blank">
-    <img alt="Twitter: GabrielTorland" src="https://img.shields.io/twitter/follow/GabrielTorland.svg?style=social" />
-  </a>
-</p>
 
 > User-friendliness was the main objective of developing the website. A client or an admin that has little or no experience in web development should be able to edit this website.
 
